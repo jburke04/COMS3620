@@ -1,1 +1,1 @@
-# COMS3620
+# cool project garaunteed an A
