@@ -2,45 +2,62 @@ package src;
 
 import java.util.Scanner;
 
-
-
 public class Main {
-	private static void exampleBookingScreen(int input){
-		System.out.println("Yay Booking");
-	}
-	private static void exampleMaintenanceScreen(int input){
-		System.out.println("Yay Maintenance");
-	}
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Basic Functionality (press 0 to exit)");
-
-		while (true) {
-			System.out.print("1: Booking\n2:Maintenance\n");
-			String line = scanner.nextLine();
-			line = line.trim();
-
-			
-			// Validate: must be exactly one character and a digit 0-9
-			if (line.length() != 1 || !Character.isDigit(line.charAt(0))) {
-				System.out.println("Invalid input. Please press a single number key (0-9).\n");
-				continue;
-			}
-
-			int digit = Character.getNumericValue(line.charAt(0));
-
-			if (digit == 0) {
-				System.out.println("Received 0 — exiting loop.");
+		boolean close = false;
+		Scanner input = new Scanner(System.in);
+		while (!close) {
+			System.out.println("[C]ustomer Services | [E]mployee Services | [Q]uit");
+			switch(input.nextLine().toLowerCase()) { //toLowerCase() will catch if they don't input strictly uppercase letters.
+			case "c":
+				customersTab(input);
 				break;
-			} else if (digit == 1){
-				exampleBookingScreen(digit);
-			} else if (digit == 2){
-				exampleMaintenanceScreen(digit);
-			}else {
-				System.out.println("Invalid input. Select Booking or Maintenance.\n");
+			case "e":
+				employeesTab(input);
+				break;
+			case "q":
+				close = true;
+				break;
 			}
 		}
-
-		scanner.close();
+		input.close();
+		System.exit(1);
+	}
+	//These functions down here are for code cleanliness: I do not want to have to read through 500 nested if-else statements
+	private static void customersTab(Scanner input) {
+		boolean back = false;
+		while (!back) {
+			System.out.println("[B]ook Room | [U]pdate Booking | [C]ancel Booking | Check [I]n | Check [O]ut | C[H]ange Room | [R]oom Service | [Q]uit menu");
+			switch(input.nextLine().toLowerCase()) {
+			case "b":
+				//TODO
+				break;
+			case "u":
+				//TODO
+				break;
+			case "c":
+				//TODO
+				break;
+			case "i":
+				//TODO
+				break;
+			case "o":
+				//TODO
+				break;
+			case "h":
+				//TODO
+				break;
+			case "r":
+				//TODO
+				break;
+			case "q":
+				back = true;
+				break;
+			}
+		}
+	}
+	
+	private static void employeesTab(Scanner input) {
+		
 	}
 }
