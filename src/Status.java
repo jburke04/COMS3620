@@ -1,0 +1,5 @@
+package src;
+
+public enum Status {
+	AVAILABLE, BOOKED, OCCUPIED, CLEANING, INSPECTING, AWAITING;
+}

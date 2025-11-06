@@ -1,6 +1,39 @@
 package src;
-public interface Room {
-	public int getCost();
-	public boolean book(); //The way I see it is that all the business with "booking, changing, and checking out" can be represented at a higher level than the room itself.
-	public boolean unbook(); //Most likely we will have a helper class do all that for us. So, the room only knows when someone is or is not in it. Something something "information expert".
+
+import java.util.Calendar;
+
+public class Room {
+	int roomNumber;
+	Status status;
+	RoomDescription description;
+	
+	public Room(RoomType type) {
+		if (type == RoomType.SINGLE) {
+			description = new RoomDescription(type, 100);
+		}
+		else if (type == RoomType.DOUBLE) {
+			description = new RoomDescription(type, 150);
+		}
+		else if (type == RoomType.KING) {
+			description = new RoomDescription(type, 200);
+		}
+		else if (type == RoomType.PRESIDENTIAL) {
+			description = new RoomDescription(type, 300);
+		}
+		
+		status = Status.AVAILABLE;
+	}
+	
+	public Room(RoomType type, Status status) {
+		this(type);
+		this.status = status;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 }
