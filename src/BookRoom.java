@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class BookRoom {
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, models.BookingSystem system) {
         System.out.println("\n=== BOOK A ROOM ===\n");
 
         // Step 1: Get or create guest
-        Guest guest = getOrCreateGuest(scanner, system);
+        models.Guest guest = getOrCreateGuest(scanner, system);
         if (guest == null) {
             System.out.println("Booking cancelled.");
             return;
@@ -30,14 +30,14 @@ public class BookRoom {
         int numGuests = Integer.parseInt(scanner.nextLine().trim());
 
         // Step 4: Select room type
-        RoomType selectedType = selectRoomType(scanner);
+        models.RoomType selectedType = selectRoomType(scanner);
         if (selectedType == null) {
             System.out.println("Booking cancelled.");
             return;
         }
 
         // Step 5: Find available rooms
-        List<Room> availableRooms = system.findAvailableRooms(selectedType, startDate, endDate);
+        List<models.Room> availableRooms = system.findAvailableRooms(selectedType, startDate, endDate);
 
         if (availableRooms.isEmpty()) {
             System.out.println("\nNo rooms available for selected dates and type.");
@@ -48,7 +48,7 @@ public class BookRoom {
         // Step 6: Display available rooms and select
         System.out.println("\nAvailable rooms:");
         for (int i = 0; i < availableRooms.size(); i++) {
-            Room room = availableRooms.get(i);
+            models.Room room = availableRooms.get(i);
             System.out.println((i + 1) + ". Room " + room.roomNumber +
                     " - " + room.description.type +
                     " - $" + room.description.cost + " per night");
@@ -62,7 +62,7 @@ public class BookRoom {
             return;
         }
 
-        Room selectedRoom = availableRooms.get(choice - 1);
+        models.Room selectedRoom = availableRooms.get(choice - 1);
 
         // Step 7: Calculate cost and create booking
         long diffInMillis = endDate.getTimeInMillis() - startDate.getTimeInMillis();
@@ -87,18 +87,18 @@ public class BookRoom {
         }
 
         // Step 8: Create booking
-        Booking booking = system.book(selectedRoom.roomNumber, startDate, endDate, guest);
+        models.Booking booking = system.book(selectedRoom.roomNumber, startDate, endDate, guest);
 
         if (booking != null) {
             System.out.println("\n✓ Booking successful!");
-            System.out.println("Confirmation number: " + booking.confirmationNumber);
+            System.out.println("Confirmation number: " + booking.getConfirmationNumber());
             System.out.println("Room status changed to: BOOKED");
         } else {
             System.out.println("\n✗ Booking failed. Please try again.");
         }
     }
 
-    private static Guest getOrCreateGuest(Scanner scanner, BookingSystem system) {
+    private static models.Guest getOrCreateGuest(Scanner scanner, models.BookingSystem system) {
         System.out.println("Does guest have existing record? (Y/N): ");
         String hasRecord = scanner.nextLine().trim().toLowerCase();
 
@@ -119,8 +119,8 @@ public class BookRoom {
 
                 System.out.println("\nGuests found:");
                 for (int i = 0; i < results.size(); i++) {
-                    Guest g = results.get(i);
-                    System.out.println((i + 1) + ". " + g.name + " - " + g.phoneNumber);
+                    models.Guest g = results.get(i);
+                    System.out.println((i + 1) + ". " + g.getName() + " - " + g.getPhoneNumber());
                 }
 
                 System.out.print("Select guest (or 0 to create new): ");
@@ -151,7 +151,7 @@ public class BookRoom {
         return createNewGuest(scanner, system);
     }
 
-    private static Guest createNewGuest(Scanner scanner, BookingSystem system) {
+    private static models.Guest createNewGuest(Scanner scanner, models.BookingSystem system) {
         System.out.println("\n--- New Guest Information ---");
         System.out.print("Name: ");
         String name = scanner.nextLine().trim();
@@ -168,7 +168,7 @@ public class BookRoom {
         return system.addGuest(name, phone, email, idDoc);
     }
 
-    private static RoomType selectRoomType(Scanner scanner) {
+    private static models.RoomType selectRoomType(Scanner scanner) {
         System.out.println("\n--- Select Room Type ---");
         System.out.println("1. Single ($100/night)");
         System.out.println("2. Double ($150/night)");
@@ -179,10 +179,10 @@ public class BookRoom {
         int choice = Integer.parseInt(scanner.nextLine().trim());
 
         switch (choice) {
-            case 1: return RoomType.SINGLE;
-            case 2: return RoomType.DOUBLE;
-            case 3: return RoomType.KING;
-            case 4: return RoomType.PRESIDENTIAL;
+            case 1: return models.RoomType.SINGLE;
+            case 2: return models.RoomType.DOUBLE;
+            case 3: return models.RoomType.KING;
+            case 4: return models.RoomType.PRESIDENTIAL;
             default: return null;
         }
     }
@@ -202,7 +202,7 @@ public class BookRoom {
         return cal;
     }
 
-    private static void handleNoAvailability(Scanner scanner, BookingSystem system, Guest guest, Calendar startDate, Calendar endDate) {
+    private static void handleNoAvailability(Scanner scanner, models.BookingSystem system, models.Guest guest, Calendar startDate, Calendar endDate) {
         System.out.println("\n--- Alternative Options ---");
         System.out.println("1. Try different room type");
         System.out.println("2. Try different dates");
