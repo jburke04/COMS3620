@@ -9,6 +9,9 @@ import java.util.Calendar;
  * and the status of the Booking itself.
  */
 public class Booking {
+	private static int nextConfirmationNumber = 1000;
+
+	private int confirmationNumber;
 	private Guest guest;
 	private int bookingID;
 	private Calendar startTime;
@@ -28,6 +31,7 @@ public class Booking {
 	 * @param double cost of the whole Booking
 	 */
 	public Booking(Guest guest, int bookingID, Calendar startTime, Calendar endTime, Room room, BookingStatus status, double cost) {
+		this.confirmationNumber = nextConfirmationNumber++;
 		this.guest = guest;
 		this.bookingID = bookingID;
 		this.startTime = startTime;
@@ -36,6 +40,8 @@ public class Booking {
 		this.status = status;
 		this.cost = cost;
 	}
+
+	public int getConfirmationNumber() { return confirmationNumber; }
 
 	/**
 	 * Returns the Guest for this Booking
@@ -69,11 +75,25 @@ public class Booking {
 		return this.room;
 	}
 
+	public Calendar getStartDate() { return startDate; }
+
+	public Calendar getEndDate() { return endDate; }
+
+	public double getCost() { return cost; }
+
 	/**
 	 * Sets the Booking's current status to the desired value
 	 * @param status enumerated value representing the status to set this Booking to
 	 */
 	public void setStatus(BookingStatus status) {
 		this.status = status;
+	}
+
+	/**
+	 * Sets the Booking's current cost to the desired value
+	 * @param int cost to set
+	 */
+	public void setCost(int cost) { 
+		this.cost = cost;
 	}
 }

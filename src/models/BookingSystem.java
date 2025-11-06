@@ -10,6 +10,7 @@ import java.util.Calendar;
  */
 public class BookingSystem {
 	private final RoomUtils roomUtils;
+	private Room[] rooms;
 	
 	/**
 	 * Constructor for BookingSystem that takes two filepaths and uses them to populate
@@ -30,6 +31,10 @@ public class BookingSystem {
 	 */
 	public BookingSystem(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList) {
 		this.roomUtils = new RoomUtils(roomsList, bookingsList);
+	}
+
+	public BookingSystem(int numRooms) {
+		this.rooms = new Room[numRooms];
 	}
 	
 	public boolean book(RoomType type, Calendar startDate, Calendar endDate) {
@@ -88,4 +93,51 @@ public class BookingSystem {
 		
 		return false;
 	}
+
+	// to book we need to see if rooms are available
+	public List<Room> findAvailableRooms(RoomType type, Calendar startDate, Calendar endDate) {
+
+		return null;
+	}
+
+	public boolean isRoomAvailable(int roomNumber, Calendar startDate, Calendar endDate){
+		return false;
+	}
+
+	// Check in a guest
+	public boolean checkIn(int confirmationNumber) {
+		return false;
+	}
+
+	// if confirmation number is not avilable
+	public boolean checkIn(Booking booking) {
+		return false;
+	}
+
+	// Find booking by confirmation number
+	public Booking findBookingByConfirmation(int confirmationNumber) {
+		return null;
+	}
+
+	public List<Guest> searchGuestByName(String name) {
+		return null;
+	}
+
+	// Search guest by phone
+	public Guest searchGuestByPhone(String phone) {
+		return null;
+	}
+
+	public Guest addGuest(String name, String phone, String email, String idDocument) {
+		return null;
+	}
+
+	private Room getRoomByNumber(int roomNumber) {
+		return null;
+	}
+
+	// Getters
+	public Room[] getRooms() { return this.rooms; }
+	public List<Booking> getBookings() { return this.bookings; }
+	public List<Guest> getGuests() { return this.guests; }
 }
