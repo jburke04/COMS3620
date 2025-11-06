@@ -114,6 +114,11 @@ public class BookingSystem {
 		return false;
 	}
 
+	public boolean change(Booking booking, Room newRoom) {
+		booking.getRoom() = newRoom;
+		return true;
+	}
+
 	// Find booking by confirmation number
 	public Booking findBookingByConfirmation(int confirmationNumber) {
 		return null;
