@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 import java.util.Calendar;
 
@@ -46,11 +46,27 @@ public class Booking {
 	}
 
 	/**
+	 * Returns the ID for this Booking
+	 * @return ID of the Booking
+	 */
+	public int getBookingID() {
+		return this.bookingID;
+	}
+
+	/**
 	 * Returns the current status for this Booking
 	 * @return Booking's current Status
 	 */
 	public BookingStatus getStatus() {
 		return this.status;
+	}
+
+	/**
+	 * Returns the Room within this Booking
+	 * @return Room being Booked
+	 */
+	public Room getRoom() {
+		return this.room;
 	}
 
 	/**

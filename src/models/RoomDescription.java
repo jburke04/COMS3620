@@ -1,11 +1,25 @@
-package src.models;
+package models;
 
 public class RoomDescription {
 	private RoomType type;
 	private double cost;
 	
+	/**
+	 * Constructor for a Room Description that holds information for a specific
+	 * room type and the regular cost per night
+	 * @param RoomType enumerated value representing the type of room
+	 * @param double cost per night for this room
+	 */
 	public RoomDescription(RoomType type, double cost) {
 		this.type = type;
 		this.cost = cost;
+	}
+
+	/**
+	 * Returns the enumberated value for the Room Type
+	 * @return enum of Room Type
+	 */
+	public RoomType getRoomType() {
+		return this.type;
 	}
 }

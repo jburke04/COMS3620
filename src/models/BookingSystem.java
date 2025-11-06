@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,12 +9,25 @@ import java.util.Calendar;
  * for a Booking.
  */
 public class BookingSystem {
-	private RoomUtils roomUtils;
+	private final RoomUtils roomUtils;
 	
+	/**
+	 * Constructor for BookingSystem that takes two filepaths and uses them to populate
+	 * the list of rooms and list of bookings that the Room Utility class will support
+	 * complex logic for.
+	 * @param String filepath for the list of rooms
+	 * @param String filepath for the list of bookings
+	 */
 	public BookingSystem(String f1, String f2) {
 		this.roomUtils = new RoomUtils(f1, f2);
 	}
 
+	/**
+	 * Constructor for BookingSystem that takes already defined lists for the rooms and
+	 * bookings and provides them to the Room Utility class.
+	 * @param ArrayList list of rooms
+	 * @param ArrayList list of bookings
+	 */
 	public BookingSystem(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList) {
 		this.roomUtils = new RoomUtils(roomsList, bookingsList);
 	}
@@ -30,7 +43,11 @@ public class BookingSystem {
 	}
 	
 	/**
-	 * A Guest wants to cancel the Booking
+	 * A Guest wants to cancel a specified Booking. The Hotel BookingSystem needs to check the following:
+	 * 	- if the Booking exists
+	 * 	- if the request has been made before the cancellation window has passed
+	 * If either condition is violated, then this function will return an error code respective of the
+	 * violated condition, and the user interface will provide a corresponding message.
 	 * @param booking desired Booking to cancel 
 	 * @return 0 if the cancellation was successful, 1 if the booking doesn't exist, and 2 if the cancellation is not within the cancellation window
 	 */

@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 /**
  * 
@@ -45,5 +45,9 @@ public class Room {
 	 */
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public RoomType getRoomType() {
+		return this.description.getRoomType();
 	}
 }
