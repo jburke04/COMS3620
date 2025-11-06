@@ -1,5 +1,4 @@
 package src;
-
 import java.util.Scanner;
 
 public class Main {
@@ -42,7 +41,7 @@ public class Main {
 				//TODO
 				break;
 			case "o":
-				//TODO
+				checkout.start(input);
 				break;
 			case "h":
 				//TODO
