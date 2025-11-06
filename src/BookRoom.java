@@ -1,5 +1,7 @@
 package src;
 
+import models.*;
+
 public class BookRoom {
     public static void start(Scanner scanner, BookingSystem system) {
 

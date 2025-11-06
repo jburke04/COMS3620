@@ -35,7 +35,7 @@ public class Main {
 				//TODO
 				break;
 			case "c":
-				//TODO
+				cancel.start(input, null);
 				break;
 			case "i":
 				//TODO
