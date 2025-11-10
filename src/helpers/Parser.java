@@ -1,56 +1,209 @@
+//package src.helpers;
+//
+//import src.models.Booking;
+//import src.models.Guest;
+//import src.models.Room;
+//
+//import java.io.FileReader;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+//import org.json.simple.parser.JSONParser;
+//import org.json.simple.parser.ParseException;
+//import java.util.ArrayList;
+//
+//public class Parser {
+//
+//    private static JSONParser parser = new JSONParser();
+//
+//    public static void parseRooms(String filepath, ArrayList<Room> rooms) {
+//
+//        JSONArray a = null;
+//        try {
+//            a = (JSONArray) parser.parse(new FileReader(filepath));
+//        } catch (java.lang.Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        for (Object o : a)
+//        {
+//            JSONObject person = (JSONObject) o;
+//
+//            String name = (String) person.get("name");
+//            System.out.println(name);
+//
+//            String city = (String) person.get("city");
+//            System.out.println(city);
+//
+//            String job = (String) person.get("job");
+//            System.out.println(job);
+//
+//            JSONArray cars = (JSONArray) person.get("cars");
+//
+//            for (Object c : cars)
+//            {
+//                System.out.println(c+"");
+//            }
+//        }
+//    }
+//
+//    public static void parseBookings(String filepath, ArrayList<Booking> bookings) {
+//
+//    }
+//
+//    public static void parseGuests(String filepath, ArrayList<Guest> guests) {
+//
+//    }
+//}
+/**
+ * iteration 1
+ */
+
 package src.helpers;
 
-import src.models.Booking;
-import src.models.Guest;
-import src.models.Room;
+import src.models.*;
 
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import java.util.ArrayList;
 
+/**
+ * JSON (simple) loader/saver for Rooms, Guests, and Bookings.
+ * Uses the assets already present in src/assets/.
+ */
 public class Parser {
 
-    private static JSONParser parser = new JSONParser();
+    private static final JSONParser parser = new JSONParser();
 
-    public static void parseRooms(String filepath, ArrayList<Room> rooms) {
+    public static void parseRooms(String filepath, List<Room> rooms) {
+        rooms.clear();
+        try (FileReader reader = new FileReader(filepath)) {
+            JSONArray arr = (JSONArray) parser.parse(reader);
+            for (Object o : arr) {
+                JSONObject r = (JSONObject) o;
+                int num = ((Long) r.get("roomNumber")).intValue();
+                String status = (String) r.get("status");
+                JSONObject desc = (JSONObject) r.get("description");
+                String type = (String) desc.get("type");
+                double cost = ((Number) desc.get("cost")).doubleValue();
 
-        JSONArray a = null;
-        try {
-            a = (JSONArray) parser.parse(new FileReader(filepath));
-        } catch (java.lang.Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        for (Object o : a)
-        {
-            JSONObject person = (JSONObject) o;
-
-            String name = (String) person.get("name");
-            System.out.println(name);
-
-            String city = (String) person.get("city");
-            System.out.println(city);
-
-            String job = (String) person.get("job");
-            System.out.println(job);
-
-            JSONArray cars = (JSONArray) person.get("cars");
-
-            for (Object c : cars)
-            {
-                System.out.println(c+"");
+                rooms.add(new Room(
+                        num,
+                        Status.valueOf(status),
+                        RoomType.valueOf(type),
+                        cost
+                ));
             }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse Rooms.json: " + e.getMessage(), e);
         }
     }
 
-    public static void parseBookings(String filepath, ArrayList<Booking> bookings) {
+    public static void parseGuests(String filepath, List<Guest> guests) {
+        guests.clear();
+        try (FileReader reader = new FileReader(filepath)) {
+            JSONArray arr = (JSONArray) parser.parse(reader);
+            for (Object o : arr) {
+                JSONObject g = (JSONObject) o;
+                int guestId = ((Long) g.get("guestId")).intValue();
+                String name = (String) g.get("name");
+                String phone = (String) g.get("phoneNumber");
+                String email = (String) g.get("email");
+                String idDoc = (String) g.getOrDefault("idDocument", "");
 
+                guests.add(new Guest(guestId, name, phone, email, idDoc));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse Guests.json: " + e.getMessage(), e);
+        }
     }
 
-    public static void parseGuests(String filepath, ArrayList<Guest> guests) {
+    public static void parseBookings(String filepath, List<Booking> bookings) {
+        bookings.clear();
+        try (FileReader reader = new FileReader(filepath)) {
+            JSONArray arr = (JSONArray) parser.parse(reader);
+            for (Object o : arr) {
+                JSONObject b = (JSONObject) o;
+                int conf = ((Long) b.get("confirmationNumber")).intValue();
+                int guestId = ((Long) b.get("guestID")).intValue();
+                String startStr = (String) b.get("startTime");
+                String endStr   = (String) b.get("endTime");
+                int roomNum = ((Long) b.get("roomNumber")).intValue();
+                String status = (String) b.get("status");
+                double cost = ((Number) b.get("cost")).doubleValue();
 
+                Calendar start = gregFromISO(startStr);
+                Calendar end   = gregFromISO(endStr);
+
+                bookings.add(new Booking(conf, guestId, start, end, roomNum,
+                        BookingStatus.valueOf(status), cost));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse Bookings.json: " + e.getMessage(), e);
+        }
+    }
+
+    // ---- Saves ----
+    public static void saveBookings(String filepath, List<Booking> bookings) {
+        JSONArray arr = new JSONArray();
+        for (Booking b : bookings) {
+            JSONObject o = new JSONObject();
+            o.put("confirmationNumber", b.getConfirmationNumber());
+            o.put("guestID", b.getGuestID());
+            o.put("startTime", isoFromCalendar(b.getStartTime()));
+            o.put("endTime", isoFromCalendar(b.getEndTime()));
+            o.put("roomNumber", b.getRoomNumber());
+            o.put("status", b.getStatus().name());
+            o.put("cost", b.getCost());
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save Bookings.json: " + e.getMessage(), e);
+        }
+    }
+
+    public static void saveRooms(String filepath, List<Room> rooms) {
+        JSONArray arr = new JSONArray();
+        for (Room r : rooms) {
+            JSONObject desc = new JSONObject();
+            desc.put("type", r.getRoomType().name());
+            desc.put("cost", r.getCost());
+
+            JSONObject o = new JSONObject();
+            o.put("roomNumber", r.getRoomNumber());
+            o.put("status", r.getStatus().name());
+            o.put("description", desc);
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save Rooms.json: " + e.getMessage(), e);
+        }
+    }
+
+    // ---- helpers ----
+    private static Calendar gregFromISO(String iso) {
+        LocalDateTime ldt = LocalDateTime.parse(iso);
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()));
+        return cal;
+    }
+
+    private static String isoFromCalendar(Calendar cal) {
+        LocalDateTime ldt = LocalDateTime.of(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH) + 1,
+                cal.get(Calendar.DAY_OF_MONTH),
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                0);
+        return ldt.toString();
     }
 }

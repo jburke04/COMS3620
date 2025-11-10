@@ -8,6 +8,124 @@ import java.util.Calendar;
  * dates (start and end) of the Booking, the total cost of the Booking (without discounts),
  * and the status of the Booking itself.
  */
+//public class Booking {
+//	private static int nextConfirmationNumber = 1000;
+//
+//	private int confirmationNumber;
+//	private int guestID;
+//	private Calendar startTime;
+//	private Calendar endTime;
+//	private Room room;
+//	private BookingStatus status;
+//	private double cost;
+//
+//	/**
+//	 * Constructor for a Booking
+//	 * @param guestID Guest ID the Booking is reserved under
+//	 * @param startTime start time and day of the Booking
+//	 * @param endTime end time and day of the Booking
+//	 * @param room Room being booked
+//	 * @param status status of the Booking
+//	 * @param cost cost of the whole Booking
+//	 */
+//	public Booking(int guestID, Calendar startTime, Calendar endTime, Room room, BookingStatus status, double cost) {
+//		this.confirmationNumber = nextConfirmationNumber++;
+//		this.guestID = guestID;
+//		this.startTime = startTime;
+//		this.endTime = endTime;
+//		this.room = room;
+//		this.status = status;
+//		this.cost = cost;
+//	}
+//
+//	/**
+//	 * Returns the confirmation number for this Booking
+//	 * @return confirmation number (unique identifier) for the Booking
+//	 */
+//	public int getConfirmationNumber() {
+//		return this.confirmationNumber;
+//	}
+//
+//	/**
+//	 * Returns the Guest for this Booking
+//	 * @return Guest the Booking is under
+//	 */
+//	public int getGuestID() {
+//		return this.guestID;
+//	}
+//
+//	/**
+//	 * Returns the current status for this Booking
+//	 * @return Booking's current Status
+//	 */
+//	public BookingStatus getStatus() {
+//		return this.status;
+//	}
+//
+//	/**
+//	 * Returns the Room within this Booking
+//	 * @return Room being Booked
+//	 */
+//	public Room getRoom() {
+//		return this.room;
+//	}
+//
+//	/**
+//	 * Returns the start date and time of the reservation
+//	 * @return date and time the reservation starts
+//	 */
+//	public Calendar getStartTime() {
+//		return this.startTime;
+//	}
+//
+//	/**
+//	 * Returns the end date and time of the reservation
+//	 * @return date and time the reservation ends
+//	 */
+//	public Calendar getEndTime() {
+//		return this.endTime;
+//	}
+//
+//	/**
+//	 * Returns the full estimated cost (without discounts) for the reservation
+//	 * @return full cost of the reservation
+//	 */
+//	public double getCost() {
+//		return this.cost;
+//	}
+//
+//	public void setRoom(Room room) {
+//		this.room = room;
+//	}
+//
+//	/**
+//	 * Sets the Booking's current status to the desired value
+//	 * @param status enumerated value representing the status to set this Booking to
+//	 */
+//	public void setStatus(BookingStatus status) {
+//		this.status = status;
+//	}
+//
+//	public void setStartTime(Calendar startTime) {
+//		this.startTime = startTime;
+//	}
+//
+//	public void setEndTime(Calendar endTime) {
+//		this.endTime = endTime;
+//	}
+//
+//	/**
+//	 * Sets the Booking's current cost to the desired value
+//	 * @param cost cost to set
+//	 */
+//	public void setCost(int cost) {
+//		this.cost = cost;
+//	}
+//}
+
+/**
+ * Redoing for iteration 1
+ */
 public class Booking {
 	private static int nextConfirmationNumber = 1000;
 
@@ -15,110 +133,39 @@ public class Booking {
 	private int guestID;
 	private Calendar startTime;
 	private Calendar endTime;
-	private Room room;
+	private int roomNumber;
 	private BookingStatus status;
 	private double cost;
 
-	/**
-	 * Constructor for a Booking
-	 * @param guestID Guest ID the Booking is reserved under
-	 * @param startTime start time and day of the Booking
-	 * @param endTime end time and day of the Booking
-	 * @param room Room being booked
-	 * @param status status of the Booking
-	 * @param cost cost of the whole Booking
-	 */
-	public Booking(int guestID, Calendar startTime, Calendar endTime, Room room, BookingStatus status, double cost) {
-		this.confirmationNumber = nextConfirmationNumber++;
+	public Booking(int confirmationNumber, int guestID, Calendar startTime, Calendar endTime,
+				   int roomNumber, BookingStatus status, double cost) {
+		this.confirmationNumber = confirmationNumber;
 		this.guestID = guestID;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.room = room;
+		this.roomNumber = roomNumber;
 		this.status = status;
 		this.cost = cost;
+
+		// keep nextConfirmationNumber monotonic if we loaded older data
+		if (confirmationNumber >= nextConfirmationNumber) {
+			nextConfirmationNumber = confirmationNumber + 1;
+		}
 	}
 
-	/**
-	 * Returns the confirmation number for this Booking
-	 * @return confirmation number (unique identifier) for the Booking
-	 */
-	public int getConfirmationNumber() {
-		return this.confirmationNumber;
+	// constructor for new bookings (auto conf #)
+	public Booking(int guestID, Calendar startTime, Calendar endTime,
+				   int roomNumber, BookingStatus status, double cost) {
+		this(nextConfirmationNumber++, guestID, startTime, endTime, roomNumber, status, cost);
 	}
 
-	/**
-	 * Returns the Guest for this Booking
-	 * @return Guest the Booking is under
-	 */
-	public int getGuestID() {
-		return this.guestID;
-	}
-
-	/**
-	 * Returns the current status for this Booking
-	 * @return Booking's current Status
-	 */
-	public BookingStatus getStatus() {
-		return this.status;
-	}
-
-	/**
-	 * Returns the Room within this Booking
-	 * @return Room being Booked
-	 */
-	public Room getRoom() {
-		return this.room;
-	}
-
-	/**
-	 * Returns the start date and time of the reservation
-	 * @return date and time the reservation starts
-	 */
-	public Calendar getStartTime() { 
-		return this.startTime;
-	}
-
-	/**
-	 * Returns the end date and time of the reservation
-	 * @return date and time the reservation ends
-	 */
-	public Calendar getEndTime() {
-		return this.endTime;
-	}
-
-	/**
-	 * Returns the full estimated cost (without discounts) for the reservation
-	 * @return full cost of the reservation
-	 */
-	public double getCost() {
-		return this.cost;
-	}
-
-	public void setRoom(Room room) {
-		this.room = room;
-	}
-
-	/**
-	 * Sets the Booking's current status to the desired value
-	 * @param status enumerated value representing the status to set this Booking to
-	 */
-	public void setStatus(BookingStatus status) {
-		this.status = status;
-	}
-
-	public void setStartTime(Calendar startTime) {
-		this.startTime = startTime;
-	}
-
-	public void setEndTime(Calendar endTime) {
-		this.endTime = endTime;
-	}
-
-	/**
-	 * Sets the Booking's current cost to the desired value
-	 * @param cost cost to set
-	 */
-	public void setCost(int cost) { 
-		this.cost = cost;
-	}
+	public int getConfirmationNumber() { return confirmationNumber; }
+	public int getGuestID() { return guestID; }
+	public Calendar getStartTime() { return startTime; }
+	public Calendar getEndTime() { return endTime; }
+	public int getRoomNumber() { return roomNumber; }
+	public BookingStatus getStatus() { return status; }
+	public void setStatus(BookingStatus status) { this.status = status; }
+	public double getCost() { return cost; }
 }
+
