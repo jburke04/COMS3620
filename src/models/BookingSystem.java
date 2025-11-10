@@ -1,7 +1,10 @@
-package models;
+package src.models;
+
+import src.helpers.Parser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * System that the Hotel utilizes for managing Bookings. The Booking System itself
@@ -9,18 +12,23 @@ import java.util.Calendar;
  * for a Booking.
  */
 public class BookingSystem {
-	private final RoomUtils roomUtils;
-	private Room[] rooms;
+	private RoomUtils roomUtils;
+	private List<Guest> guests;
 	
 	/**
 	 * Constructor for BookingSystem that takes two filepaths and uses them to populate
 	 * the list of rooms and list of bookings that the Room Utility class will support
 	 * complex logic for.
-	 * @param String filepath for the list of rooms
-	 * @param String filepath for the list of bookings
+	 * @param f1 filepath for the list of rooms
+	 * @param f2 filepath for the list of bookings
+	 * @param f3 filepath for the list of guests
 	 */
-	public BookingSystem(String f1, String f2) {
-		this.roomUtils = new RoomUtils(f1, f2);
+	public BookingSystem(String f1, String f2, String f3) {
+        roomUtils = new RoomUtils();
+        Parser.parseRooms(f1, roomUtils.getRooms());
+        Parser.parseBookings(f2, roomUtils.getBookings());
+		//TODO: iterate through the third file to fetch the list of guests
+        Parser.parseGuests(f3, guests);
 	}
 
 	/**
@@ -29,22 +37,25 @@ public class BookingSystem {
 	 * @param ArrayList list of rooms
 	 * @param ArrayList list of bookings
 	 */
-	public BookingSystem(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList) {
+	public BookingSystem(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList, List<Guest> guests) {
 		this.roomUtils = new RoomUtils(roomsList, bookingsList);
+		this.guests = guests;
 	}
+	
+	public Booking book(RoomType type, Calendar startDate, Calendar endDate, Guest guest) {
+		//TODO: search for the next available room by room type and check if it's not booked during the requested dates
+		return null;
+	}
+	
+	public Booking book(int roomNumber, Calendar startDate, Calendar endDate, Guest guest) {
+		Room room = roomUtils.findRoom(roomNumber);
+		if (room == null)
+			return null;
 
-	public BookingSystem(int numRooms) {
-		this.rooms = new Room[numRooms];
-	}
-	
-	public boolean book(RoomType type, Calendar startDate, Calendar endDate) {
-		
-		return false;
-	}
-	
-	public boolean book(int roomNumber, Calendar startDate, Calendar endDate ) {
-		
-		return false;
+		//TODO: calculate the full cost of the booking and add it as the total cost:
+		double totalCost = 0;
+		Booking b = new Booking(guest.getGuestID(), startDate, endDate, room, BookingStatus.BOOKED, totalCost);
+		return b;
 	}
 	
 	/**
@@ -53,7 +64,7 @@ public class BookingSystem {
 	 * 	- if the request has been made before the cancellation window has passed
 	 * If either condition is violated, then this function will return an error code respective of the
 	 * violated condition, and the user interface will provide a corresponding message.
-	 * @param booking desired Booking to cancel 
+	 * @param Booking desired Booking to cancel 
 	 * @return 0 if the cancellation was successful, 1 if the booking doesn't exist, and 2 if the cancellation is not within the cancellation window
 	 */
 	public int cancel(Booking booking) {
@@ -84,13 +95,13 @@ public class BookingSystem {
 		return false;
 	}
 	
-	public boolean clean(int roomNumber) {
-		
+	public boolean clean(Room room) {
+		room.setStatus(Status.CLEANING);
 		return false;
 	}
 	
-	public boolean inspect(int roomNumber) {
-		
+	public boolean inspect(Room room) {
+		room.setStatus(Status.INSPECTING);
 		return false;
 	}
 
@@ -100,49 +111,106 @@ public class BookingSystem {
 		return null;
 	}
 
-	public boolean isRoomAvailable(int roomNumber, Calendar startDate, Calendar endDate){
+	public boolean isRoomAvailable(Room room, Calendar startDate, Calendar endDate){
 		return false;
 	}
 
-	// Check in a guest
+	/**
+	 * Checks in for a guest using the provided confirmation number.
+	 * @param int confirmation number to check in
+	 * @return true if the booking doesn't exist (error), false if the
+	 * 			check in was successful.
+	 */
 	public boolean checkIn(int confirmationNumber) {
+		Booking b = roomUtils.findBooking(confirmationNumber);
+		// no such booking exists, return true for error
+		if (b == null)
+			return true;
+
+		// booking exists, update statuses and return false for no error
+		b.setStatus(BookingStatus.CHECKEDIN);
+		b.getRoom().setStatus(Status.OCCUPIED);
 		return false;
 	}
 
-	// if confirmation number is not avilable
-	public boolean checkIn(Booking booking) {
-		return false;
-	}
+	// commented out bc of errors for now
+	// // if confirmation number is not avilable
+	// public boolean checkIn(Booking booking) {
+	// 	booking.setStatus(BookingStatus.CHECKEDIN);
+	// 	booking.getRoom().setStatus(Status.OCCUPIED);
+	// 	return false;
+	// }
 
+	/**
+	 * Change the room for the Booking.
+	 * @param Booking booking to update
+	 * @param Room room to change the booking to
+	 * @return true if there is an issue with the requested room,
+	 * 			false if the booking update was successful.
+	 */
 	public boolean change(Booking booking, Room newRoom) {
-		booking.getRoom() = newRoom;
-		return true;
+		//TODO: first ensure that the requested room is not booked during that time
+		
+		// not booked during that time, continue with the update
+		booking.setRoom(newRoom);
+		return false;
 	}
 
-	// Find booking by confirmation number
+	/**
+	 * Searches for the Booking by the confirmation number. Returns null if no such
+	 * confirmation number exists.
+	 * @param int confirmation number to search
+	 * @return Booking with corresponding confirmation number
+	 */
 	public Booking findBookingByConfirmation(int confirmationNumber) {
-		return null;
+		return roomUtils.findBooking(confirmationNumber);
 	}
 
+	/**
+	 * Search for a Guest by the provided name.
+	 * @param String name to search
+	 * @return list of guests with corresponding name
+	 */
 	public List<Guest> searchGuestByName(String name) {
 		return null;
 	}
 
-	// Search guest by phone
+	/**
+	 * Search for a Guest by the provided phone number.
+	 * @param String phone number to search
+	 * @return list of guests with corresponding phone number
+	 */
 	public Guest searchGuestByPhone(String phone) {
 		return null;
 	}
 
+	/**
+	 * Adds a Guest to the current list of guests in this system.
+	 * @param String name of guest
+	 * @param String phone number of guest
+	 * @param String email of guest
+	 * @param String ID Document of guest
+     * @return guest being added
+	 */
 	public Guest addGuest(String name, String phone, String email, String idDocument) {
-		return null;
+        Guest guest = new Guest(name, phone, email, idDocument);
+
+        return guest;
 	}
 
 	private Room getRoomByNumber(int roomNumber) {
-		return null;
+		return roomUtils.findRoom(roomNumber);
 	}
 
-	// Getters
-	public Room[] getRooms() { return this.rooms; }
-	public List<Booking> getBookings() { return this.bookings; }
-	public List<Guest> getGuests() { return this.guests; }
+	public ArrayList<Room> getRooms() {
+		return this.roomUtils.getRooms();
+	}
+
+	public List<Booking> getBookings() {
+		return this.roomUtils.getBookings();
+	}
+
+	public List<Guest> getGuests() {
+		return this.guests;
+	}
 }

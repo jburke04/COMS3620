@@ -1,16 +1,16 @@
-package models;
+package src.models;
 
 /**
  * 
  */
 public class Room {
-	public models.RoomDescription description;
+	public RoomDescription description;
 	public int roomNumber;
-	private models.Status status;
+	private Status status;
 	
-	public Room(models.RoomType type, int roomNumber) {
-		if (type == models.RoomType.SINGLE) {
-			description = new models.RoomDescription(type, 100);
+	public Room(RoomType type, int roomNumber) {
+		if (type == RoomType.SINGLE) {
+			description = new RoomDescription(type, 100);
 		}
 		else if (type == RoomType.DOUBLE) {
 			description = new RoomDescription(type, 150);
@@ -30,6 +30,18 @@ public class Room {
 		this(type, roomNumber);
 		this.status = status;
 	}
+
+	public RoomType getRoomType() {
+		return this.description.getRoomType();
+	}
+
+	public double getCost() {
+		return this.description.getCost();
+	}
+
+	public int getRoomNumber() {
+		return this.roomNumber;
+	}
 	
 	/**
 	 * Gets the current status value for this Room
@@ -45,9 +57,5 @@ public class Room {
 	 */
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public RoomType getRoomType() {
-		return this.description.getRoomType();
 	}
 }

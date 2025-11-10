@@ -1,5 +1,7 @@
 package src;
 
+import src.models.*;
+
 public interface PostCheckoutMaintenanceService {
 
     void recordCleaningDone(int roomNumber);

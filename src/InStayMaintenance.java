@@ -1,7 +1,7 @@
 package src;
 
 import java.util.Scanner;
-import models.*;
+import src.models.*;
 
 public class InStayMaintenance {
     public static void main(String[] args) {
@@ -32,7 +32,7 @@ public class InStayMaintenance {
         if (!available) {
             System.out.print("New preferred window: ");
             String newWindow = sc.nextLine().trim();
-            svc.rescheduleVisit(ticket.getId(), newWindow);
+            svc.rescheduleVisit(ticket.getID(), newWindow);
             System.out.println("Visit rescheduled to: " + newWindow);
             System.out.println("Proceeding to visit...");
         }
@@ -42,10 +42,10 @@ public class InStayMaintenance {
 
         if (fixedNow) {
             // Main success path
-            svc.visitAndFix(ticket.getId());
+            svc.visitAndFix(ticket.getID());
             System.out.print("Is the fix acceptable? [y/n]: ");
             boolean accepted = sc.nextLine().trim().toLowerCase().startsWith("y");
-            svc.guestConfirm(ticket.getId(), accepted);
+            svc.guestConfirm(ticket.getID(), accepted);
             System.out.println(accepted ? "Great — ticket resolved and accepted."
                                         : "Noted — ticket resolved but guest did not accept.");
         } else {
@@ -60,7 +60,7 @@ public class InStayMaintenance {
             } else {
                 System.out.print("Parts needed. Follow-up visit window: ");
                 String followUp = sc.nextLine().trim();
-                svc.markNeedsParts(ticket.getId(), followUp);
+                svc.markNeedsParts(ticket.getID(), followUp);
                 System.out.println("Follow-up scheduled: " + followUp + " (ticket remains OPEN).");
             }
         }

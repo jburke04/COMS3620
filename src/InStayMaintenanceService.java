@@ -1,59 +1,47 @@
 package src;
 
+import java.awt.print.Book;
 import java.util.*;
-import models.*;
+import src.models.*;
 
 public class InStayMaintenanceService {
 
-    public static class RoomRef {
-        public int number;
-        public Status status;
-        public RoomRef(int number, Status status) {
-            this.number = number;
-            this.status = status;
-        }
-        @Override public String toString() { return "Room " + number + " (" + status + ")"; }
-    }
-
-    public static class GuestRef {
-        public int guestId;
-        public String name;
-        public int roomNumber;
-        public GuestRef(int guestId, String name, int roomNumber) {
-            this.guestId = guestId;
-            this.name = name;
-            this.roomNumber = roomNumber;
-        }
-        @Override public String toString() { return "Guest#" + guestId + " " + name + " in room " + roomNumber; }
-    }
-
     private int nextTicketId = 1;
     private final Map<Integer, MaintenanceTicket> tickets = new LinkedHashMap<>();
-    private final Map<Integer, RoomRef> rooms = new HashMap<>();
-    private final Map<Integer, GuestRef> guests = new HashMap<>();
+    private final Map<Integer, Room> rooms = new HashMap<>();
+    private final Map<Integer, Guest> guests = new HashMap<>();
 
     public InStayMaintenanceService() {
-        rooms.put(101, new RoomRef(101, Status.OCCUPIED));
-        rooms.put(102, new RoomRef(102, Status.AVAILABLE));
-        rooms.put(103, new RoomRef(103, Status.AVAILABLE));
-        guests.put(1, new GuestRef(1, "Siddhartha", 101));
+        Guest g = new Guest("Siddhartha", "1234567890", "example@gmail.com", "");
+        Room r = new Room(RoomType.SINGLE, 101);
+        r.setStatus(Status.OCCUPIED);
+        // making a filler booking for now
+        Booking b = new Booking(g.getGuestID(), Calendar.getInstance(), Calendar.getInstance(), r, BookingStatus.CHECKEDIN, r.getCost());
+        rooms.put(101, r);
+        rooms.put(102, new Room(RoomType.SINGLE, 102));
+        rooms.get(102).setStatus(Status.AVAILABLE);
+        rooms.put(103, new Room(RoomType.SINGLE, 103));
+        rooms.get(103).setStatus(Status.AVAILABLE);
+        guests.put(1, g);
     }
 
-    public GuestRef getGuest(int id) { return guests.get(id); }
-    public RoomRef getRoom(int number) { return rooms.get(number); }
+    public Guest getGuest(int id) { return guests.get(id); }
+    public Room getRoom(int number) { return rooms.get(number); }
     public Collection<MaintenanceTicket> getAllTickets() { return tickets.values(); }
 
     public MaintenanceTicket reportIssue(int guestId, String description, Severity severity, String visitWindow) {
-        GuestRef g = requireGuestCheckedIn(guestId);
-        MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, g.roomNumber, description, severity);
+        Guest g = requireGuestCheckedIn(guestId);
+        Booking b = findCurrBooking(g);
+        assert b != null;
+        MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, b.getRoom(), description, severity);
         t.setScheduledWindow(visitWindow);
-        tickets.put(t.getId(), t);
+        tickets.put(t.getID(), t);
         return t;
     }
 
     public void visitAndFix(int ticketId) {
         MaintenanceTicket t = requireTicketOpen(ticketId);
-        t.resolve();
+        t.setResolvedAt(Calendar.getInstance());
     }
 
     public void guestConfirm(int ticketId, boolean accepted) {
@@ -74,26 +62,29 @@ public class InStayMaintenanceService {
     }
     
     public void relocateGuestSameRate(int guestId, int newRoomNumber) {
-        GuestRef g = requireGuestCheckedIn(guestId);
-        RoomRef current = rooms.get(g.roomNumber);
-        RoomRef target = rooms.get(newRoomNumber);
-        if (target == null || target.status != Status.AVAILABLE) {
+        Guest g = requireGuestCheckedIn(guestId);
+        Booking b = findCurrBooking(g);
+        assert b != null;
+        Room current = rooms.get(b.getRoom().getRoomNumber());
+        Room target = rooms.get(newRoomNumber);
+        if (target == null || target.getStatus() != Status.AVAILABLE) {
             throw new IllegalStateException("Target room not available");
         }
-        target.status = Status.OCCUPIED;
-        current.status = Status.AWAITING;
-        g.roomNumber = newRoomNumber;
+        target.setStatus(Status.OCCUPIED);
+        current.setStatus(Status.AWAITING);
+        b.setRoom(target);
     }
 
     public void emergencyRelocate(int guestId, int newRoomNumber) {
         relocateGuestSameRate(guestId, newRoomNumber);
     }
 
-    private GuestRef requireGuestCheckedIn(int guestId) {
-        GuestRef g = guests.get(guestId);
+    private Guest requireGuestCheckedIn(int guestId) {
+        Guest g = guests.get(guestId);
         if (g == null) throw new IllegalArgumentException("Guest not found");
-        RoomRef r = rooms.get(g.roomNumber);
-        if (r == null || r.status != Status.OCCUPIED) {
+        Booking b = findCurrBooking(g);
+        assert b != null;
+        if (b.getRoom() == null || b.getRoom().getStatus() != Status.OCCUPIED) {
             throw new IllegalStateException("Guest is not currently checked-in / occupying a room");
         }
         return g;
@@ -104,5 +95,13 @@ public class InStayMaintenanceService {
         if (t == null) throw new IllegalArgumentException("Unknown ticket " + ticketId);
         if (t.getStatus() != MaintenanceStatus.OPEN) throw new IllegalStateException("Ticket not OPEN");
         return t;
+    }
+
+    private static Booking  findCurrBooking(Guest g) {
+        for (Booking b : g.getBookingHistory()) {
+            if (b.getStatus() == BookingStatus.CHECKEDIN)
+                return b;
+        }
+        return null;
     }
 }

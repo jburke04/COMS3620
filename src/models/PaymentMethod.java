@@ -1,4 +1,4 @@
-package models;
+package src.models;
 
 public enum PaymentMethod {
     CASH,
