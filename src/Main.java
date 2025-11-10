@@ -1,12 +1,9 @@
 package src;
 import java.util.Scanner;
 
-import src.models.BookingSystem;
-
 public class Main {
 	public static void main(String[] args) {
 		boolean close = false;
-        BookingSystem system = new BookingSystem("./assets/Rooms.json", "./assets/Bookings.json", "./assets/Guests.json");
 		Scanner input = new Scanner(System.in);
 		while (!close) {
 			System.out.println("[C]ustomer Services | [E]mployee Services | [Q]uit");

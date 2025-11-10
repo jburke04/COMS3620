@@ -21,13 +21,13 @@ public class BookingSystem {
 	 * @param f2 filepath for the list of bookings
 	 * @param f3 filepath for the list of guests
 	 */
-	public BookingSystem(String f1, String f2, String f3) {
-        roomUtils = new RoomUtils();
-        Parser.parseRooms(f1, roomUtils.getRooms());
-        Parser.parseBookings(f2, roomUtils.getBookings());
-		//TODO: iterate through the third file to fetch the list of guests
-        Parser.parseGuests(f3, guests);
-	}
+	// public BookingSystem(String f1, String f2, String f3) {
+    //     roomUtils = new RoomUtils();
+    //     Parser.parseRooms(f1, roomUtils.getRooms());
+    //     Parser.parseBookings(f2, roomUtils.getBookings());
+	// 	//TODO: iterate through the third file to fetch the list of guests
+    //     Parser.parseGuests(f3, guests);
+	// }
 
 	/**
 	 * Constructor for BookingSystem that takes already defined lists for the rooms and
