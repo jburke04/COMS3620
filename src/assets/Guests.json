@@ -1,0 +1,28 @@
+[
+  {
+    "guestId": 1,
+    "name": "Siddhartha",
+    "phoneNumber": "1234567890",
+    "email": "example@gmail.com",
+    "idDocument": "",
+    "bookingHistory": [
+      {
+        "confirmationNumber": 1,
+        "guestID": 1,
+        "startTime": "2025-11-10T14:00:00",
+        "endTime": "2025-11-12T11:00:00",
+        "roomNumber": 101,
+        "status": "CONFIRMED",
+        "cost": 200.0
+      }
+    ]
+  },
+  {
+    "guestId": 2,
+    "name": "Em",
+    "phoneNumber": "5555555555",
+    "email": "something@yahoo.com",
+    "idDocument": "",
+    "bookingHistory":[]
+  }
+]

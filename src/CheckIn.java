@@ -1,6 +1,8 @@
 package src;
 
-import models.*;
+import src.models.*;
+import java.util.Scanner;
+import java.util.Calendar;
 
 public class CheckIn {
     public static void start(Scanner scanner, BookingSystem system) {
@@ -33,6 +35,7 @@ public class CheckIn {
 
     private static boolean processPayment(Scanner scanner){
 
+        return false;
     }
 
     private static void handlePaymentFailure(Scanner scanner){
@@ -41,6 +44,7 @@ public class CheckIn {
 
     private static String formatDate(Calendar cal) {
 
+        return "";
     }
 
 }

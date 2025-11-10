@@ -3,6 +3,7 @@ package src;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import src.models.*;
 
 /**
  * 1. Room gets cleaned
@@ -23,9 +24,9 @@ public class PostCheckoutMaintenanceServiceImpl {
     }
 
     // Called when housekeeper finishes cleaning
-    public void cleaningDone(int roomNumber) {
+    public void cleaningDone(Room room) {
         // TODO: room in CLEANING
-        boolean ok = system.clean(roomNumber);
+        boolean ok = system.clean(room);
         if (!ok) {
             System.out.println("Error: cleaning update failed");
         } else {
@@ -33,9 +34,9 @@ public class PostCheckoutMaintenanceServiceImpl {
         }
     }
 
-    public void inspectionResult(int roomNumber, boolean pass, String issue, Severity severity) {
+    public void inspectionResult(Room room, boolean pass, String issue, Severity severity) {
         if (pass) {
-            boolean ok = system.inspect(roomNumber);
+            boolean ok = system.clean(room);
             if (ok) System.out.println("Room passed inspection. Now available.");
             return;
         }
@@ -43,21 +44,21 @@ public class PostCheckoutMaintenanceServiceImpl {
         // If inspection failed then we make maintenance ticket
         MaintenanceTicket t = new MaintenanceTicket(
             ticketId.getAndIncrement(),
-            roomNumber,
+            room,
             issue,
             severity
         );
         tickets.add(t);
 
-        System.out.println("Room failed inspection. Maintenance ticket created: #" + t.id);
+        System.out.println("Room failed inspection. Maintenance ticket created: #" + t.getID());
         // TODO: mark room AWAITING or OUT_OF_SERVICE
     }
 
     public void finishMaintenance(int ticketNumber) {
         for (MaintenanceTicket t : tickets) {
-            if (t.id == ticketNumber && t.status == MaintenanceStatus.OPEN) {
-                t.status = MaintenanceStatus.RESOLVED;
-                t.resolvedAt = java.util.Calendar.getInstance();
+            if (t.getID() == ticketNumber && t.getStatus() == MaintenanceStatus.OPEN) {
+                t.setStatus(MaintenanceStatus.RESOLVED);
+                t.setResolvedAt(java.util.Calendar.getInstance());
                 System.out.println("Ticket #" + ticketNumber + " resolved. Room needs re-inspection.");
                 // TODO: move room to INSPECTING state 
                 return;

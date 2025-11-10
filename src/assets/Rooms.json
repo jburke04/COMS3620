@@ -1,0 +1,26 @@
+[
+  {
+    "roomNumber": 101,
+    "status": "OCCUPIED",
+    "description": {
+      "type": "SINGLE",
+      "cost": 100.0
+    }
+  },
+  {
+    "roomNumber": 102,
+    "status": "AVAILABLE",
+    "description": {
+      "type": "SINGLE",
+      "cost": 100.0
+    }
+  },
+  {
+    "roomNumber": 103,
+    "status": "AVAILABLE",
+    "description": {
+      "type": "SINGLE",
+      "cost": 100.0
+    }
+  }
+]
