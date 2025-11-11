@@ -21,8 +21,11 @@ public class InStayMaintenance {
             System.out.println("1) Create ticket");
             System.out.println("2) View ticket");
             System.out.println("3) Resolve ticket");
+            System.out.println("0) Back");
             System.out.print("Choose: ");
             String c = sc.nextLine().trim();
+
+            if ("0".equals(c)) return;
 
             if ("1".equals(c)) {
                 System.out.print("Room number: ");
