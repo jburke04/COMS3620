@@ -449,18 +449,24 @@ public class BookingSystem {
 		saveAll();
 		return true;
 	}
+    public boolean validateBooking(int confirmationNumber){
+        Booking b = findBookingByConfirmation(confirmationNumber);
+        if (b == null) return false;
+        if (b.getStatus() != BookingStatus.CHECKEDIN) return false;
+        return true;
+    }
 
-	public boolean checkOutAndPay(int confirmationNumber, String method) {
-		Booking b = findBookingByConfirmation(confirmationNumber);
-		if (b == null) return false;
-		if (b.getStatus() != BookingStatus.CHECKEDIN) return false;
+	public void checkoutAndPay(int confirmationNumber) {
+        Booking b = findBookingByConfirmation(confirmationNumber);
+        if(validateBooking(confirmationNumber)){
+            return;
+        }
 
 		// simulate external payment success (method is not validated here)
 		Room r = findRoomByNumber(b.getRoomNumber());
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
 		saveAll();
-		return true;
 	}
 
 	// ---- maintenance ----
