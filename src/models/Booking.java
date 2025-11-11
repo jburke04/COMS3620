@@ -125,6 +125,7 @@ import java.util.Calendar;
 
 /**
  * Redoing for iteration 1
+ * added setter for room number
  */
 public class Booking {
 	private static int nextConfirmationNumber = 1000;
@@ -147,13 +148,11 @@ public class Booking {
 		this.status = status;
 		this.cost = cost;
 
-		// keep nextConfirmationNumber monotonic if we loaded older data
 		if (confirmationNumber >= nextConfirmationNumber) {
 			nextConfirmationNumber = confirmationNumber + 1;
 		}
 	}
 
-	// constructor for new bookings (auto conf #)
 	public Booking(int guestID, Calendar startTime, Calendar endTime,
 				   int roomNumber, BookingStatus status, double cost) {
 		this(nextConfirmationNumber++, guestID, startTime, endTime, roomNumber, status, cost);
@@ -164,6 +163,7 @@ public class Booking {
 	public Calendar getStartTime() { return startTime; }
 	public Calendar getEndTime() { return endTime; }
 	public int getRoomNumber() { return roomNumber; }
+	public void setRoomNumber(int roomNumber) { this.roomNumber = roomNumber; }
 	public BookingStatus getStatus() { return status; }
 	public void setStatus(BookingStatus status) { this.status = status; }
 	public double getCost() { return cost; }

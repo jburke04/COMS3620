@@ -1,11 +1,1 @@
-[
-  {
-    "confirmationNumber": 1,
-    "guestID": 1,
-    "startTime": "2025-11-10T14:00:00",
-    "endTime": "2025-11-12T11:00:00",
-    "roomNumber": 101,
-    "status": "CONFIRMED",
-    "cost": 200.0
-  }
-]
+[{"confirmationNumber":1,"roomNumber":101,"cost":200.0,"startTime":"2025-11-10T14:00","endTime":"2025-11-12T11:00","guestID":1,"status":"CONFIRMED"},{"confirmationNumber":1000,"roomNumber":102,"cost":100.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-21T14:00","guestID":3,"status":"CONFIRMED"},{"confirmationNumber":1001,"roomNumber":103,"cost":200.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":3,"status":"CONFIRMED"}]

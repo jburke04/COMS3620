@@ -64,6 +64,8 @@ import src.models.*;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -71,18 +73,26 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-/**
- * JSON (simple) loader/saver for Rooms, Guests, and Bookings.
- * Uses the assets already present in src/assets/.
- */
 public class Parser {
 
     private static final JSONParser parser = new JSONParser();
 
+    private static Object parseOrEmptyArray(String path) {
+        try {
+            if (!Files.exists(Paths.get(path))) return new JSONArray();
+            try (FileReader reader = new FileReader(path)) {
+                Object parsed = parser.parse(reader);
+                return (parsed instanceof JSONArray) ? parsed : new JSONArray();
+            }
+        } catch (Exception e) {
+            return new JSONArray(); // be permissive
+        }
+    }
+
     public static void parseRooms(String filepath, List<Room> rooms) {
         rooms.clear();
-        try (FileReader reader = new FileReader(filepath)) {
-            JSONArray arr = (JSONArray) parser.parse(reader);
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject r = (JSONObject) o;
                 int num = ((Long) r.get("roomNumber")).intValue();
@@ -105,8 +115,8 @@ public class Parser {
 
     public static void parseGuests(String filepath, List<Guest> guests) {
         guests.clear();
-        try (FileReader reader = new FileReader(filepath)) {
-            JSONArray arr = (JSONArray) parser.parse(reader);
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject g = (JSONObject) o;
                 int guestId = ((Long) g.get("guestId")).intValue();
@@ -124,8 +134,8 @@ public class Parser {
 
     public static void parseBookings(String filepath, List<Booking> bookings) {
         bookings.clear();
-        try (FileReader reader = new FileReader(filepath)) {
-            JSONArray arr = (JSONArray) parser.parse(reader);
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject b = (JSONObject) o;
                 int conf = ((Long) b.get("confirmationNumber")).intValue();
@@ -144,6 +154,24 @@ public class Parser {
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse Bookings.json: " + e.getMessage(), e);
+        }
+    }
+
+    public static void parseTickets(String filepath, List<MaintenanceTicket> tickets) {
+        tickets.clear();
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
+            for (Object o : arr) {
+                JSONObject t = (JSONObject) o;
+                int id = ((Long) t.get("ticketId")).intValue();
+                int room = ((Long) t.get("roomNumber")).intValue();
+                String desc = (String) t.get("description");
+                String severity = (String) t.get("severity");
+                String status = (String) t.get("status");
+                tickets.add(new MaintenanceTicket(id, room, desc, severity, MaintenanceStatus.valueOf(status)));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse MaintenanceTickets.json: " + e.getMessage(), e);
         }
     }
 
@@ -185,6 +213,24 @@ public class Parser {
             w.write(arr.toJSONString());
         } catch (Exception e) {
             throw new RuntimeException("Failed to save Rooms.json: " + e.getMessage(), e);
+        }
+    }
+
+    public static void saveTickets(String filepath, List<MaintenanceTicket> tickets) {
+        JSONArray arr = new JSONArray();
+        for (MaintenanceTicket t : tickets) {
+            JSONObject o = new JSONObject();
+            o.put("ticketId", t.getTicketId());
+            o.put("roomNumber", t.getRoomNumber());
+            o.put("description", t.getDescription());
+            o.put("severity", t.getSeverity());
+            o.put("status", t.getStatus().name());
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save MaintenanceTickets.json: " + e.getMessage(), e);
         }
     }
 

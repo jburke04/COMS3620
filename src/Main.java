@@ -1,5 +1,5 @@
-package src;
-import java.util.Scanner;
+//package src;
+//import java.util.Scanner;
 
 //public class Main {
 //	public static void main(String[] args) {
@@ -60,7 +60,12 @@ import java.util.Scanner;
 //
 //	}
 //}
+
+package src;
+
 import src.models.BookingSystem;
+
+import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
@@ -68,7 +73,33 @@ public class Main {
 		system.loadAll();
 
 		Scanner sc = new Scanner(System.in);
-		BookRoom.start(sc, system);
-		sc.close();
+		while (true) {
+			System.out.println("\n=== HOTEL SYSTEM DEMO ===");
+			System.out.println("1) Book a Room");
+			System.out.println("2) Cancel a Booking");
+			System.out.println("3) Change Room");
+			System.out.println("4) In-Stay Maintenance");
+			System.out.println("5) Check-In (mark booking as CHECKEDIN)");
+			System.out.println("6) Checkout & Payment");
+			System.out.println("0) Exit");
+			System.out.print("Choose: ");
+			String choice = sc.nextLine().trim();
+			switch (choice) {
+				case "1": BookRoom.start(sc, system); break;
+				case "2": Cancel.start(sc, system); break;
+				case "3": ChangeRoom.start(sc, system); break;
+				case "4": InStayMaintenance.start(sc, system); break;
+				case "5":
+					System.out.print("Enter confirmation #: ");
+					int c = Integer.parseInt(sc.nextLine().trim());
+					boolean ok = system.checkIn(c);
+					System.out.println(ok ? "✅ Checked in." : "⚠️ Failed to check in.");
+					break;
+				case "6": Checkout.start(sc, system); break;
+				case "0": sc.close(); return;
+				default: System.out.println("Invalid.");
+			}
+		}
 	}
 }
+

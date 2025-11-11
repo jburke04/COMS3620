@@ -1,10 +1,10 @@
-package src.models;
-
-import src.helpers.Parser;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+//package src.models;
+//
+//import src.helpers.Parser;
+//
+//import java.util.ArrayList;
+//import java.util.Calendar;
+//import java.util.List;
 
 ///**
 // * System that the Hotel utilizes for managing Bookings. The Booking System itself
@@ -217,36 +217,131 @@ import java.util.List;
 /**
  * Iteration 1
  */
+package src.models;
+
 
 import java.util.stream.Collectors;
 
-/** In-memory store + file I/O for rooms, guests, bookings. */
+///** In-memory store + file I/O for rooms, guests, bookings. */
+//public class BookingSystem {
+//
+//	private final List<Room> rooms = new ArrayList<>();
+//	private final List<Guest> guests = new ArrayList<>();
+//	private final List<Booking> bookings = new ArrayList<>();
+//
+//	private final String roomsPath = "src/assets/Rooms.json";
+//	private final String guestsPath = "src/assets/Guests.json";
+//	private final String bookingsPath = "src/assets/Bookings.json";
+//
+//	public void loadAll() {
+//		Parser.parseRooms(roomsPath, rooms);
+//		Parser.parseGuests(guestsPath, guests);
+//		Parser.parseBookings(bookingsPath, bookings);
+//	}
+//
+//	public void saveAll() {
+//		Parser.saveRooms(roomsPath, rooms);
+//		Parser.saveBookings(bookingsPath, bookings);
+//		// (Guests unchanged in Book-a-Room flow)
+//	}
+//
+//	// ---- getters ----
+//	public List<Room> getRooms() { return rooms; }
+//	public List<Guest> getGuests() { return guests; }
+//	public List<Booking> getBookings() { return bookings; }
+//
+//	// ---- queries ----
+//	public Guest findGuestByPhoneOrName(String phoneOrName) {
+//		for (Guest g : guests) {
+//			if (g.getPhoneNumber().equalsIgnoreCase(phoneOrName)
+//					|| g.getName().equalsIgnoreCase(phoneOrName)) {
+//				return g;
+//			}
+//		}
+//		return null;
+//	}
+//
+//	public Room findRoomByNumber(int roomNumber) {
+//		for (Room r : rooms) if (r.getRoomNumber() == roomNumber) return r;
+//		return null;
+//	}
+//
+//	public List<Room> findAvailableRooms(RoomType type, Calendar start, Calendar end) {
+//		return rooms.stream()
+//				.filter(r -> r.getRoomType() == type)
+//				.filter(r -> isRoomAvailable(r, start, end))
+//				.collect(Collectors.toList());
+//	}
+//
+//	public boolean isRoomAvailable(Room room, Calendar start, Calendar end) {
+//		if (room.getStatus() != Status.AVAILABLE) return false;
+//
+//		for (Booking b : bookings) {
+//			if (b.getRoomNumber() != room.getRoomNumber()) continue;
+//			if (b.getStatus() == BookingStatus.CANCELLED) continue;
+//
+//			// date overlap check: (start < b.end) && (b.start < end)
+//			if (start.before(b.getEndTime()) && b.getStartTime().before(end)) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+//
+//	// ---- command ----
+//	public Booking createBooking(Guest guest, Room room, Calendar start, Calendar end) {
+//		long nights = Math.max(1, (end.getTimeInMillis() - start.getTimeInMillis()) / (24L*60L*60L*1000L));
+//		double cost = nights * room.getCost();
+//		Booking booking = new Booking(guest.getGuestId(), start, end, room.getRoomNumber(),
+//				BookingStatus.CONFIRMED, cost);
+//		bookings.add(booking);
+//		room.setStatus(Status.BOOKED);
+//		saveAll();
+//		return booking;
+//	}
+//}
+
+/**
+ * for iteration 1
+ */
+
+import src.helpers.Parser;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class BookingSystem {
 
 	private final List<Room> rooms = new ArrayList<>();
 	private final List<Guest> guests = new ArrayList<>();
 	private final List<Booking> bookings = new ArrayList<>();
+	private final List<MaintenanceTicket> tickets = new ArrayList<>();
 
 	private final String roomsPath = "src/assets/Rooms.json";
 	private final String guestsPath = "src/assets/Guests.json";
 	private final String bookingsPath = "src/assets/Bookings.json";
+	private final String ticketsPath = "src/assets/MaintenanceTickets.json";
+
+	private int nextTicketId = 1;
 
 	public void loadAll() {
 		Parser.parseRooms(roomsPath, rooms);
 		Parser.parseGuests(guestsPath, guests);
 		Parser.parseBookings(bookingsPath, bookings);
+		Parser.parseTickets(ticketsPath, tickets);
+		nextTicketId = tickets.stream().mapToInt(MaintenanceTicket::getTicketId).max().orElse(0) + 1;
 	}
 
 	public void saveAll() {
 		Parser.saveRooms(roomsPath, rooms);
 		Parser.saveBookings(bookingsPath, bookings);
-		// (Guests unchanged in Book-a-Room flow)
+		Parser.saveTickets(ticketsPath, tickets);
 	}
 
-	// ---- getters ----
 	public List<Room> getRooms() { return rooms; }
 	public List<Guest> getGuests() { return guests; }
 	public List<Booking> getBookings() { return bookings; }
+	public List<MaintenanceTicket> getTickets() { return tickets; }
 
 	// ---- queries ----
 	public Guest findGuestByPhoneOrName(String phoneOrName) {
@@ -264,6 +359,11 @@ public class BookingSystem {
 		return null;
 	}
 
+	public Booking findBookingByConfirmation(int conf) {
+		for (Booking b : bookings) if (b.getConfirmationNumber() == conf) return b;
+		return null;
+	}
+
 	public List<Room> findAvailableRooms(RoomType type, Calendar start, Calendar end) {
 		return rooms.stream()
 				.filter(r -> r.getRoomType() == type)
@@ -276,9 +376,8 @@ public class BookingSystem {
 
 		for (Booking b : bookings) {
 			if (b.getRoomNumber() != room.getRoomNumber()) continue;
-			if (b.getStatus() == BookingStatus.CANCELLED) continue;
+			if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.COMPLETED) continue;
 
-			// date overlap check: (start < b.end) && (b.start < end)
 			if (start.before(b.getEndTime()) && b.getStartTime().before(end)) {
 				return false;
 			}
@@ -286,7 +385,7 @@ public class BookingSystem {
 		return true;
 	}
 
-	// ---- command ----
+	// ---- commands: book / cancel / change room / checkin / checkout ----
 	public Booking createBooking(Guest guest, Room room, Calendar start, Calendar end) {
 		long nights = Math.max(1, (end.getTimeInMillis() - start.getTimeInMillis()) / (24L*60L*60L*1000L));
 		double cost = nights * room.getCost();
@@ -296,5 +395,103 @@ public class BookingSystem {
 		room.setStatus(Status.BOOKED);
 		saveAll();
 		return booking;
+	}
+
+	public boolean cancelBooking(int confirmationNumber) {
+		Booking b = findBookingByConfirmation(confirmationNumber);
+		if (b == null) return false;
+		if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.COMPLETED) return false;
+
+		b.setStatus(BookingStatus.CANCELLED);
+		Room r = findRoomByNumber(b.getRoomNumber());
+		if (r != null && r.getStatus() == Status.BOOKED) {
+			r.setStatus(Status.AVAILABLE);
+		}
+		saveAll();
+		return true;
+	}
+
+	public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
+		Booking b = findBookingByConfirmation(confirmationNumber);
+		if (b == null) return false;
+
+		Room current = findRoomByNumber(b.getRoomNumber());
+		Room target  = findRoomByNumber(newRoomNumber);
+		if (target == null) return false;
+
+		if (!isRoomAvailable(target, b.getStartTime(), b.getEndTime())) return false;
+
+		// free previous room if it was just booked (not occupied)
+		if (current != null && current.getStatus() == Status.BOOKED) {
+			current.setStatus(Status.AVAILABLE);
+		}
+		// assign new room
+		b.setRoomNumber(newRoomNumber);
+		if (b.getStatus() == BookingStatus.CHECKEDIN) {
+			target.setStatus(Status.OCCUPIED);
+		} else {
+			target.setStatus(Status.BOOKED);
+		}
+		saveAll();
+		return true;
+	}
+
+	public boolean checkIn(int confirmationNumber) {
+		Booking b = findBookingByConfirmation(confirmationNumber);
+		if (b == null) return false;
+		if (b.getStatus() != BookingStatus.CONFIRMED) return false;
+
+		Room r = findRoomByNumber(b.getRoomNumber());
+		if (r == null || r.getStatus() == Status.AWAITING) return false;
+
+		b.setStatus(BookingStatus.CHECKEDIN);
+		r.setStatus(Status.OCCUPIED);
+		saveAll();
+		return true;
+	}
+
+	public boolean checkOutAndPay(int confirmationNumber, String method) {
+		Booking b = findBookingByConfirmation(confirmationNumber);
+		if (b == null) return false;
+		if (b.getStatus() != BookingStatus.CHECKEDIN) return false;
+
+		// simulate external payment success (method is not validated here)
+		Room r = findRoomByNumber(b.getRoomNumber());
+		b.setStatus(BookingStatus.COMPLETED);
+		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
+		saveAll();
+		return true;
+	}
+
+	// ---- maintenance ----
+	public MaintenanceTicket createTicket(int roomNumber, String description, String severity) {
+		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, roomNumber, description, severity, MaintenanceStatus.OPEN);
+		tickets.add(t);
+		// if severe, mark room awaiting
+		Room r = findRoomByNumber(roomNumber);
+		if (r != null && "HIGH".equalsIgnoreCase(severity)) {
+			r.setStatus(Status.AWAITING);
+		}
+		saveAll();
+		return t;
+	}
+
+	public boolean resolveTicket(int ticketId) {
+		for (MaintenanceTicket t : tickets) {
+			if (t.getTicketId() == ticketId) {
+				t.setStatus(MaintenanceStatus.RESOLVED);
+				// if room was awaiting, free or keep occupied depending on bookings
+				Room r = findRoomByNumber(t.getRoomNumber());
+				if (r != null && r.getStatus() == Status.AWAITING) {
+					// if someone is checked-in on this room, it should be OCCUPIED, else AVAILABLE
+					boolean occupied = bookings.stream()
+							.anyMatch(b -> b.getRoomNumber() == r.getRoomNumber() && b.getStatus() == BookingStatus.CHECKEDIN);
+					r.setStatus(occupied ? Status.OCCUPIED : Status.AVAILABLE);
+				}
+				saveAll();
+				return true;
+			}
+		}
+		return false;
 	}
 }
