@@ -102,12 +102,12 @@ public class InStayMaintenance {
             System.out.print("Description: ");
             String desc = sc.nextLine().trim();
             MaintenanceTicket t = system.createTicket(room, desc, sev);
-            System.out.println("✅ Created: " + t);
+            System.out.println("Created: " + t);
         } else if ("2".equals(c)) {
             System.out.print("Ticket id: ");
             int id = Integer.parseInt(sc.nextLine().trim());
             boolean ok = system.resolveTicket(id);
-            System.out.println(ok ? "✅ Resolved." : "⚠️ Not found.");
+            System.out.println(ok ? "Resolved." : "Not found.");
         } else {
             System.out.println("Invalid choice.");
         }

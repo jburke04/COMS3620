@@ -47,6 +47,6 @@ public class ChangeRoom {
         int newRoom = Integer.parseInt(sc.nextLine().trim());
 
         boolean ok = system.changeRoom(conf, newRoom);
-        System.out.println(ok ? "✅ Room changed." : "⚠️ Could not change room.");
+        System.out.println(ok ? "Room changed." : "Could not change room.");
     }
 }
