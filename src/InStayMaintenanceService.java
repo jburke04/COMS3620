@@ -11,16 +11,14 @@ import java.util.*;
 
 public class InStayMaintenanceService {
 
-    private int nextTicketId = 1;
     private final Map<Integer, MaintenanceTicket> tickets = new LinkedHashMap<>();
     private final Map<Integer, Room> rooms = loadRoomsFromJson("src/assets/Rooms.json");
-    private final Map<Integer, Guest> guests = new HashMap<>();
     private final Map<Integer, Booking> currentBookings = new HashMap<>();
+    private final Map<Integer, String> scheduledWindows = new HashMap<>();
+    private final Map<Integer, Boolean> guestConfirmations = new HashMap<>();
 
     public InStayMaintenanceService() {
         int guestId = 1;
-        Guest g = new Guest(guestId, "Siddhartha", "1234567890", "example@gmail.com", "");
-        guests.put(guestId, g);
         Room first = rooms.values().stream().findFirst().orElse(null);
         if (first != null) {
             first.setStatus(Status.OCCUPIED);
@@ -29,35 +27,45 @@ public class InStayMaintenanceService {
         }
     }
 
-    public MaintenanceTicket createTicket(int roomNumber, String description, Severity severity) {
-        if (!rooms.containsKey(roomNumber)) {
-            return null;
-        }
-        Room room = rooms.get(roomNumber);
-        if (room.getStatus() != Status.OCCUPIED) {
-            return null;
-        }
-        int ticketId = nextTicketId++;
-        String createdAt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
-        MaintenanceTicket t = new MaintenanceTicket(ticketId, roomNumber, description, createdAt, MaintenanceStatus.OPEN);
-        tickets.put(ticketId, t);
-        return t;
+    public void registerTicket(MaintenanceTicket t) {
+        tickets.put(t.getTicketId(), t);
     }
 
-    public boolean resolveTicket(int ticketId) {
-        MaintenanceTicket t = tickets.get(ticketId);
-        if (t == null) return false;
-        if (t.getStatus() != MaintenanceStatus.OPEN) return false;
-        t.setStatus(MaintenanceStatus.RESOLVED);
-        return true;
+    public MaintenanceTicket getTicket(int id) {
+        return tickets.get(id);
     }
 
     public Collection<MaintenanceTicket> getAllTickets() {
         return tickets.values();
     }
 
-    public Room getRoom(int number) {
-        return rooms.get(number);
+    public void rescheduleVisit(int ticketId, String newWindow) {
+        if (!tickets.containsKey(ticketId)) throw new IllegalArgumentException("Unknown ticket");
+        scheduledWindows.put(ticketId, newWindow);
+    }
+
+    public void visitAndFix(int ticketId) {
+        MaintenanceTicket t = tickets.get(ticketId);
+        if (t == null) throw new IllegalArgumentException("Unknown ticket");
+        if (t.getStatus() != MaintenanceStatus.OPEN) throw new IllegalStateException("Ticket not OPEN");
+        t.setStatus(MaintenanceStatus.RESOLVED);
+    }
+
+    public void guestConfirm(int ticketId, boolean accepted) {
+        if (!tickets.containsKey(ticketId)) throw new IllegalArgumentException("Unknown ticket");
+        guestConfirmations.put(ticketId, accepted);
+    }
+
+    public String describeMeta(int ticketId) {
+        StringBuilder sb = new StringBuilder();
+        String win = scheduledWindows.get(ticketId);
+        Boolean ok = guestConfirmations.get(ticketId);
+        if (win != null && !win.isEmpty()) sb.append("[visit=").append(win).append("]");
+        if (ok != null) {
+            if (sb.length() > 0) sb.append(" ");
+            sb.append(ok ? "[guest=accepted]" : "[guest=not-accepted]");
+        }
+        return sb.toString();
     }
 
     private static Map<Integer, Room> loadRoomsFromJson(String path) {
@@ -76,5 +84,10 @@ public class InStayMaintenanceService {
             }
         } catch (Exception ignored) {}
         return map;
+    }
+
+    @SuppressWarnings("unused")
+    private static String nowIso() {
+        return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
     }
 }
