@@ -321,7 +321,7 @@ public class BookRoom {
         if (!ans.equals("y")) { System.out.println("Cancelled."); return; }
 
         Booking b = system.createBooking(guest, room, in, out);
-        System.out.println("✅ Booking confirmed! Confirmation #: " + b.getConfirmationNumber());
+        System.out.println("Booking confirmed! Confirmation #: " + b.getConfirmationNumber());
     }
 
     private static Guest getOrCreateGuest(Scanner scanner, BookingSystem system) {

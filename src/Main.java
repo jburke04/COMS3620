@@ -93,7 +93,7 @@ public class Main {
 					System.out.print("Enter confirmation #: ");
 					int c = Integer.parseInt(sc.nextLine().trim());
 					boolean ok = system.checkIn(c);
-					System.out.println(ok ? "✅ Checked in." : "⚠️ Failed to check in.");
+					System.out.println(ok ? "Checked in." : "Failed to check in.");
 					break;
 				case "6": Checkout.start(sc, system); break;
 				case "0": sc.close(); return;

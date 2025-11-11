@@ -189,6 +189,6 @@ public class Checkout {
         String method = sc.nextLine().trim();
 
         boolean ok = system.checkOutAndPay(conf, method);
-        System.out.println(ok ? "✅ Paid & checked out. Room set to NEEDS_CLEANING." : "⚠️ Failed (wrong state or booking not found).");
+        System.out.println(ok ? "Paid & checked out. Room set to NEEDS_CLEANING." : "Failed (wrong state or booking not found).");
     }
 }
