@@ -1,147 +1,93 @@
 package src.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Guests will interact with the Hotel's Booking System in order to make
- * reservations, put in requests, change reservations, etc.
+ * Guests that exist under the Hotel's Booking System. This keeps track of the Guest's unique 
+ * ID, their Name, the Phone number associated with their account, and their email.
  */
-//public class Guest {
-//	private static int nextId = 1;
-//
-//	int guestId;
-//	String name;
-//	String phoneNumber;
-//	String email;
-//	String idDocument;
-//	List<Booking> bookingHistory;
-//
-//	/**
-//	 * Constructor for a new Guest
-//	 * @param name Guest name
-//	 * @param phoneNumber Phone Number
-//	 * @param email Guest email
-//	 * @param idDocument ID Documentation for Guest
-//	 */
-//	public Guest(String name, String phoneNumber, String email, String idDocument) {
-//		this.guestId = nextId++;
-//		this.name = name;
-//		this.phoneNumber = phoneNumber;
-//		this.email = email;
-//		this.idDocument = idDocument;
-//		this.bookingHistory = new ArrayList<>();
-//	}
-//
-//		/**
-//	 * Constructor for a Guest
-//	 * @param String Guest name
-//	 * @param String Phone Number
-//	 * @param String Guest email
-//	 * @param String ID Documentation for Guest
-//	 */
-//	public Guest(String name, String phoneNumber, String email, String idDocument, ArrayList<Booking> bookingHistory) {
-//		this.guestId = nextId++;
-//		this.name = name;
-//		this.phoneNumber = phoneNumber;
-//		this.email = email;
-//		this.idDocument = idDocument;
-//		this.bookingHistory = bookingHistory;
-//	}
-//
-//	/**
-//	 * Returns the name of this Guest
-//	 * @return String of the Guest's name
-//	 */
-//	public String getName() {
-//		return this.name;
-//	}
-//
-//	/**
-//	 * Returns the ID for this Guest
-//	 * @return Guest's ID
-//	 */
-//	public int getGuestID() {
-//		return this.guestId;
-//	}
-//
-//	/**
-//	 * Returns the phone number for this Guest
-//	 * @return Guest's phone number
-//	 */
-//	public String getPhoneNumber() {
-//		return this.phoneNumber;
-//	}
-//
-//	/**
-//	 * Returns the email for this Guest
-//	 * @return Guest's email
-//	 */
-//	public String getEmail() {
-//		return this.email;
-//	}
-//
-//	/**
-//	 * Returns a list of the Booking history for this Guest
-//	 * @return Guest's Booking history
-//	 */
-//	public List<Booking> getBookingHistory() {
-//		return this.bookingHistory;
-//	}
-//
-//	/**
-//	 * Updates Guest's phone number
-//	 * @param String phone number to update to
-//	 */
-//	public void setPhoneNumber(String phoneNumber) {
-//		this.phoneNumber = phoneNumber;
-//	}
-//
-//	/**
-//	 * Updates Guest's email
-//	 * @param String email to update to
-//	 */
-//	public void setEmail(String email) {
-//		this.email = email;
-//	}
-//
-//	/**
-//	 * Upon creating a booking, adds the booking to the Guest's
-//	 * Booking history list
-//	 * @param Booking booking to append
-//	 */
-//	public void addBooking(Booking booking) {
-//		this.bookingHistory.add(booking);
-//	}
-//}
-
-/**
- * Redoing the file for iteratiom 1
- */
-
 public class Guest {
-	private int guestId;
-	private String name;
+	private static int id = 1;
+
+	private final int guestId;
+	private final String name;
 	private String phoneNumber;
 	private String email;
-	private String idDocument;
 
-	public Guest(int guestId, String name, String phoneNumber, String email, String idDocument) {
+	/**
+	 * Constructor for an existing Guest.
+	 * @param guestId ID for this Guest.
+	 * @param name Name for this Guest.
+	 * @param phoneNumber Phone number for this Guest.
+	 * @param email Email for this Guest.
+	 */
+	public Guest(int guestId, String name, String phoneNumber, String email) {
 		this.guestId = guestId;
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.idDocument = idDocument;
+
+		if (guestId >= Guest.id)
+			Guest.id = guestId + 1;
 	}
 
-	public int getGuestId() { return guestId; }
-	public String getName() { return name; }
-	public String getPhoneNumber() { return phoneNumber; }
-	public String getEmail() { return email; }
-	public String getIdDocument() { return idDocument; }
+	/**
+	 * Constructor for a new Guest.
+	 * @param name Name for this Guest.
+	 * @param phoneNumber Phone number for this Guest.
+	 * @param email Email for this Guest.
+	 */
+	public Guest(String name, String phoneNumber, String email) {
+		this.guestId = Guest.id++;
+		this.name = name;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+	}
 
+	// -------------- Getters ----------------
+
+	/**
+	 * Gets this Guest's ID.
+	 * @return Guest's ID.
+	 */
+	public int getGuestId() { return this.guestId; }
+
+	/**
+	 * Gets this Guest's name.
+	 * @return Guest's name.
+	 */
+	public String getName() { return this.name; }
+
+	/**
+	 * Gets this Guest's phone number.
+	 * @return Guest's phone number.
+	 */
+	public String getPhoneNumber() { return this.phoneNumber; }
+
+	/**
+	 * Gets this Guest's email.
+	 * @return Guest's email.
+	 */
+	public String getEmail() { return this.email; }
+
+	// ---------------- Setters ----------------
+
+	/**
+	 * Sets the Guest's phone number.
+	 * @param phoneNumber Phone number to change to.
+	 */
+	public void setPhonenumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+	/**
+	 * Sets the Guest's email.
+	 * @param email Email to change to.
+	 */
+	public void setEmail(String email) { this.email = email; }
+
+
+	/**
+	 * Stringifies this Guest object.
+	 */
 	@Override public String toString() {
-		return name + " (ID: " + guestId + ", phone: " + phoneNumber + ")";
+		return this.name + " (ID: " + this.guestId + ", phone: " + this.phoneNumber + ")";
 	}
 }
 

@@ -1,4 +1,4 @@
-package src;
+package src.services;
 import src.models.BookingSystem;
 import java.util.Scanner;
 

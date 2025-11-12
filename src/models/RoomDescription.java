@@ -31,6 +31,10 @@ public class RoomDescription {
 		return this.cost;
 	}
 
+	/**
+	 * Stringifies the RoomType
+	 * @return String representation of this Room Description
+	 */
     public String toString() {
         switch (this.type) {
             case DOUBLE:

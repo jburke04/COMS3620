@@ -1,63 +1,3 @@
-//package src.helpers;
-//
-//import src.models.Booking;
-//import src.models.Guest;
-//import src.models.Room;
-//
-//import java.io.FileReader;
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
-//import org.json.simple.parser.ParseException;
-//import java.util.ArrayList;
-//
-//public class Parser {
-//
-//    private static JSONParser parser = new JSONParser();
-//
-//    public static void parseRooms(String filepath, ArrayList<Room> rooms) {
-//
-//        JSONArray a = null;
-//        try {
-//            a = (JSONArray) parser.parse(new FileReader(filepath));
-//        } catch (java.lang.Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        for (Object o : a)
-//        {
-//            JSONObject person = (JSONObject) o;
-//
-//            String name = (String) person.get("name");
-//            System.out.println(name);
-//
-//            String city = (String) person.get("city");
-//            System.out.println(city);
-//
-//            String job = (String) person.get("job");
-//            System.out.println(job);
-//
-//            JSONArray cars = (JSONArray) person.get("cars");
-//
-//            for (Object c : cars)
-//            {
-//                System.out.println(c+"");
-//            }
-//        }
-//    }
-//
-//    public static void parseBookings(String filepath, ArrayList<Booking> bookings) {
-//
-//    }
-//
-//    public static void parseGuests(String filepath, ArrayList<Guest> guests) {
-//
-//    }
-//}
-/**
- * iteration 1
- */
-
 package src.helpers;
 
 import src.models.*;
@@ -73,10 +13,20 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+/**
+ * Parser Helper class for reading and updating JSON files.
+ */
 public class Parser {
 
     private static final JSONParser parser = new JSONParser();
 
+    /**
+     * Checks if the file provided is empty or not, providing a parsed JSONArray
+     * of data from the JSON file if it's not empty.
+     * @param path Filepath to check.
+     * @return JSONArray of the data within an existing file, or an empty
+     *          JSONArray.
+     */
     private static Object parseOrEmptyArray(String path) {
         try {
             if (!Files.exists(Paths.get(path))) return new JSONArray();
@@ -85,10 +35,15 @@ public class Parser {
                 return (parsed instanceof JSONArray) ? parsed : new JSONArray();
             }
         } catch (Exception e) {
-            return new JSONArray(); // be permissive
+            return new JSONArray();
         }
     }
 
+    /**
+     * Parses through a file to populate the Rooms list of the Booking System.
+     * @param filepath String representation of the filepath to parse.
+     * @param rooms List of Rooms to populate.
+     */
     public static void parseRooms(String filepath, List<Room> rooms) {
         rooms.clear();
         try {
@@ -113,6 +68,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses through a file to populate the Booking System's list of guests.
+     * @param filepath String representation of the filepath to parse.
+     * @param guests List of Guests to populate.
+     */
     public static void parseGuests(String filepath, List<Guest> guests) {
         guests.clear();
         try {
@@ -123,15 +83,19 @@ public class Parser {
                 String name = (String) g.get("name");
                 String phone = (String) g.get("phoneNumber");
                 String email = (String) g.get("email");
-                String idDoc = (String) g.getOrDefault("idDocument", "");
 
-                guests.add(new Guest(guestId, name, phone, email, idDoc));
+                guests.add(new Guest(guestId, name, phone, email));
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse Guests.json: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Parses through a file to populate the Booking System's list of Bookings.
+     * @param filepath String representation of the filepath to parse.
+     * @param bookings List of Bookings to populate.
+     */
     public static void parseBookings(String filepath, List<Booking> bookings) {
         bookings.clear();
         try {
@@ -157,6 +121,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses through a file to populate the Booking System's list of Maintenance Tickets.
+     * @param filepath String representation of the filepath to parse.
+     * @param tickets List of Maintenance Tickets to populate.
+     */
     public static void parseTickets(String filepath, List<MaintenanceTicket> tickets) {
         tickets.clear();
         try {
@@ -176,6 +145,11 @@ public class Parser {
     }
 
     // ---- Saves ----
+    /**
+     * Saves the Bookings to the desired file.
+     * @param filepath file to modify/update.
+     * @param bookings List of Bookings to update the file with.
+     */
     public static void saveBookings(String filepath, List<Booking> bookings) {
         JSONArray arr = new JSONArray();
         for (Booking b : bookings) {
@@ -196,6 +170,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Saves the Rooms to the desired file.
+     * @param filepath file to modify/update.
+     * @param rooms List of Rooms to update the file with.
+     */
     public static void saveRooms(String filepath, List<Room> rooms) {
         JSONArray arr = new JSONArray();
         for (Room r : rooms) {
@@ -216,6 +195,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Saves the Maintenance Tickets to the desired file.
+     * @param filepath file to modify/update.
+     * @param bookings List of Maintenance Tickets to update the file with.
+     */
     public static void saveTickets(String filepath, List<MaintenanceTicket> tickets) {
         JSONArray arr = new JSONArray();
         for (MaintenanceTicket t : tickets) {

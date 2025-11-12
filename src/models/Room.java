@@ -1,66 +1,8 @@
 package src.models;
 
 /**
- * 
- */
-//public class Room {
-//	public RoomDescription description;
-//	public int roomNumber;
-//	private Status status;
-//
-//	public Room(RoomType type, int roomNumber) {
-//		if (type == RoomType.SINGLE) {
-//			description = new RoomDescription(type, 100);
-//		}
-//		else if (type == RoomType.DOUBLE) {
-//			description = new RoomDescription(type, 150);
-//		}
-//		else if (type == RoomType.KING) {
-//			description = new RoomDescription(type, 200);
-//		}
-//		else if (type == RoomType.PRESIDENTIAL) {
-//			description = new RoomDescription(type, 300);
-//		}
-//
-//		this.roomNumber = roomNumber;
-//		status = Status.AVAILABLE;
-//	}
-//
-//	public Room(RoomType type, int roomNumber, Status status) {
-//		this(type, roomNumber);
-//		this.status = status;
-//	}
-//
-//	public RoomType getRoomType() {
-//		return this.description.getRoomType();
-//	}
-//
-//	public double getCost() {
-//		return this.description.getCost();
-//	}
-//
-//	public int getRoomNumber() {
-//		return this.roomNumber;
-//	}
-//
-//	/**
-//	 * Gets the current status value for this Room
-//	 * @return status value of the room
-//	 */
-//	public Status getStatus() {
-//		return status;
-//	}
-//
-//	/**
-//	 * Sets the Room's status to the desired value
-//	 * @param Status status value to set the room to
-//	 */
-//	public void setStatus(Status status) {
-//		this.status = status;
-//	}
-
-/**
- * Redoing the file for iteration 1 demo 1
+ * Room that exist within this Hotel. This tracks the Room's number, the current Status of
+ * the Room, the type of Room, and the cost per night.
  */
 public class Room {
 	private int roomNumber;
@@ -68,6 +10,13 @@ public class Room {
 	private RoomType roomType;
 	private double cost;
 
+	/**
+	 * Constructor for a Room.
+	 * @param roomNumber Room number of this Room.
+	 * @param status Status for this Room.
+	 * @param roomType RoomType for this Room.
+	 * @param cost Cost per night for this Room.
+	 */
 	public Room(int roomNumber, Status status, RoomType roomType, double cost) {
 		this.roomNumber = roomNumber;
 		this.status = status;
@@ -75,11 +24,39 @@ public class Room {
 		this.cost = cost;
 	}
 
-	public int getRoomNumber() { return roomNumber; }
-	public Status getStatus() { return status; }
+	// ----------- Getters ------------
+
+	/**
+	 * Gets the room number for this Room.
+	 * @return Room number of the Room.
+	 */
+	public int getRoomNumber() { return this.roomNumber; }
+
+	/**
+	 * Gets the Status for this Room.
+	 * @return Status of the Room.
+	 */
+	public Status getStatus() { return this.status; }
+
+	/**
+	 * Gets the RoomType for this Room.
+	 * @return RoomType of the Room.
+	 */
+	public RoomType getRoomType() { return this.roomType; }
+
+	/**
+	 * Gets the Cost per night for this Room.
+	 * @return Cost per night for the Room.
+	 */
+	public double getCost() { return this.cost; }
+
+	// ----------- Setters ------------
+
+	/**
+	 * Sets the status for this Room.
+	 * @param status Status to change to.
+	 */
 	public void setStatus(Status status) { this.status = status; }
-	public RoomType getRoomType() { return roomType; }
-	public double getCost() { return cost; }
 }
 
 

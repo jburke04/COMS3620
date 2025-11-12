@@ -1,7 +1,8 @@
 package src.models;
 
+/**
+ * Enum to track a Booking's status.
+ */
 public enum BookingStatus {
-    // for iteration 1 demo
-    // added PENDING and CONFIRMED
-    PENDING, CONFIRMED, BOOKED, CANCELLED, CHECKEDIN, CHECKEDOUT, COMPLETED;
+    PENDING, CONFIRMED, CANCELLED, CHECKEDIN, CHECKEDOUT, COMPLETED;
 }
