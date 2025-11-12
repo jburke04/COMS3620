@@ -13,14 +13,19 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+/**
+ * Parser Helper class for reading and updating JSON files.
+ */
 public class Parser {
 
     private static final JSONParser parser = new JSONParser();
 
     /**
-     * 
-     * @param path
-     * @return
+     * Checks if the file provided is empty or not, providing a parsed JSONArray
+     * of data from the JSON file if it's not empty.
+     * @param path Filepath to check.
+     * @return JSONArray of the data within an existing file, or an empty
+     *          JSONArray.
      */
     private static Object parseOrEmptyArray(String path) {
         try {
@@ -30,7 +35,7 @@ public class Parser {
                 return (parsed instanceof JSONArray) ? parsed : new JSONArray();
             }
         } catch (Exception e) {
-            return new JSONArray(); // be permissive
+            return new JSONArray();
         }
     }
 

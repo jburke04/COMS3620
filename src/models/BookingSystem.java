@@ -4,6 +4,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import src.helpers.Parser;
 
+/**
+ * Hotel's Booking System that contains the list of Rooms that exist within the Hotel,
+ * the list of Bookings made under that Hotel, the list of Guests under that Hotel, and
+ * the list of Maintenance Tickets that exist for all Rooms.
+ */
 public class BookingSystem {
 
 	private final List<Room> rooms = new ArrayList<>();
@@ -203,7 +208,15 @@ public class BookingSystem {
 		return true;
 	}
 
+	/**
+	 * Changes the room number under an existing Booking.
+	 * @param confirmationNumber Booking to modify.
+	 * @param newRoomNumber Room number to change to.
+	 * @return True if the operation was successful, false if it failed.
+	 */
 	public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
+		//TODO: need to calculate the new cost of the Booking after changing the room.
+
 		Booking b = findBookingByConfirmation(confirmationNumber);
 		if (b == null) return false;
 
@@ -228,6 +241,11 @@ public class BookingSystem {
 		return true;
 	}
 
+	/**
+	 * Checks In for a provided confirmation number.
+	 * @param confirmationNumber Booking to Check In.
+	 * @return True if the operation was successful, false if not.
+	 */
 	public boolean checkIn(int confirmationNumber) {
 		Booking b = findBookingByConfirmation(confirmationNumber);
 		if (b == null) return false;
@@ -241,6 +259,12 @@ public class BookingSystem {
 		saveAll();
 		return true;
 	}
+
+	/**
+	 * Validates whether the Booking exists and is CHECKEDIN.
+	 * @param confirmationNumber Booking to check.
+	 * @return True if the Booking is not set to CHECKEDIN status, false if so.
+	 */
     public boolean validateBooking(int confirmationNumber){
         Booking b = findBookingByConfirmation(confirmationNumber);
         if (b == null) return false;
@@ -248,10 +272,16 @@ public class BookingSystem {
         return true;
     }
 
-	public void checkoutAndPay(int confirmationNumber) {
+	/**
+	 * Checks Out for the provided Booking and sets the Room to status
+	 * NEEDS_CLEANING.
+	 * @param confirmationNumber Booking to Check Out.
+	 * @return True if the operation was successful, false if not.
+	 */
+	public boolean checkoutAndPay(int confirmationNumber) {
         Booking b = findBookingByConfirmation(confirmationNumber);
         if(validateBooking(confirmationNumber)){
-            return;
+            return false;
         }
 
 		// simulate external payment success (method is not validated here)
@@ -259,6 +289,7 @@ public class BookingSystem {
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
 		saveAll();
+		return true;
 	}
 
 	// ---- maintenance ----
