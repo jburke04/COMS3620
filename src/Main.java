@@ -63,9 +63,8 @@
 
 package src;
 
-import src.models.BookingSystem;
-
 import java.util.Scanner;
+import src.models.BookingSystem;
 
 public class Main {
 	public static void main(String[] args) {
@@ -79,8 +78,8 @@ public class Main {
 			System.out.println("2) Cancel a Booking");
 			System.out.println("3) Change Room");
 			System.out.println("4) In-Stay Maintenance");
-			System.out.println("5) Check-In (mark booking as CHECKEDIN)");
-			System.out.println("6) Checkout & Payment");
+			// System.out.println("5) Check-In (mark booking as CHECKEDIN)");
+			System.out.println("5) Checkout & Payment");
 			System.out.println("0) Exit");
 			System.out.print("Choose: ");
 			String choice = sc.nextLine().trim();
@@ -89,13 +88,13 @@ public class Main {
 				case "2": Cancel.start(sc, system); break;
 				case "3": ChangeRoom.start(sc, system); break;
 				case "4": InStayMaintenance.start(sc, system); break;
-				case "5":
-					System.out.print("Enter confirmation #: ");
-					int c = Integer.parseInt(sc.nextLine().trim());
-					boolean ok = system.checkIn(c);
-					System.out.println(ok ? "Checked in." : "Failed to check in.");
-					break;
-				case "6": checkout.start(sc, system); break;
+				// case "5":
+				// 	System.out.print("Enter confirmation #: ");
+				// 	int c = Integer.parseInt(sc.nextLine().trim());
+				// 	boolean ok = system.checkIn(c);
+				// 	System.out.println(ok ? "Checked in." : "Failed to check in.");
+				// 	break;
+				case "5": checkout.start(sc, system); break;
 				case "0": sc.close(); return;
 				default: System.out.println("Invalid.");
 			}
