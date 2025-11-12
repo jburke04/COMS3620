@@ -1,4 +1,4 @@
-package src;
+package src.services;
 
 import src.models.*;
 import java.util.Scanner;

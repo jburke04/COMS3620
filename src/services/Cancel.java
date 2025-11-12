@@ -1,14 +1,19 @@
-package src;
+package src.services;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import src.models.*;
 
 /**
- * User Interface that handles the cancellation process.
+ * Service that handles the cancellation process.
  */
 public class Cancel {
 
+    /**
+     * Starter loop that checks which Booking a user wants to cancel.
+     * @param scanner Input scanner for reading user input.
+     * @param system Booking System to utilize.
+     */
     public static void start(Scanner scanner, BookingSystem system) {
         String choice = "";
         ArrayList<Integer> ids = new ArrayList<>();
@@ -52,7 +57,8 @@ public class Cancel {
     }
 
     /**
-     * Print out list of Bookings
+     * Print out list of Bookings.
+     * @param system Booking System that provides the list of Bookings.
      */
     private static void printBookings(BookingSystem system) {
         for (Booking booking : system.getBookings())
@@ -63,10 +69,10 @@ public class Cancel {
     /**
      * Confirmation loop for the Guest to determine if they want to cancel the
      * Booking or not.
-     * @param selected Booking to cancel
-     * @param scanner Input scanner
+     * @param selected Booking to cancel.
+     * @param scanner Input scanner.
      * @return 0 if the cancel was confirmed and completed, 1 if the cancel was
-     *          denied or the user changed their mind
+     *          denied or the user changed their mind.
      */
     private static int confirmationLoop(Booking selected, Scanner scanner, BookingSystem system) {
         String choice;
