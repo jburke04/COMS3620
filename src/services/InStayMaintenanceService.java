@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Service for In-Stay Maintenance.
+ */
 public class InStayMaintenanceService {
 
     private final Map<Integer, MaintenanceTicket> tickets = new LinkedHashMap<>();

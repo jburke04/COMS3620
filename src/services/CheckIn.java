@@ -1,10 +1,19 @@
 package src.services;
 
-import src.models.*;
-import java.util.Scanner;
 import java.util.Calendar;
+import java.util.Scanner;
+import src.models.*;
 
+/**
+ * Service for Checking In.
+ */
 public class CheckIn {
+
+    /**
+     * Start loop for Check In Service.
+     * @param scanner Input scanner for user input.
+     * @param system Booking System to utilize.
+     */
     public static void start(Scanner scanner, BookingSystem system) {
 
     }

@@ -3,8 +3,16 @@ package src.services;
 import java.util.*;
 import src.models.*;
 
+/**
+ * Service for Booking a Room.
+ */
 public class BookRoom {
 
+    /**
+     * Start loop for Booking a Room service.
+     * @param scanner Input scanner for user input.
+     * @param system Booking System to utilize.
+     */
     public static void start(Scanner scanner, BookingSystem system) {
         System.out.println("\n=== BOOK A ROOM ===");
 
@@ -72,6 +80,15 @@ public class BookRoom {
         confirmAndCreate(scanner, system, guest, chosen, checkIn, checkOut);
     }
 
+    /**
+     * Confirms if the user wants to create this Booking.
+     * @param scanner Scanner for user input.
+     * @param system Booking System to utilize.
+     * @param guest Guest to put the Booking under.
+     * @param room Room to book.
+     * @param in Start time for Booking.
+     * @param out End time for Booking.
+     */
     private static void confirmAndCreate(Scanner scanner, BookingSystem system, Guest guest,
                                          Room room, Calendar in, Calendar out) {
         long nights = Math.max(1, (out.getTimeInMillis() - in.getTimeInMillis()) / (24L*60L*60L*1000L));
@@ -83,12 +100,24 @@ public class BookRoom {
         System.out.println(" Total: $" + total);
         System.out.print("Confirm booking? (y/n): ");
         String ans = scanner.nextLine().trim().toLowerCase();
-        if (!ans.equals("y")) { System.out.println("Cancelled."); return; }
+
+        // user inputted 'n', cancel confirmation:
+        if (!ans.equals("y")) { 
+            System.out.println("Cancelled."); 
+            return; 
+        }
 
         Booking b = system.createBooking(guest, room, in, out);
         System.out.println("Booking confirmed! Confirmation #: " + b.getConfirmationNumber());
     }
 
+    /**
+     * Searches for an existing Guest. If the Guest doesn't exist in the Booking System, a
+     * new Guest is created.
+     * @param scanner Input scanner for user input.
+     * @param system Booking System to utilize.
+     * @return Guest found or new Guest created.
+     */
     private static Guest getOrCreateGuest(Scanner scanner, BookingSystem system) {
         System.out.print("Existing guest? Enter phone or name (or leave blank to create new): ");
         String key = scanner.nextLine().trim();
@@ -111,12 +140,18 @@ public class BookRoom {
         System.out.print("Email: ");
         String email = scanner.nextLine().trim();
 
-        Guest g = new Guest(nextId, name, phone, email, "");
+        Guest g = new Guest(nextId, name, phone, email);
         system.getGuests().add(g);
         // Guests.json saving not strictly required for booking to work; your rubric focuses on Bookings & Rooms.
         return g;
     }
 
+    /**
+     * Prompts the user to input a date.
+     * @param scanner Input scanner for user input.
+     * @param prompt Whether the user needs to provide the start or end time.
+     * @return Calendar object corresponding to the provided date.
+     */
     private static Calendar promptDate(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -136,6 +171,11 @@ public class BookRoom {
         }
     }
 
+    /**
+     * Prompts user to select which of the following RoomTypes this Hotel provides.
+     * @param scanner Input scanner for user input.
+     * @return Desired RoomType.
+     */
     private static RoomType promptRoomType(Scanner scanner) {
         System.out.println("\nRoom Types:");
         int i = 1;

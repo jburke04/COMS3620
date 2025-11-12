@@ -5,7 +5,7 @@ import java.util.Scanner;
 import src.models.*;
 
 /**
- * Service that handles the cancellation process.
+ * Service for Booking Cancellation.
  */
 public class Cancel {
 

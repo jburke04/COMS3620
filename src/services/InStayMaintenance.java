@@ -11,10 +11,18 @@ import org.json.simple.parser.JSONParser;
 
 import src.models.*;
 
+/**
+ * UI for In-Stay Maintenance.
+ */
 public class InStayMaintenance {
     private static final String ROOMS_JSON_PATH = "src/assets/Rooms.json";
     private static final InStayMaintenanceService svc = new InStayMaintenanceService();
 
+    /**
+     * Start loop for In-Stay Maintenance Service.
+     * @param sc Input scanner for user input.
+     * @param system Booking System to utilize.
+     */
     public static void start(Scanner sc, BookingSystem system) {
         while (true) {
             System.out.println("\n=== IN-STAY MAINTENANCE ===");
@@ -124,6 +132,10 @@ public class InStayMaintenance {
         }
     }
 
+    /**
+     * Maps Rooms (by room number) to their corresponding current RoomStatus.
+     * @return Map object with room numbers and their RoomStatus.
+     */
     private static Map<Integer, Status> loadRoomStatuses() {
         Map<Integer, Status> map = new HashMap<>();
         try (FileReader r = new FileReader(ROOMS_JSON_PATH)) {

@@ -1,12 +1,20 @@
 package src.services;
 
-import src.models.*;
-
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
+import src.models.*;
 
+/**
+ * Service for Changing Rooms.
+ */
 public class ChangeRoom {
+
+    /**
+     * Start loop for Room Changing Service.
+     * @param sc Input scanner for user input.
+     * @param system Booking System to utilize.
+     */
     public static void start(Scanner sc, BookingSystem system) {
         System.out.println("\n=== GUEST CHANGES ROOM ===");
         System.out.print("Enter confirmation number: ");
