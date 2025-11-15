@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MaintenanceSystem {
 
-    private List<MaintenanceTicket> tickets = new ArrayList<>();
+    private final List<MaintenanceTicket> tickets = new ArrayList<>();
     private final String ticketPath = "src/assets/MaintenanceTickets.json";
 
     private int nextTicketId = 1;
@@ -33,12 +33,12 @@ public class MaintenanceSystem {
      * @return A maintenance ticket with the given fields.
      */
     public MaintenanceTicket createTicket(Room room, String description, String severity) {
-        MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, room.getRoomNumber(), description, severity, MaintenanceStatus.OPEN);
+        MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, room, description, severity, MaintenanceStatus.OPEN);
         tickets.add(t);
         // if severe, mark room awaiting
-        Room r = room;
-        if (r != null && "HIGH".equalsIgnoreCase(severity)) {
-            r.setStatus(Status.AWAITING);
+        //Room r = room;
+        if (room != null && "HIGH".equalsIgnoreCase(severity)) {
+            room.setStatus(Status.AWAITING);
         }
         saveTickets();
         return t;
@@ -54,17 +54,32 @@ public class MaintenanceSystem {
             if (t.getTicketId() == ticketId) {
                 t.setStatus(MaintenanceStatus.RESOLVED);
                 // if room was awaiting, free or keep occupied depending on bookings
-                Room r = findRoomByNumber(t.getRoomNumber());
+                // I'm going to pull this into being handled by something else depending on the result of this method call.
+                /*Room r = t.getRoom();
                 if (r != null && r.getStatus() == Status.AWAITING) {
                     // if someone is checked-in on this room, it should be OCCUPIED, else AVAILABLE
                     boolean occupied = bookings.stream()
                             .anyMatch(b -> b.getRoomNumber() == r.getRoomNumber() && b.getStatus() == BookingStatus.CHECKEDIN);
                     r.setStatus(occupied ? Status.OCCUPIED : Status.AVAILABLE);
-                }
+                }*/
                 saveTickets();
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Helper method for HotelSystem. Used exclusively for the resolveTicket() method in HotelSystem.
+     * @param ticketID ID# of the ticket.
+     * @return A ticket matching the ticketID
+     */
+    public MaintenanceTicket getTicketByID(int ticketID) {
+        for (MaintenanceTicket t : tickets) {
+            if (t.getTicketId() == ticketID) {
+                return t;
+            }
+        }
+        return null;
     }
 }

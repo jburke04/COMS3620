@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.*;
 
 public class GuestSystem {
-    private List<Guest> guests = new ArrayList<>();
+    private final List<Guest> guests = new ArrayList<>();
     private final String guestPath = "src/assets/Guests.json";
 
     public GuestSystem() {

@@ -81,4 +81,22 @@ public class RoomSystem {
         // no conflicting Bookings, return true:
         return true;
     }
+
+    /**
+     * Whether a room is checked-in or not.
+     * @param room The room to check.
+     * @param bookings The list of all bookings.
+     * @return True if room is checked-in, false if not.
+     */
+    public boolean isRoomCheckedIn(Room room, List<Booking> bookings) {
+        for (Booking b : bookings) {
+            if (b.getRoomNumber() != room.getRoomNumber()) {
+                continue;
+            }
+            if (b.getStatus() == BookingStatus.CHECKEDIN) {
+                return true;
+            }
+        }
+        return false; //Room is presumably available
+    }
 }

@@ -292,9 +292,24 @@ public class BookingSystem {
 		return true;
 	}
 
+    /**
+     * Returns a list of active bookings that have the corresponding guest. Active here means either booked or check-in.
+     * @param guest Guest to find bookings for.
+     * @return List of active bookings of Guest
+     */
+    public List<Booking> getActiveBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && (b.getStatus() == BookingStatus.CONFIRMED || b.getStatus() == BookingStatus.CHECKEDIN)) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
 	// ---- maintenance ----
 	public MaintenanceTicket createTicket(int roomNumber, String description, String severity) {
-		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, roomNumber, description, severity, MaintenanceStatus.OPEN);
+		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, findRoomByNumber(roomNumber), description, severity, MaintenanceStatus.OPEN);
 		tickets.add(t);
 		// if severe, mark room awaiting
 		Room r = findRoomByNumber(roomNumber);
@@ -310,7 +325,7 @@ public class BookingSystem {
 			if (t.getTicketId() == ticketId) {
 				t.setStatus(MaintenanceStatus.RESOLVED);
 				// if room was awaiting, free or keep occupied depending on bookings
-				Room r = findRoomByNumber(t.getRoomNumber());
+				Room r = t.getRoom();
 				if (r != null && r.getStatus() == Status.AWAITING) {
 					// if someone is checked-in on this room, it should be OCCUPIED, else AVAILABLE
 					boolean occupied = bookings.stream()

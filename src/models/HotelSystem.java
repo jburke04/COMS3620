@@ -15,9 +15,10 @@ import java.util.*;
 public class HotelSystem {
 
     //These should only be accessible from this class. No other class needs to see how this system works.
-    private BookingSystem bookingSystem;
-    private GuestSystem guestSystem;
-    private RoomSystem roomSystem;
+    private final BookingSystem bookingSystem;
+    private final GuestSystem guestSystem;
+    private final RoomSystem roomSystem;
+    private final MaintenanceSystem maintenanceSystem;
     //EmployeeSystem employeeSystem; FOR LATER USE.
 
 
@@ -28,6 +29,7 @@ public class HotelSystem {
         bookingSystem = new BookingSystem();
         guestSystem = new GuestSystem();
         roomSystem = new RoomSystem();
+        maintenanceSystem = new MaintenanceSystem();
     }
 
     //GUEST METHODS
@@ -117,6 +119,16 @@ public class HotelSystem {
     }
 
     /**
+     * Cancels a booking.
+     * @param confirmationNumber Confirmation Number of the booking.
+     * @return Whether the booking could be cancelled or not.
+     */
+    public boolean cancelBooking(int confirmationNumber) {
+        //TODO: THIS WILL NEED UPDATED WHEN BOOKING SYSTEM NO LONGER CONTAINS ALL ROOM INFO.
+        return bookingSystem.cancelBooking(confirmationNumber);
+    }
+
+    /**
      * The name hopefully implies a lot. I want to add check in by name or phone add some point. Stay tuned.
      * @param confirmationNumber Confirmation number of the booking to check in.
      * @return Whether the check in was successful or not.
@@ -125,6 +137,58 @@ public class HotelSystem {
         return bookingSystem.checkIn(confirmationNumber);
     }
 
+    /**
+     * Method to get a list of bookings that the guest has that are currently waiting to be checked in or checked in.
+     * @param phoneOrName Phone or Name of guest.
+     * @return List of active guest bookings.
+     */
+    public List<Booking> getActiveBookingsByGuestNameOrPhone(String phoneOrName) {
+        Guest g = guestSystem.findGuestByPhoneOrName(phoneOrName);
+        if (Objects.isNull(g)) {
+            return null; //Guest was not found
+        }
+        return bookingSystem.getActiveBookingsByGuest(g);
+    }
+
     //Hey y'all. If you're down here, you're probably looking for the payment methods. I didn't get around to those,
     //so sorry if you needed those while I'm out. I'll get back to it ASAP. -TH
+
+    //MAINTENANCE METHODS
+
+    /**
+     * Creates an in-stay maintenance ticket for the specific room with a description and severity.
+     * @param roomNumber Number of the room to be maintained.
+     * @param description Description of maintenance.
+     * @param severity Description of severity.
+     * @return Whether the ticket was able to be created or not.
+     */
+    public boolean createTicket(int roomNumber, String description, String severity) {
+        Room r = roomSystem.findRoomByNumber(roomNumber);
+        if (Objects.isNull(r)) {
+            return false; //Room does not exist.
+        }
+        if (Objects.isNull(maintenanceSystem.createTicket(r, description, severity))) {
+            return false; //Ticket could not be created
+        }
+        return true; //Ticket was created successfully.
+    }
+
+    /**
+     * Method to resolve maintenance tickets. Also handles setting room status once they are resolved instead of maintenance system doing it.
+     * @param ticketID ID# of ticket to resolve.
+     * @return Whether the ticket was successfully resolved or not.
+     */
+    public boolean resolveTicket(int ticketID) {
+        if (maintenanceSystem.resolveTicket(ticketID)) {
+            Room r = maintenanceSystem.getTicketByID(ticketID).getRoom();
+            if (roomSystem.isRoomCheckedIn(r, bookingSystem.getBookings())) {
+                r.setStatus(Status.OCCUPIED);
+            }
+            else {
+                r.setStatus(Status.AVAILABLE);
+            }
+            return true;
+        }
+        return false;
+    }
 }
