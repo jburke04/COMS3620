@@ -1,4 +1,4 @@
-package src.services;
+package services;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import src.models.*;
+import models.*;
 
 /**
  * UI for In-Stay Maintenance.

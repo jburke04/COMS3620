@@ -1,8 +1,8 @@
-package src.models;
+package models;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import src.helpers.Parser;
+import helpers.Parser;
 
 /**
  * Hotel's Booking System that contains the list of Rooms that exist within the Hotel,
@@ -47,13 +47,13 @@ public class BookingSystem {
 	 * Gets the list of Rooms for this Booking System.
 	 * @return list of Rooms that exist in the Hotel.
 	 */
-	public List<Room> getRooms() { return this.rooms; }
+	//public List<Room> getRooms() { return this.rooms; }
 
 	/**
 	 * Gets the list of Guests for this Booking System.
 	 * @return list of Guests that are registered in the Booking System.
 	 */
-	public List<Guest> getGuests() { return this.guests; }
+	//public List<Guest> getGuests() { return this.guests; }
 
 	/**
 	 * Gets the list of Bookings for this Booking System.
@@ -65,7 +65,7 @@ public class BookingSystem {
 	 * Gets the list of Maintenance Tickets for this Booking System.
 	 * @return list of Maintenance Tickets created under this Booking System.
 	 */
-	public List<MaintenanceTicket> getTickets() { return this.tickets; }
+	//public List<MaintenanceTicket> getTickets() { return this.tickets; }
 
 	/**
 	 * Takes a phone number or name of a Guest expected to be in the Hotel's
@@ -135,7 +135,7 @@ public class BookingSystem {
 	}
 
 	/**
-	 * Checks whether or not a Room is available within the defined window.
+	 * Checks whether a Room is available within the defined window.
 	 * @param room Room to check for availability.
 	 * @param start Start time that the Room must be available for.
 	 * @param end End time that the Room must be available for.
@@ -187,7 +187,7 @@ public class BookingSystem {
 
 	/**
 	 * Cancels a Booking that corresponds with the provided confirmation number.
-	 * @param confirmatioNumber confirmation number to cancel.
+	 * @param confirmationNumber confirmation number to cancel.
 	 * @return false if the Booking was not cancelled, true if the Booking was.
 	 */
 	public boolean cancelBooking(int confirmationNumber) {

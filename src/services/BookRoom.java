@@ -1,7 +1,7 @@
-package src.services;
+package services;
 
 import java.util.*;
-import src.models.*;
+import models.*;
 
 /**
  * Service for Booking a Room.

@@ -1,8 +1,7 @@
-package src;
-
 import java.util.Scanner;
-import src.models.BookingSystem;
-import src.services.*;
+
+import models.*;
+import services.*;
 
 public class Main {
 	public static void main(String[] args) {

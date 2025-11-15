@@ -1,8 +1,8 @@
-package src.services;
+package services;
 
 import java.util.Calendar;
 import java.util.Scanner;
-import src.models.*;
+import models.*;
 
 /**
  * Service for Checking In.

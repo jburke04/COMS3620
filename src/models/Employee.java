@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 /**
  * Employee interface to be used for employees of various departments.

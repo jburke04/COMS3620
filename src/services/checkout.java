@@ -1,5 +1,5 @@
-package src.services;
-import src.models.BookingSystem;
+package services;
+import models.BookingSystem;
 import java.util.Scanner;
 
 public class checkout {

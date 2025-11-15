@@ -1,9 +1,10 @@
-package src.helpers;
+package helpers;
 
-import src.models.*;
+import models.*;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -198,7 +199,7 @@ public class Parser {
     /**
      * Saves the Maintenance Tickets to the desired file.
      * @param filepath file to modify/update.
-     * @param bookings List of Maintenance Tickets to update the file with.
+     * @param tickets List of Maintenance Tickets to update the file with.
      */
     public static void saveTickets(String filepath, List<MaintenanceTicket> tickets) {
         JSONArray arr = new JSONArray();
@@ -215,6 +216,29 @@ public class Parser {
             w.write(arr.toJSONString());
         } catch (Exception e) {
             throw new RuntimeException("Failed to save MaintenanceTickets.json: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Saves the Guests to the Guests.json file
+     * @param filepath path to Guests.json
+     * @param guests list of Guests
+     */
+    public static void saveGuests(String filepath, List<Guest> guests) {
+        JSONArray arr = new JSONArray();
+        for (Guest g : guests) {
+            JSONObject o = new JSONObject();
+            o.put("guestID", g.getGuestId());
+            o.put("name", g.getName());
+            o.put("phone", g.getPhoneNumber());
+            o.put("email", g.getEmail());
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)){
+            w.write(arr.toJSONString());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to save Guests.json " + e.getMessage(), e);
         }
     }
 
