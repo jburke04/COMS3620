@@ -44,6 +44,7 @@ public class Parser {
      * @param filepath String representation of the filepath to parse.
      * @param rooms List of Rooms to populate.
      */
+    @SuppressWarnings("unchecked")
     public static void parseRooms(String filepath, List<Room> rooms) {
         rooms.clear();
         try {
@@ -73,6 +74,7 @@ public class Parser {
      * @param filepath String representation of the filepath to parse.
      * @param guests List of Guests to populate.
      */
+    @SuppressWarnings("unchecked")
     public static void parseGuests(String filepath, List<Guest> guests) {
         guests.clear();
         try {
@@ -96,6 +98,7 @@ public class Parser {
      * @param filepath String representation of the filepath to parse.
      * @param bookings List of Bookings to populate.
      */
+    @SuppressWarnings("unchecked")
     public static void parseBookings(String filepath, List<Booking> bookings) {
         bookings.clear();
         try {
@@ -126,6 +129,7 @@ public class Parser {
      * @param filepath String representation of the filepath to parse.
      * @param tickets List of Maintenance Tickets to populate.
      */
+    @SuppressWarnings("unchecked")
     public static void parseTickets(String filepath, List<MaintenanceTicket> tickets) {
         tickets.clear();
         try {
@@ -150,6 +154,7 @@ public class Parser {
      * @param filepath file to modify/update.
      * @param bookings List of Bookings to update the file with.
      */
+    @SuppressWarnings("unchecked")
     public static void saveBookings(String filepath, List<Booking> bookings) {
         JSONArray arr = new JSONArray();
         for (Booking b : bookings) {
@@ -175,6 +180,7 @@ public class Parser {
      * @param filepath file to modify/update.
      * @param rooms List of Rooms to update the file with.
      */
+    @SuppressWarnings("unchecked")
     public static void saveRooms(String filepath, List<Room> rooms) {
         JSONArray arr = new JSONArray();
         for (Room r : rooms) {
@@ -200,6 +206,7 @@ public class Parser {
      * @param filepath file to modify/update.
      * @param bookings List of Maintenance Tickets to update the file with.
      */
+    @SuppressWarnings("unchecked")
     public static void saveTickets(String filepath, List<MaintenanceTicket> tickets) {
         JSONArray arr = new JSONArray();
         for (MaintenanceTicket t : tickets) {
