@@ -323,4 +323,14 @@ public class BookingSystem {
 		}
 		return false;
 	}
+	public List<Booking> getBookingsForGuest(int guestId) {
+		List<Booking> result = new ArrayList<>();
+		for (Booking b : bookings) {
+			if (b.getGuestID() == guestId) {
+				result.add(b);
+			}
+		}
+		return result;
+	}
+
 }
