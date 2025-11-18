@@ -66,7 +66,7 @@ public class RoomSystem {
      */
     public boolean isRoomAvailable(Room room, List<Booking> bookings, Calendar startDate, Calendar endDate) {
         // check if the Room is not currently AVAILABLE:
-        if (room.getStatus() != Status.AVAILABLE) return false;
+        if (room.getStatus() != Status.AVAILABLE || room.getStatus() != Status.AWAITING) return false;
 
         // Check if any Bookings with this Room conflict with the defined window:
         for (Booking b : bookings) {

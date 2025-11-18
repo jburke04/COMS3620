@@ -147,8 +147,7 @@ public class BookRoom {
         String email = scanner.nextLine().trim();
 
         Guest g = new Guest(nextId, name, phone, email);
-        system.getGuests().add(g);
-        // Guests.json saving not strictly required for booking to work; your rubric focuses on Bookings & Rooms.
+        system.addGuest(g);
         return g;
     }
 

@@ -1,16 +1,14 @@
-package src.services;
+package services;
 
-import src.models.BookingSystem;
-import src.models.Guest;
-import src.models.Booking;
-import src.helpers.Parser;
+import models.*;
+import helpers.Parser;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class GetGuests {
 
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
 
         System.out.println("=== Guest Lookup ===");
 
@@ -46,7 +44,7 @@ public class GetGuests {
         }
     }
 
-    private static void printGuestInfo(BookingSystem system, Guest guest) {
+    private static void printGuestInfo(HotelSystem system, Guest guest) {
         System.out.println("\n=== Guest Information ===");
         System.out.println("Name: " + guest.getName());
         System.out.println("ID: " + guest.getGuestId());
@@ -55,7 +53,7 @@ public class GetGuests {
 
         System.out.println("\n=== Booking History ===");
 
-        List<Booking> bookings = system.getBookingsForGuest(guest.getGuestId());
+        List<Booking> bookings = system.getBookingByGuest(guest);
 
         if (bookings.isEmpty()) {
             System.out.println("No bookings found for this guest.");

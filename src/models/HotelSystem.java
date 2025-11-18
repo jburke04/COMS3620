@@ -70,6 +70,11 @@ public class HotelSystem {
     public Guest findGuestByPhoneOrName(String phoneOrName) {
         return guestSystem.findGuestByPhoneOrName(phoneOrName);
     }
+
+    public void addGuest(Guest guest) {
+        guestSystem.addGuest(guest);
+    }
+
     //ROOM METHODS
 
     /**
@@ -176,6 +181,10 @@ public class HotelSystem {
             return null; //Guest was not found
         }
         return bookingSystem.getConfirmedBookingsByGuest(g);
+    }
+
+    public List<Booking> getBookingByGuest(Guest guest) {
+        return bookingSystem.getBookingsForGuest(guest);
     }
 
     public List<Booking> getConfirmedBookings() {

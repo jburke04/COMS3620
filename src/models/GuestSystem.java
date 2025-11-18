@@ -46,5 +46,10 @@ public class GuestSystem {
         return guests;
     }
 
+    public void addGuest(Guest guest) {
+        guests.add(guest);
+        Parser.saveGuests(guestPath, guests);
+    }
+
 
 }

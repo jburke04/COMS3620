@@ -25,6 +25,10 @@ public class ChangeRoom {
             System.out.println("No booking found.");
             return;
         }
+        if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.CHECKEDOUT || b.getStatus() == BookingStatus.COMPLETED) {
+            System.out.println("Booking not available to change.");
+            return;
+        }
 
         Calendar start = b.getStartTime();
         Calendar end   = b.getEndTime();

@@ -82,11 +82,10 @@ public class Parser {
             JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject g = (JSONObject) o;
-                int guestId = ((Long) g.get("guestId")).intValue();
+                int guestId = ((Long) g.get("guestID")).intValue();
                 String name = (String) g.get("name");
-                String phone = (String) g.get("phoneNumber");
+                String phone = (String) g.get("phone");
                 String email = (String) g.get("email");
-
                 guests.add(new Guest(guestId, name, phone, email));
             }
         } catch (Exception e) {

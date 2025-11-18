@@ -1,6 +1,5 @@
 package models;
 
-import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 import helpers.Parser;
@@ -38,10 +37,15 @@ public class BookingSystem {
 	/**
 	 * Saves all JSON data to their respective JSON files.
 	 */
-	public void saveAll() {
-		Parser.saveRooms(roomsPath, rooms);
+
+    public BookingSystem() {
+        Parser.parseBookings(bookingsPath, bookings);
+    }
+
+	public void saveBookings() {
+		//Parser.saveRooms(roomsPath, rooms);
 		Parser.saveBookings(bookingsPath, bookings);
-		Parser.saveTickets(ticketsPath, tickets);
+		//Parser.saveTickets(ticketsPath, tickets);
 	}
 
 	/**
@@ -181,8 +185,8 @@ public class BookingSystem {
 		Booking booking = new Booking(guest.getGuestId(), start, end, room.getRoomNumber(),
 				BookingStatus.CONFIRMED, cost);
 		bookings.add(booking);
-		room.setStatus(Status.BOOKED);
-		saveAll();
+		room.setStatus(Status.AWAITING);
+		saveBookings();
 		return booking;
 	}
 
@@ -202,10 +206,10 @@ public class BookingSystem {
 		// update Booking status and set Room as AVAILABLE:
 		b.setStatus(BookingStatus.CANCELLED);
 		Room r = findRoomByNumber(b.getRoomNumber());
-		if (r != null && r.getStatus() == Status.BOOKED) {
+		if (r != null && r.getStatus() == Status.AWAITING) {
 			r.setStatus(Status.AVAILABLE);
 		}
-		saveAll();
+        saveBookings();
 		return true;
 	}
 
@@ -238,7 +242,7 @@ public class BookingSystem {
 		} else {
 			target.setStatus(Status.BOOKED);
 		}
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
@@ -257,7 +261,7 @@ public class BookingSystem {
 
 		b.setStatus(BookingStatus.CHECKEDIN);
 		r.setStatus(Status.OCCUPIED);
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
@@ -289,7 +293,7 @@ public class BookingSystem {
 		Room r = findRoomByNumber(b.getRoomNumber());
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
@@ -337,7 +341,7 @@ public class BookingSystem {
 		if (r != null && "HIGH".equalsIgnoreCase(severity)) {
 			r.setStatus(Status.AWAITING);
 		}
-		saveAll();
+		saveBookings();
 		return t;
 	}
 
@@ -353,16 +357,16 @@ public class BookingSystem {
 							.anyMatch(b -> b.getRoomNumber() == r.getRoomNumber() && b.getStatus() == BookingStatus.CHECKEDIN);
 					r.setStatus(occupied ? Status.OCCUPIED : Status.AVAILABLE);
 				}
-				saveAll();
+				saveBookings();
 				return true;
 			}
 		}
 		return false;
 	}
-	public List<Booking> getBookingsForGuest(int guestId) {
+	public List<Booking> getBookingsForGuest(Guest guest) {
 		List<Booking> result = new ArrayList<>();
 		for (Booking b : bookings) {
-			if (b.getGuestID() == guestId) {
+			if (b.getGuestID() == guest.getGuestId()) {
 				result.add(b);
 			}
 		}
