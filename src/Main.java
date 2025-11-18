@@ -16,6 +16,7 @@ public class Main {
 			System.out.println("3) Change Room");
 			System.out.println("4) In-Stay Maintenance");
 			System.out.println("5) Checkout & Payment");
+			System.out.println("6) Guest Lookup");
 			System.out.println("0) Exit");
 			System.out.print("Choose: ");
 			String choice = sc.nextLine().trim();
@@ -25,6 +26,7 @@ public class Main {
 				case "3": ChangeRoom.start(sc, system); break;
 				case "4": InStayMaintenance.start(sc, system); break;
 				case "5": checkout.start(sc, system); break;
+				case "6": GetGuests.start(sc, system); break;
 				case "0": sc.close(); return;
 				default: System.out.println("Invalid.");
 			}
