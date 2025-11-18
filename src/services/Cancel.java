@@ -14,15 +14,15 @@ public class Cancel {
      * @param scanner Input scanner for reading user input.
      * @param system Booking System to utilize.
      */
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
         String choice = "";
-        ArrayList<Integer> ids = new ArrayList<>();
+        //ArrayList<Integer> ids = new ArrayList<>(); Maybe we'll need this later? Not used right now though :/
         Booking selected;
         System.out.println("");
 
-        for (Booking booking : system.getBookings()) {
+        /*for (Booking booking : system.getBookings()) {
             ids.add(booking.getConfirmationNumber());
-        }
+        }*/
 
         // allow guest to select which Booking to cancel:
         do {
@@ -43,7 +43,7 @@ public class Cancel {
             }
 
             // user inputted an ID, check if it's valid:
-            selected = system.findBookingByConfirmation(Integer.parseInt(choice));
+            selected = system.getBookingByConfirmation(Integer.parseInt(choice));
             if (selected != null) {
                 // user confirmed the cancellation, break out of this loop, otherwise return to the list
                 if (confirmationLoop(selected, scanner, system) == 0)
@@ -60,8 +60,8 @@ public class Cancel {
      * Print out list of Bookings.
      * @param system Booking System that provides the list of Bookings.
      */
-    private static void printBookings(BookingSystem system) {
-        for (Booking booking : system.getBookings())
+    private static void printBookings(HotelSystem system) {
+        for (Booking booking : system.getConfirmedBookings())
             if (booking.getStatus() == BookingStatus.CONFIRMED)
                 System.out.println("Confirmation Number: " + booking.getConfirmationNumber() + ", Room #" + booking.getRoomNumber());
     }
@@ -74,7 +74,7 @@ public class Cancel {
      * @return 0 if the cancel was confirmed and completed, 1 if the cancel was
      *          denied or the user changed their mind.
      */
-    private static int confirmationLoop(Booking selected, Scanner scanner, BookingSystem system) {
+    private static int confirmationLoop(Booking selected, Scanner scanner, HotelSystem system) {
         String choice;
         // confirm user wants to cancel that booking:
         do {

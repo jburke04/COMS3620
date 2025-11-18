@@ -14,8 +14,8 @@ public class MaintenanceSystem {
     /**
      * Creates a maintenance system, and more importantly loads the json directly.
      */
-    public MaintenanceSystem() {
-        Parser.parseTickets(ticketPath, tickets);
+    public MaintenanceSystem(RoomUtils utils) {
+        Parser.parseTickets(ticketPath, tickets, utils);
     }
 
     /**

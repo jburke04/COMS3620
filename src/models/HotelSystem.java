@@ -19,6 +19,8 @@ public class HotelSystem {
     private final GuestSystem guestSystem;
     private final RoomSystem roomSystem;
     private final MaintenanceSystem maintenanceSystem;
+    private final PaymentSystem paymentSystem;
+    private final RoomUtils utils;
     //EmployeeSystem employeeSystem; FOR LATER USE.
 
 
@@ -29,7 +31,9 @@ public class HotelSystem {
         bookingSystem = new BookingSystem();
         guestSystem = new GuestSystem();
         roomSystem = new RoomSystem();
-        maintenanceSystem = new MaintenanceSystem();
+        utils = new RoomUtils(bookingSystem.getBookings(), roomSystem.getRooms());
+        maintenanceSystem = new MaintenanceSystem(utils);
+        paymentSystem = new PaymentSystem();
     }
 
     //GUEST METHODS
@@ -54,6 +58,18 @@ public class HotelSystem {
         the object will be null and the statement will evaluate to false. It works!*/
         return !Objects.isNull(guestSystem.findGuestByPhoneOrName(phoneOrName));
     }
+
+    /**
+     * I don't like doing this, but some functions need the list of guests.
+     * @return The list of Guest objects.
+     */
+    public List<Guest> getGuests() {
+        return guestSystem.getGuests();
+    }
+
+    public Guest findGuestByPhoneOrName(String phoneOrName) {
+        return guestSystem.findGuestByPhoneOrName(phoneOrName);
+    }
     //ROOM METHODS
 
     /**
@@ -77,6 +93,18 @@ public class HotelSystem {
     public boolean roomInSystem(int roomNumber) {
         //Another one of these return statements.
         return !Objects.isNull(roomSystem.findRoomByNumber(roomNumber));
+    }
+
+    public Room getRoomByNumber(int roomNumber) {
+        return roomSystem.findRoomByNumber(roomNumber);
+    }
+
+    public boolean isRoomAvailable(int roomNumber, Calendar start, Calendar end) {
+        return roomSystem.isRoomAvailable(roomSystem.findRoomByNumber(roomNumber), bookingSystem.getBookings(), start, end);
+    }
+
+    public boolean isRoomAvailable(Room room, Calendar start, Calendar end) {
+        return roomSystem.isRoomAvailable(room, bookingSystem.getBookings(), start, end);
     }
 
     //BOOKING METHODS
@@ -138,20 +166,29 @@ public class HotelSystem {
     }
 
     /**
-     * Method to get a list of bookings that the guest has that are currently waiting to be checked in or checked in.
+     * Method to get a list of bookings that the guest has that are currently waiting to be checked in.
      * @param phoneOrName Phone or Name of guest.
-     * @return List of active guest bookings.
+     * @return List of awaiting guest bookings.
      */
-    public List<Booking> getActiveBookingsByGuestNameOrPhone(String phoneOrName) {
+    public List<Booking> getConfirmedBookingsByGuestNameOrPhone(String phoneOrName) {
         Guest g = guestSystem.findGuestByPhoneOrName(phoneOrName);
         if (Objects.isNull(g)) {
             return null; //Guest was not found
         }
-        return bookingSystem.getActiveBookingsByGuest(g);
+        return bookingSystem.getConfirmedBookingsByGuest(g);
     }
 
-    //Hey y'all. If you're down here, you're probably looking for the payment methods. I didn't get around to those,
-    //so sorry if you needed those while I'm out. I'll get back to it ASAP. -TH
+    public List<Booking> getConfirmedBookings() {
+        return bookingSystem.getConfirmedBookings();
+    }
+
+    public Booking getBookingByConfirmation(int confirmation) {
+        return bookingSystem.findBookingByConfirmation(confirmation);
+    }
+
+    public boolean validateBooking(int confirmation) {
+        return bookingSystem.validateBooking(confirmation);
+    }
 
     //MAINTENANCE METHODS
 
@@ -162,15 +199,12 @@ public class HotelSystem {
      * @param severity Description of severity.
      * @return Whether the ticket was able to be created or not.
      */
-    public boolean createTicket(int roomNumber, String description, String severity) {
+    public MaintenanceTicket createTicket(int roomNumber, String description, String severity) {
         Room r = roomSystem.findRoomByNumber(roomNumber);
         if (Objects.isNull(r)) {
-            return false; //Room does not exist.
+            return null; //Room does not exist.
         }
-        if (Objects.isNull(maintenanceSystem.createTicket(r, description, severity))) {
-            return false; //Ticket could not be created
-        }
-        return true; //Ticket was created successfully.
+        return maintenanceSystem.createTicket(r, description, severity);
     }
 
     /**
@@ -190,5 +224,16 @@ public class HotelSystem {
             return true;
         }
         return false;
+    }
+
+    //PAYMENT METHODS
+
+    public boolean checkout(int confirmation) {
+        Booking b = bookingSystem.findBookingByConfirmation(confirmation);
+        if (Objects.isNull(b)) {
+            return false;
+        }
+        Room r = roomSystem.findRoomByNumber(b.getRoomNumber());
+        return paymentSystem.checkoutAndPay(b, r);
     }
 }

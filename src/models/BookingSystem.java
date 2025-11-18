@@ -1,5 +1,6 @@
 package models;
 
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 import helpers.Parser;
@@ -26,13 +27,13 @@ public class BookingSystem {
 	/**
 	 * Loads all JSON data into each array list.
 	 */
-	public void loadAll() {
+	/*public void loadAll() {
 		Parser.parseRooms(roomsPath, rooms);
 		Parser.parseGuests(guestsPath, guests);
 		Parser.parseBookings(bookingsPath, bookings);
 		Parser.parseTickets(ticketsPath, tickets);
 		nextTicketId = tickets.stream().mapToInt(MaintenanceTicket::getTicketId).max().orElse(0) + 1;
-	}
+	}/*
 
 	/**
 	 * Saves all JSON data to their respective JSON files.
@@ -293,14 +294,34 @@ public class BookingSystem {
 	}
 
     /**
-     * Returns a list of active bookings that have the corresponding guest. Active here means either booked or check-in.
+     * Returns a list of confirmed bookings that have the corresponding guest.
      * @param guest Guest to find bookings for.
      * @return List of active bookings of Guest
      */
-    public List<Booking> getActiveBookingsByGuest(Guest guest) {
+    public List<Booking> getConfirmedBookingsByGuest(Guest guest) {
         List<Booking> out = new ArrayList<>();
         for (Booking b : bookings) {
-            if (b.getGuestID() == guest.getGuestId() && (b.getStatus() == BookingStatus.CONFIRMED || b.getStatus() == BookingStatus.CHECKEDIN)) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getConfirmedBookings() {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getCheckedBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CHECKEDIN) {
                 out.add(b);
             }
         }

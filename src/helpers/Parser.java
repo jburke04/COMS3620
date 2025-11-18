@@ -127,7 +127,7 @@ public class Parser {
      * @param filepath String representation of the filepath to parse.
      * @param tickets List of Maintenance Tickets to populate.
      */
-    public static void parseTickets(String filepath, List<MaintenanceTicket> tickets) {
+    public static void parseTickets(String filepath, List<MaintenanceTicket> tickets, RoomUtils utils) {
         tickets.clear();
         try {
             JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
@@ -138,7 +138,7 @@ public class Parser {
                 String desc = (String) t.get("description");
                 String severity = (String) t.get("severity");
                 String status = (String) t.get("status");
-                tickets.add(new MaintenanceTicket(id, room, desc, severity, MaintenanceStatus.valueOf(status)));
+                tickets.add(new MaintenanceTicket(id, utils.findRoom(room), desc, severity, MaintenanceStatus.valueOf(status)));
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse MaintenanceTickets.json: " + e.getMessage(), e);
@@ -206,7 +206,7 @@ public class Parser {
         for (MaintenanceTicket t : tickets) {
             JSONObject o = new JSONObject();
             o.put("ticketId", t.getTicketId());
-            o.put("roomNumber", t.getRoomNumber());
+            o.put("roomNumber", t.getRoom().getRoomNumber());
             o.put("description", t.getDescription());
             o.put("severity", t.getSeverity());
             o.put("status", t.getStatus().name());

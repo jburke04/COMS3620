@@ -14,19 +14,19 @@ public class CheckIn {
      * @param scanner Input scanner for user input.
      * @param system Booking System to utilize.
      */
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
 
     }
 
-    private static void handleBookingNotFound(Scanner scanner, BookingSystem system){
+    private static void handleBookingNotFound(Scanner scanner, HotelSystem system){
 
     }
 
-    private static void searchBookingsByGuestName(BookingSystem system, String name) {
+    private static void searchBookingsByGuestName(HotelSystem system, String name) {
 
     }
 
-    private static void offerNewBooking(Scanner scanner, BookingSystem system) {
+    private static void offerNewBooking(Scanner scanner, HotelSystem system) {
 
     }
 
@@ -38,7 +38,7 @@ public class CheckIn {
 
     }
 
-    private static void handleRoomNotReady(Scanner scanner, BookingSystem system, Booking booking) {
+    private static void handleRoomNotReady(Scanner scanner, HotelSystem system, Booking booking) {
 
     }
 

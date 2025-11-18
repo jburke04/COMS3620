@@ -1,14 +1,15 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.*;
 
 public class RoomUtils {
-    private ArrayList<Booking> bookingsList;
-    private ArrayList<Room> roomsList;
+    private List<Booking> bookingsList;
+    private List<Room> roomsList;
 
-    public RoomUtils() {
-        bookingsList = new ArrayList<>();
-        roomsList = new ArrayList<>();
+    public RoomUtils(List<Booking> bookings, List<Room> rooms) {
+        bookingsList = bookings;
+        roomsList = rooms;
     }
 
     public RoomUtils(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList) {
@@ -16,11 +17,11 @@ public class RoomUtils {
         this.bookingsList = bookingsList;
     }
 
-    public ArrayList<Room> getRooms() {
+    public List<Room> getRooms() {
         return this.roomsList;
     }
 
-    public ArrayList<Booking> getBookings() {
+    public List<Booking> getBookings() {
         return this.bookingsList;
     }
 
@@ -46,7 +47,7 @@ public class RoomUtils {
      * Iterates through the list of confirmation numbers to find the Booking with
      * the corresponding confirmation number. Returns null if no such Booking
      * exists.
-     * @param int confirmation number to look for
+     * @param confirmationNumber confirmation number to look for
      * @return corresponding Booking with that confirmation number, or null
      *          if it doesn't exist.
      */

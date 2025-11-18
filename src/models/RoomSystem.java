@@ -52,6 +52,10 @@ public class RoomSystem {
                 .collect(Collectors.toList());
     }
 
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
     /**
      * Checks whether a Room is available within the defined window.
      * @param room Room to check for availability.

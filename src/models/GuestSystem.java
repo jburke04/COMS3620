@@ -42,5 +42,9 @@ public class GuestSystem {
         }
     }
 
+    public List<Guest> getGuests() {
+        return guests;
+    }
+
 
 }
