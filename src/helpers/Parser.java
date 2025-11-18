@@ -233,7 +233,7 @@ public class Parser {
         return cal;
     }
 
-    private static String isoFromCalendar(Calendar cal) {
+    public static String isoFromCalendar(Calendar cal) {
         LocalDateTime ldt = LocalDateTime.of(
                 cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH) + 1,
