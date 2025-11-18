@@ -66,7 +66,7 @@ public class RoomSystem {
      */
     public boolean isRoomAvailable(Room room, List<Booking> bookings, Calendar startDate, Calendar endDate) {
         // check if the Room is not currently AVAILABLE:
-        if (room.getStatus() != Status.AVAILABLE || room.getStatus() != Status.AWAITING) return false;
+        if (room.getStatus() != Status.AVAILABLE && room.getStatus() != Status.AWAITING) return false;
 
         // Check if any Bookings with this Room conflict with the defined window:
         for (Booking b : bookings) {
@@ -77,13 +77,30 @@ public class RoomSystem {
             if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.COMPLETED) continue;
 
             // compare requested window to the window of the existing Booking:
-            if (startDate.before(b.getEndTime()) && b.getStartTime().after(endDate)) {
-                return false;
-            }
+            if (during(startDate, b.getStartTime(), b.getEndTime())) return false; //If the start of this booking falls inside another
+            if (during(endDate, b.getStartTime(), b.getEndTime())) return false; //If the end falls inside another
+
+            if (during(b.getStartTime(), startDate, endDate)) return false; //If the current booking falls inside wanted start-end
+            if (during(b.getEndTime(), startDate, endDate)) return false; //same here
+
+            if (startDate.equals(b.getStartTime())) return false; //two bookings cannot start the same day for the same room.
+            if (endDate.equals(b.getEndTime())) return false; //same with endings.
         }
 
         // no conflicting Bookings, return true:
         return true;
+    }
+
+    /**
+     * helper for the function above.
+     * @param toCheck date to check if it falls during range start-end
+     * @param start start of range
+     * @param end end of range
+     * @return whether the checked date is during the range.
+     */
+    private boolean during(Calendar toCheck, Calendar start, Calendar end) {
+        if (toCheck.after(start) && toCheck.before(end)) return true;
+        return false;
     }
 
     /**

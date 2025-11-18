@@ -137,7 +137,9 @@ public class HotelSystem {
         }
         //Now that we know the room is available, book it. This also means you don't have to do the checks in BookingSystem :)
         //The return here may look weird, but this should ideally catch any weird stuff where the room is available but the booking fails to be created.
-        return !Objects.isNull(bookingSystem.createBooking(guest, room, startDate, endDate));
+        boolean success = !Objects.isNull(bookingSystem.createBooking(guest, room, startDate, endDate)); //Exclusively so I can save room state after this call.
+        roomSystem.saveRooms();
+        return success;
     }
 
     /**
@@ -148,7 +150,9 @@ public class HotelSystem {
      */
     public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
         //TODO: MAKE SURE TO ADD THE COST RECALCULATION IN HERE!
-        return bookingSystem.changeRoom(confirmationNumber, newRoomNumber);
+        boolean success = bookingSystem.changeRoom(confirmationNumber, newRoomNumber);
+        roomSystem.saveRooms();
+        return success;
     }
 
     /**
@@ -158,7 +162,9 @@ public class HotelSystem {
      */
     public boolean cancelBooking(int confirmationNumber) {
         //TODO: THIS WILL NEED UPDATED WHEN BOOKING SYSTEM NO LONGER CONTAINS ALL ROOM INFO.
-        return bookingSystem.cancelBooking(confirmationNumber);
+        boolean success = bookingSystem.cancelBooking(confirmationNumber, utils);
+        roomSystem.saveRooms();
+        return success;
     }
 
     /**
@@ -167,7 +173,9 @@ public class HotelSystem {
      * @return Whether the check in was successful or not.
      */
     public boolean checkInByNumber(int confirmationNumber) {
-        return bookingSystem.checkIn(confirmationNumber);
+        boolean success = bookingSystem.checkIn(confirmationNumber);
+        roomSystem.saveRooms();
+        return success;
     }
 
     /**

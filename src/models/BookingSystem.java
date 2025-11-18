@@ -195,7 +195,7 @@ public class BookingSystem {
 	 * @param confirmationNumber confirmation number to cancel.
 	 * @return false if the Booking was not cancelled, true if the Booking was.
 	 */
-	public boolean cancelBooking(int confirmationNumber) {
+	public boolean cancelBooking(int confirmationNumber, RoomUtils utils) {
 		// search for Booking:
 		Booking b = findBookingByConfirmation(confirmationNumber);
 		// no corresponding Booking found, return false:
@@ -205,7 +205,7 @@ public class BookingSystem {
 
 		// update Booking status and set Room as AVAILABLE:
 		b.setStatus(BookingStatus.CANCELLED);
-		Room r = findRoomByNumber(b.getRoomNumber());
+		Room r = utils.findRoom(b.getRoomNumber());
 		if (r != null && r.getStatus() == Status.AWAITING) {
 			r.setStatus(Status.AVAILABLE);
 		}
