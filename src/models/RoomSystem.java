@@ -4,12 +4,18 @@ import helpers.Parser;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RoomSystem {
+public class RoomSystem implements SubSystem {
     private final List<Room> rooms = new ArrayList<>();
     private final String roomPath = "src/assets/Rooms.json";
 
-    public RoomSystem() {
-        Parser.parseRooms(roomPath, rooms);
+    @Override
+    public void load() {
+        Parser.parseRooms(this.roomPath, this.rooms);
+    }
+
+    @Override
+    public void save() {
+        Parser.saveRooms(this.roomPath, this.rooms);
     }
 
     /**
@@ -27,12 +33,15 @@ public class RoomSystem {
      * 			exists in the Hotel.
      */
     public Room findRoomByNumber(int roomNumber) {
-        for (Room r : rooms) {
+        // search for corresponding room:
+        for (Room r : this.rooms) {
+            // match found:
             if (r.getRoomNumber() == roomNumber) {
                 return r;
             }
         }
 
+        // no room found, return null:
         return null;
     }
 
@@ -52,8 +61,12 @@ public class RoomSystem {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gets the list of Rooms for this Room System
+     * @return list of Rooms
+     */
     public List<Room> getRooms() {
-        return rooms;
+        return this.rooms;
     }
 
     /**

@@ -1,6 +1,5 @@
 package services;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import models.*;
 
@@ -16,13 +15,8 @@ public class Cancel {
      */
     public static void start(Scanner scanner, HotelSystem system) {
         String choice = "";
-        //ArrayList<Integer> ids = new ArrayList<>(); Maybe we'll need this later? Not used right now though :/
         Booking selected;
         System.out.println("");
-
-        /*for (Booking booking : system.getBookings()) {
-            ids.add(booking.getConfirmationNumber());
-        }*/
 
         // allow guest to select which Booking to cancel:
         do {

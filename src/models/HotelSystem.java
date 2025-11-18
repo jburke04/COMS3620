@@ -15,9 +15,9 @@ import java.util.*;
 public class HotelSystem {
 
     //These should only be accessible from this class. No other class needs to see how this system works.
-    private final BookingSystem bookingSystem;
-    private final GuestSystem guestSystem;
-    private final RoomSystem roomSystem;
+    private final BookingSystem bookingSystem = new BookingSystem();
+    private final GuestSystem guestSystem = new GuestSystem();
+    private final RoomSystem roomSystem = new RoomSystem();
     private final MaintenanceSystem maintenanceSystem;
     private final PaymentSystem paymentSystem;
     private final RoomUtils utils;
@@ -28,12 +28,12 @@ public class HotelSystem {
      * Where it all starts. This will give us our subsystems to play with.
      */
     public HotelSystem() {
-        bookingSystem = new BookingSystem();
-        guestSystem = new GuestSystem();
-        roomSystem = new RoomSystem();
-        utils = new RoomUtils(bookingSystem.getBookings(), roomSystem.getRooms());
-        maintenanceSystem = new MaintenanceSystem(utils);
-        paymentSystem = new PaymentSystem();
+        this.bookingSystem.load();
+        this.guestSystem.load();
+        this.roomSystem.load();
+        this.utils = new RoomUtils(this.bookingSystem.getBookings(), this.roomSystem.getRooms());
+        this.maintenanceSystem = new MaintenanceSystem(utils);
+        this.paymentSystem = new PaymentSystem();
     }
 
     //GUEST METHODS

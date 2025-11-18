@@ -38,8 +38,8 @@ public class Booking {
 		this.status = status;
 		this.cost = cost;
 
-		if (confirmationNumber >= Booking.nextConfirmationNumber) {
-			Booking.nextConfirmationNumber = confirmationNumber + 1;
+		if (this.confirmationNumber >= Booking.nextConfirmationNumber) {
+			Booking.nextConfirmationNumber = this.confirmationNumber + 1;
 		}
 	}
 
@@ -54,7 +54,7 @@ public class Booking {
 	 */
 	public Booking(int guestID, Calendar startTime, Calendar endTime,
 				   int roomNumber, BookingStatus status, double cost) {
-		this(nextConfirmationNumber++, guestID, startTime, endTime, roomNumber, status, cost);
+		this(Booking.nextConfirmationNumber++, guestID, startTime, endTime, roomNumber, status, cost);
 	}
 
 	// -------------- Getters --------------
@@ -100,6 +100,18 @@ public class Booking {
 	 * @return Total cost of the Booking without discounts.
 	 */
 	public double getCost() { return this.cost; }
+
+	/**
+	 * String representation of a Booking
+	 */
+	public String toString() {
+		return this.confirmationNumber + ": \n"
+			+ "\tRoom #" + this.roomNumber + "\n"
+			+ "\tStart: " + this.startTime.toString() + "\n"
+			+ "\tEnd: " + this.endTime.toString() + "\n"
+			+ "\tCost: " + this.cost + "\n"
+			+ "\tStatus: " + this.status; 
+	}
 
 	// --------------- Setters -----------------
 

@@ -1,97 +1,43 @@
 package models;
 
+import helpers.Parser;
 import java.util.*;
 import java.util.stream.Collectors;
-import helpers.Parser;
 
 /**
  * Hotel's Booking System that contains the list of Rooms that exist within the Hotel,
  * the list of Bookings made under that Hotel, the list of Guests under that Hotel, and
  * the list of Maintenance Tickets that exist for all Rooms.
  */
-public class BookingSystem {
+public class BookingSystem implements SubSystem {
 
-	private final List<Room> rooms = new ArrayList<>();
-	private final List<Guest> guests = new ArrayList<>();
 	private final List<Booking> bookings = new ArrayList<>();
-	private final List<MaintenanceTicket> tickets = new ArrayList<>();
 
-	private final String roomsPath = "src/assets/Rooms.json";
-	private final String guestsPath = "src/assets/Guests.json";
 	private final String bookingsPath = "src/assets/Bookings.json";
-	private final String ticketsPath = "src/assets/MaintenanceTickets.json";
 
 	private int nextTicketId = 1;
 
 	/**
-	 * Loads all JSON data into each array list.
+	 * Loads booking data from JSON file of bookings
 	 */
-	/*public void loadAll() {
-		Parser.parseRooms(roomsPath, rooms);
-		Parser.parseGuests(guestsPath, guests);
-		Parser.parseBookings(bookingsPath, bookings);
-		Parser.parseTickets(ticketsPath, tickets);
-		nextTicketId = tickets.stream().mapToInt(MaintenanceTicket::getTicketId).max().orElse(0) + 1;
-	}/*
-
-	/**
-	 * Saves all JSON data to their respective JSON files.
-	 */
-
-    public BookingSystem() {
-        Parser.parseBookings(bookingsPath, bookings);
-    }
-
-	public void saveBookings() {
-		//Parser.saveRooms(roomsPath, rooms);
-		Parser.saveBookings(bookingsPath, bookings);
-		//Parser.saveTickets(ticketsPath, tickets);
+	@Override
+	public void load() {
+		Parser.parseBookings(this.bookingsPath, this.bookings);
 	}
 
 	/**
-	 * Gets the list of Rooms for this Booking System.
-	 * @return list of Rooms that exist in the Hotel.
+	 * Saves booking data into JSON file of bookings
 	 */
-	//public List<Room> getRooms() { return this.rooms; }
-
-	/**
-	 * Gets the list of Guests for this Booking System.
-	 * @return list of Guests that are registered in the Booking System.
-	 */
-	//public List<Guest> getGuests() { return this.guests; }
+	@Override
+	public void save() {
+		Parser.saveBookings(this.bookingsPath, this.bookings);
+	}
 
 	/**
 	 * Gets the list of Bookings for this Booking System.
 	 * @return list of Bookings that were created under this Booking System.
 	 */
 	public List<Booking> getBookings() { return this.bookings; }
-
-	/**
-	 * Gets the list of Maintenance Tickets for this Booking System.
-	 * @return list of Maintenance Tickets created under this Booking System.
-	 */
-	//public List<MaintenanceTicket> getTickets() { return this.tickets; }
-
-	/**
-	 * Takes a phone number or name of a Guest expected to be in the Hotel's
-	 * Booking System and searches for their information.
-	 * @param phoneOrName Phone number or name of Guest to search for.
-	 * @return Guest object with matching phone number or name, or null if
-	 * 			no such Guest exists.
-	 */
-	public Guest findGuestByPhoneOrName(String phoneOrName) {
-		// iterate through the list of Guests:
-		for (Guest g : this.guests) {
-			// Guest name or phone number matches search query:
-			if (g.getPhoneNumber().equalsIgnoreCase(phoneOrName)
-					|| g.getName().equalsIgnoreCase(phoneOrName)) {
-				return g;
-			}
-		}
-
-		// no matching Guest found, return null:
-		return null;
-	}
 
 	/**
 	 * Takes a room number provided by a user and searches through the Hotel's
@@ -186,7 +132,7 @@ public class BookingSystem {
 				BookingStatus.CONFIRMED, cost);
 		bookings.add(booking);
 		room.setStatus(Status.AWAITING);
-		saveBookings();
+		this.save();
 		return booking;
 	}
 
@@ -209,7 +155,7 @@ public class BookingSystem {
 		if (r != null && r.getStatus() == Status.AWAITING) {
 			r.setStatus(Status.AVAILABLE);
 		}
-        saveBookings();
+        this.save();
 		return true;
 	}
 
@@ -242,7 +188,7 @@ public class BookingSystem {
 		} else {
 			target.setStatus(Status.BOOKED);
 		}
-		saveBookings();
+		this.save();
 		return true;
 	}
 
@@ -261,7 +207,7 @@ public class BookingSystem {
 
 		b.setStatus(BookingStatus.CHECKEDIN);
 		r.setStatus(Status.OCCUPIED);
-		saveBookings();
+		this.save();
 		return true;
 	}
 
@@ -293,7 +239,7 @@ public class BookingSystem {
 		Room r = findRoomByNumber(b.getRoomNumber());
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
-		saveBookings();
+		this.save();
 		return true;
 	}
 
@@ -304,7 +250,7 @@ public class BookingSystem {
      */
     public List<Booking> getConfirmedBookingsByGuest(Guest guest) {
         List<Booking> out = new ArrayList<>();
-        for (Booking b : bookings) {
+        for (Booking b : this.bookings) {
             if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CONFIRMED) {
                 out.add(b);
             }
@@ -314,7 +260,7 @@ public class BookingSystem {
 
     public List<Booking> getConfirmedBookings() {
         List<Booking> out = new ArrayList<>();
-        for (Booking b : bookings) {
+        for (Booking b : this.bookings) {
             if (b.getStatus() == BookingStatus.CONFIRMED) {
                 out.add(b);
             }
@@ -324,7 +270,7 @@ public class BookingSystem {
 
     public List<Booking> getCheckedBookingsByGuest(Guest guest) {
         List<Booking> out = new ArrayList<>();
-        for (Booking b : bookings) {
+        for (Booking b : this.bookings) {
             if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CHECKEDIN) {
                 out.add(b);
             }
@@ -341,7 +287,7 @@ public class BookingSystem {
 		if (r != null && "HIGH".equalsIgnoreCase(severity)) {
 			r.setStatus(Status.AWAITING);
 		}
-		saveBookings();
+		this.save();
 		return t;
 	}
 
@@ -357,7 +303,7 @@ public class BookingSystem {
 							.anyMatch(b -> b.getRoomNumber() == r.getRoomNumber() && b.getStatus() == BookingStatus.CHECKEDIN);
 					r.setStatus(occupied ? Status.OCCUPIED : Status.AVAILABLE);
 				}
-				saveBookings();
+				this.save();
 				return true;
 			}
 		}

@@ -87,7 +87,7 @@ public class Guest {
 	 * Stringifies this Guest object.
 	 */
 	@Override public String toString() {
-		return this.name + " (ID: " + this.guestId + ", phone: " + this.phoneNumber + ")";
+		return this.name + ", #" + this.guestId + ", Phone: " + this.phoneNumber + ", Email:" + this.email;
 	}
 }
 
