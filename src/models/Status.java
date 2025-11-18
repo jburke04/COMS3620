@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 public enum Status {
 	AVAILABLE, BOOKED, OCCUPIED, NEEDS_CLEANING, USED, CLEANING, INSPECTING, AWAITING;

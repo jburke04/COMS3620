@@ -1,9 +1,11 @@
-package src.services;
-import src.models.BookingSystem;
+package services;
+import models.BookingSystem;
+import models.HotelSystem;
+
 import java.util.Scanner;
 
 public class checkout {
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
         String choice = "";
         while (true) {
             System.out.println("Press '[I]nitiate' to begin checkout");
@@ -87,7 +89,7 @@ public class checkout {
                 // Cash payment path
                 System.out.println("Guest chooses Cash payment.");
                 checkoutComplete = true;
-                system.checkoutAndPay(confirmationNumber);
+                system.checkout(confirmationNumber);
                 break;
             }
             if (c != 'c') {

@@ -19,6 +19,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -27,9 +34,24 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hjonkh&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jburke04/COMS3620.git&quot;,
+    &quot;accountId&quot;: &quot;6b94c47c-c702-4777-9cc1-7bd35b411838&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="35JemrjjjuQ1RHZh4P3BeNgfyYA" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -49,6 +71,23 @@
       <option name="presentableId" value="Default" />
       <updated>1762832769479</updated>
     </task>
+    <task id="LOCAL-00001" summary="holy moly that was a lot of work.&#10;-Adding the HotelSystem subsystems.&#10;-Started pulling out functions related to certain subsystems and putting them where they belong.&#10;-Changed the package statements. I provided a new compile command that should make that not an issue and also be much easier to type :)">
+      <option name="closed" value="true" />
+      <created>1763184012104</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763184012104</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Modified Tickets, Added functionality to HotelSystem&#10;-Tickets now take Room instead of int roomNumber&#10;-Changed all System functions to handle this change.&#10;-Hotel system added calls to MaintenanceSystem for creating and resolving tickets.&#10;-Added searching for bookings by guest.&#10;-Added isRoomCheckIn in roomSystem">
+      <option name="closed" value="true" />
+      <created>1763227055458</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1763227055458</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

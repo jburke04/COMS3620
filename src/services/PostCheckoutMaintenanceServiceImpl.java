@@ -1,19 +1,19 @@
-package src.services;
+package services;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import src.models.*;
+import models.*;
 
 public class PostCheckoutMaintenanceServiceImpl {
 
-    private BookingSystem system;
+    private HotelSystem system;
     private List<MaintenanceTicket> tickets = new ArrayList<>();
     private AtomicInteger ticketId = new AtomicInteger(1);
 
-    public PostCheckoutMaintenanceServiceImpl(BookingSystem system) {
+    public PostCheckoutMaintenanceServiceImpl(HotelSystem system) {
         this.system = system;
     }
 
@@ -30,7 +30,7 @@ public class PostCheckoutMaintenanceServiceImpl {
         String createdAt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date());
         MaintenanceTicket t = new MaintenanceTicket(
                 id,
-                room.getRoomNumber(),
+                room,
                 issue,
                 createdAt,
                 MaintenanceStatus.OPEN

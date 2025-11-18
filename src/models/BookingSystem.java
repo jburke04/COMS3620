@@ -1,8 +1,9 @@
-package src.models;
+package models;
 
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
-import src.helpers.Parser;
+import helpers.Parser;
 
 /**
  * Hotel's Booking System that contains the list of Rooms that exist within the Hotel,
@@ -26,13 +27,13 @@ public class BookingSystem {
 	/**
 	 * Loads all JSON data into each array list.
 	 */
-	public void loadAll() {
+	/*public void loadAll() {
 		Parser.parseRooms(roomsPath, rooms);
 		Parser.parseGuests(guestsPath, guests);
 		Parser.parseBookings(bookingsPath, bookings);
 		Parser.parseTickets(ticketsPath, tickets);
 		nextTicketId = tickets.stream().mapToInt(MaintenanceTicket::getTicketId).max().orElse(0) + 1;
-	}
+	}/*
 
 	/**
 	 * Saves all JSON data to their respective JSON files.
@@ -47,13 +48,13 @@ public class BookingSystem {
 	 * Gets the list of Rooms for this Booking System.
 	 * @return list of Rooms that exist in the Hotel.
 	 */
-	public List<Room> getRooms() { return this.rooms; }
+	//public List<Room> getRooms() { return this.rooms; }
 
 	/**
 	 * Gets the list of Guests for this Booking System.
 	 * @return list of Guests that are registered in the Booking System.
 	 */
-	public List<Guest> getGuests() { return this.guests; }
+	//public List<Guest> getGuests() { return this.guests; }
 
 	/**
 	 * Gets the list of Bookings for this Booking System.
@@ -65,7 +66,7 @@ public class BookingSystem {
 	 * Gets the list of Maintenance Tickets for this Booking System.
 	 * @return list of Maintenance Tickets created under this Booking System.
 	 */
-	public List<MaintenanceTicket> getTickets() { return this.tickets; }
+	//public List<MaintenanceTicket> getTickets() { return this.tickets; }
 
 	/**
 	 * Takes a phone number or name of a Guest expected to be in the Hotel's
@@ -135,7 +136,7 @@ public class BookingSystem {
 	}
 
 	/**
-	 * Checks whether or not a Room is available within the defined window.
+	 * Checks whether a Room is available within the defined window.
 	 * @param room Room to check for availability.
 	 * @param start Start time that the Room must be available for.
 	 * @param end End time that the Room must be available for.
@@ -187,7 +188,7 @@ public class BookingSystem {
 
 	/**
 	 * Cancels a Booking that corresponds with the provided confirmation number.
-	 * @param confirmatioNumber confirmation number to cancel.
+	 * @param confirmationNumber confirmation number to cancel.
 	 * @return false if the Booking was not cancelled, true if the Booking was.
 	 */
 	public boolean cancelBooking(int confirmationNumber) {
@@ -292,9 +293,44 @@ public class BookingSystem {
 		return true;
 	}
 
+    /**
+     * Returns a list of confirmed bookings that have the corresponding guest.
+     * @param guest Guest to find bookings for.
+     * @return List of active bookings of Guest
+     */
+    public List<Booking> getConfirmedBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getConfirmedBookings() {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getCheckedBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CHECKEDIN) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
 	// ---- maintenance ----
 	public MaintenanceTicket createTicket(int roomNumber, String description, String severity) {
-		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, roomNumber, description, severity, MaintenanceStatus.OPEN);
+		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, findRoomByNumber(roomNumber), description, severity, MaintenanceStatus.OPEN);
 		tickets.add(t);
 		// if severe, mark room awaiting
 		Room r = findRoomByNumber(roomNumber);
@@ -310,7 +346,7 @@ public class BookingSystem {
 			if (t.getTicketId() == ticketId) {
 				t.setStatus(MaintenanceStatus.RESOLVED);
 				// if room was awaiting, free or keep occupied depending on bookings
-				Room r = findRoomByNumber(t.getRoomNumber());
+				Room r = t.getRoom();
 				if (r != null && r.getStatus() == Status.AWAITING) {
 					// if someone is checked-in on this room, it should be OCCUPIED, else AVAILABLE
 					boolean occupied = bookings.stream()

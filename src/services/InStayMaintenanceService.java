@@ -1,9 +1,9 @@
-package src.services;
+package services;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import src.models.*;
+import models.*;
 
 import java.io.FileReader;
 import java.text.SimpleDateFormat;

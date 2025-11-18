@@ -1,4 +1,4 @@
-package src.services;
+package services;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import src.models.*;
+import models.*;
 
 /**
  * UI for In-Stay Maintenance.
@@ -23,7 +23,7 @@ public class InStayMaintenance {
      * @param sc Input scanner for user input.
      * @param system Booking System to utilize.
      */
-    public static void start(Scanner sc, BookingSystem system) {
+    public static void start(Scanner sc, HotelSystem system) {
         while (true) {
             System.out.println("\n=== IN-STAY MAINTENANCE ===");
             System.out.println("1) Create ticket");
