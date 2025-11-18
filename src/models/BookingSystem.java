@@ -38,9 +38,9 @@ public class BookingSystem {
 	 * Saves all JSON data to their respective JSON files.
 	 */
 	public void saveAll() {
-		Parser.saveRooms(roomsPath, rooms);
-		Parser.saveBookings(bookingsPath, bookings);
-		Parser.saveTickets(ticketsPath, tickets);
+		Parser.saveRooms(this.roomsPath, this.rooms);
+		Parser.saveBookings(this.bookingsPath, this.bookings);
+		Parser.saveTickets(this.ticketsPath, this.tickets);
 	}
 
 	/**
