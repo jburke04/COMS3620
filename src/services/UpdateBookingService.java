@@ -14,6 +14,13 @@ public class UpdateBookingService {
      * @param system Booking System to use
      */
     public static void start(Scanner scanner, BookingSystem system) {
+        String choice = "";
+        Booking selected;
+        System.out.println("");
 
+        // UI loop:
+        do { 
+            
+        } while (true);
     }
 }
