@@ -219,14 +219,14 @@ public class BookingSystem {
 	 * @param newRoomNumber Room number to change to.
 	 * @return True if the operation was successful, false if it failed.
 	 */
-	public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
+	public boolean changeRoom(int confirmationNumber, int newRoomNumber, RoomUtils utils) {
 		//TODO: need to calculate the new cost of the Booking after changing the room.
 
 		Booking b = findBookingByConfirmation(confirmationNumber);
 		if (b == null) return false;
 
-		Room current = findRoomByNumber(b.getRoomNumber());
-		Room target  = findRoomByNumber(newRoomNumber);
+		Room current = utils.findRoom(b.getRoomNumber());
+		Room target  = utils.findRoom(newRoomNumber);
 		if (target == null) return false;
 
 		if (!isRoomAvailable(target, b.getStartTime(), b.getEndTime())) return false;

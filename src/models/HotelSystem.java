@@ -150,7 +150,7 @@ public class HotelSystem {
      */
     public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
         //TODO: MAKE SURE TO ADD THE COST RECALCULATION IN HERE!
-        boolean success = bookingSystem.changeRoom(confirmationNumber, newRoomNumber);
+        boolean success = bookingSystem.changeRoom(confirmationNumber, newRoomNumber, utils);
         roomSystem.saveRooms();
         return success;
     }
