@@ -1,7 +1,7 @@
-package src.services;
+package services;
 
 import java.util.*;
-import src.models.*;
+import models.*;
 
 /**
  * Service for Booking a Room.
@@ -13,7 +13,7 @@ public class BookRoom {
      * @param scanner Input scanner for user input.
      * @param system Booking System to utilize.
      */
-    public static void start(Scanner scanner, BookingSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
         System.out.println("\n=== BOOK A ROOM ===");
 
         // 1) Get or create guest
@@ -54,7 +54,7 @@ public class BookRoom {
                 System.out.print("Type a room number to book, or 0 to cancel: ");
                 int pick = Integer.parseInt(scanner.nextLine().trim());
                 if (pick == 0) { System.out.println("Booking cancelled."); return; }
-                Room chosen = system.findRoomByNumber(pick);
+                Room chosen = system.getRoomByNumber(pick);
                 if (chosen == null || !system.isRoomAvailable(chosen, checkIn, checkOut)) {
                     System.out.println("That room is not available. Ending.");
                     return;
@@ -72,7 +72,7 @@ public class BookRoom {
         System.out.print("Type a room number to book, or 0 to cancel: ");
         int pick = Integer.parseInt(scanner.nextLine().trim());
         if (pick == 0) { System.out.println("Booking cancelled."); return; }
-        Room chosen = system.findRoomByNumber(pick);
+        Room chosen = system.getRoomByNumber(pick);
         if (chosen == null || !system.isRoomAvailable(chosen, checkIn, checkOut)) {
             System.out.println("That room is not available. Ending.");
             return;
@@ -89,7 +89,7 @@ public class BookRoom {
      * @param in Start time for Booking.
      * @param out End time for Booking.
      */
-    private static void confirmAndCreate(Scanner scanner, BookingSystem system, Guest guest,
+    private static void confirmAndCreate(Scanner scanner, HotelSystem system, Guest guest,
                                          Room room, Calendar in, Calendar out) {
         long nights = Math.max(1, (out.getTimeInMillis() - in.getTimeInMillis()) / (24L*60L*60L*1000L));
         double total = nights * room.getCost();
@@ -107,8 +107,14 @@ public class BookRoom {
             return; 
         }
 
-        Booking b = system.createBooking(guest, room, in, out);
-        System.out.println("Booking confirmed! Confirmation #: " + b.getConfirmationNumber());
+        //Booking b = system.createBooking(guest, room, in, out);
+        //System.out.println("Booking confirmed! Confirmation #: " + b.getConfirmationNumber());
+        if (system.bookRoom(guest, room, in, out)) {
+            System.out.println("Booking created successfully!");
+        }
+        else {
+            System.out.println("Failed to create booking.");
+        }
     }
 
     /**
@@ -118,7 +124,7 @@ public class BookRoom {
      * @param system Booking System to utilize.
      * @return Guest found or new Guest created.
      */
-    private static Guest getOrCreateGuest(Scanner scanner, BookingSystem system) {
+    private static Guest getOrCreateGuest(Scanner scanner, HotelSystem system) {
         System.out.print("Existing guest? Enter phone or name (or leave blank to create new): ");
         String key = scanner.nextLine().trim();
         if (!key.isEmpty()) {
@@ -141,8 +147,7 @@ public class BookRoom {
         String email = scanner.nextLine().trim();
 
         Guest g = new Guest(nextId, name, phone, email);
-        system.getGuests().add(g);
-        // Guests.json saving not strictly required for booking to work; your rubric focuses on Bookings & Rooms.
+        system.addGuest(g);
         return g;
     }
 

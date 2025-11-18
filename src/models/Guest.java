@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 /**
  * Guests that exist under the Hotel's Booking System. This keeps track of the Guest's unique 

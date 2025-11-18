@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 /**
  * Enum to track a Booking's status.

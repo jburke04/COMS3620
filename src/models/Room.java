@@ -1,4 +1,4 @@
-package src.models;
+package models;
 
 /**
  * Room that exist within this Hotel. This tracks the Room's number, the current Status of

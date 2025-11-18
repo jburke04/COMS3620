@@ -1,9 +1,10 @@
-package src.helpers;
+package helpers;
 
-import src.models.*;
+import models.*;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -81,11 +82,10 @@ public class Parser {
             JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject g = (JSONObject) o;
-                int guestId = ((Long) g.get("guestId")).intValue();
+                int guestId = ((Long) g.get("guestID")).intValue();
                 String name = (String) g.get("name");
-                String phone = (String) g.get("phoneNumber");
+                String phone = (String) g.get("phone");
                 String email = (String) g.get("email");
-
                 guests.add(new Guest(guestId, name, phone, email));
             }
         } catch (Exception e) {
@@ -130,7 +130,7 @@ public class Parser {
      * @param tickets List of Maintenance Tickets to populate.
      */
     @SuppressWarnings("unchecked")
-    public static void parseTickets(String filepath, List<MaintenanceTicket> tickets) {
+    public static void parseTickets(String filepath, List<MaintenanceTicket> tickets, RoomUtils utils) {
         tickets.clear();
         try {
             JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
@@ -141,7 +141,7 @@ public class Parser {
                 String desc = (String) t.get("description");
                 String severity = (String) t.get("severity");
                 String status = (String) t.get("status");
-                tickets.add(new MaintenanceTicket(id, room, desc, severity, MaintenanceStatus.valueOf(status)));
+                tickets.add(new MaintenanceTicket(id, utils.findRoom(room), desc, severity, MaintenanceStatus.valueOf(status)));
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse MaintenanceTickets.json: " + e.getMessage(), e);
@@ -204,7 +204,7 @@ public class Parser {
     /**
      * Saves the Maintenance Tickets to the desired file.
      * @param filepath file to modify/update.
-     * @param bookings List of Maintenance Tickets to update the file with.
+     * @param tickets List of Maintenance Tickets to update the file with.
      */
     @SuppressWarnings("unchecked")
     public static void saveTickets(String filepath, List<MaintenanceTicket> tickets) {
@@ -212,7 +212,7 @@ public class Parser {
         for (MaintenanceTicket t : tickets) {
             JSONObject o = new JSONObject();
             o.put("ticketId", t.getTicketId());
-            o.put("roomNumber", t.getRoomNumber());
+            o.put("roomNumber", t.getRoom().getRoomNumber());
             o.put("description", t.getDescription());
             o.put("severity", t.getSeverity());
             o.put("status", t.getStatus().name());
@@ -222,6 +222,29 @@ public class Parser {
             w.write(arr.toJSONString());
         } catch (Exception e) {
             throw new RuntimeException("Failed to save MaintenanceTickets.json: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Saves the Guests to the Guests.json file
+     * @param filepath path to Guests.json
+     * @param guests list of Guests
+     */
+    public static void saveGuests(String filepath, List<Guest> guests) {
+        JSONArray arr = new JSONArray();
+        for (Guest g : guests) {
+            JSONObject o = new JSONObject();
+            o.put("guestID", g.getGuestId());
+            o.put("name", g.getName());
+            o.put("phone", g.getPhoneNumber());
+            o.put("email", g.getEmail());
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)){
+            w.write(arr.toJSONString());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to save Guests.json " + e.getMessage(), e);
         }
     }
 

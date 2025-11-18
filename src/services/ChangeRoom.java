@@ -1,9 +1,9 @@
-package src.services;
+package services;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
-import src.models.*;
+import models.*;
 
 /**
  * Service for Changing Rooms.
@@ -15,20 +15,24 @@ public class ChangeRoom {
      * @param sc Input scanner for user input.
      * @param system Booking System to utilize.
      */
-    public static void start(Scanner sc, BookingSystem system) {
+    public static void start(Scanner sc, HotelSystem system) {
         System.out.println("\n=== GUEST CHANGES ROOM ===");
         System.out.print("Enter confirmation number: ");
         int conf = Integer.parseInt(sc.nextLine().trim());
 
-        Booking b = system.findBookingByConfirmation(conf);
+        Booking b = system.getBookingByConfirmation(conf);
         if (b == null) {
             System.out.println("No booking found.");
+            return;
+        }
+        if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.CHECKEDOUT || b.getStatus() == BookingStatus.COMPLETED) {
+            System.out.println("Booking not available to change.");
             return;
         }
 
         Calendar start = b.getStartTime();
         Calendar end   = b.getEndTime();
-        Room current = system.findRoomByNumber(b.getRoomNumber());
+        Room current = system.getRoomByNumber(b.getRoomNumber());
 
         System.out.println("Current room: " + (current != null ? current.getRoomNumber() + " (" + current.getRoomType() + ")" : "?"));
 

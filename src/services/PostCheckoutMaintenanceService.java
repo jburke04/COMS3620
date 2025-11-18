@@ -1,6 +1,6 @@
-package src.services;
+package services;
 
-import src.models.*;
+import models.*;
 
 public interface PostCheckoutMaintenanceService {
 

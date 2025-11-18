@@ -1,8 +1,8 @@
-package src.models;
+package models;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import src.helpers.Parser;
+import helpers.Parser;
 
 /**
  * Hotel's Booking System that contains the list of Rooms that exist within the Hotel,
@@ -26,34 +26,39 @@ public class BookingSystem {
 	/**
 	 * Loads all JSON data into each array list.
 	 */
-	public void loadAll() {
+	/*public void loadAll() {
 		Parser.parseRooms(roomsPath, rooms);
 		Parser.parseGuests(guestsPath, guests);
 		Parser.parseBookings(bookingsPath, bookings);
 		Parser.parseTickets(ticketsPath, tickets);
 		nextTicketId = tickets.stream().mapToInt(MaintenanceTicket::getTicketId).max().orElse(0) + 1;
-	}
+	}/*
 
 	/**
 	 * Saves all JSON data to their respective JSON files.
 	 */
-	public void saveAll() {
-		Parser.saveRooms(roomsPath, rooms);
+
+    public BookingSystem() {
+        Parser.parseBookings(bookingsPath, bookings);
+    }
+
+	public void saveBookings() {
+		//Parser.saveRooms(roomsPath, rooms);
 		Parser.saveBookings(bookingsPath, bookings);
-		Parser.saveTickets(ticketsPath, tickets);
+		//Parser.saveTickets(ticketsPath, tickets);
 	}
 
 	/**
 	 * Gets the list of Rooms for this Booking System.
 	 * @return list of Rooms that exist in the Hotel.
 	 */
-	public List<Room> getRooms() { return this.rooms; }
+	//public List<Room> getRooms() { return this.rooms; }
 
 	/**
 	 * Gets the list of Guests for this Booking System.
 	 * @return list of Guests that are registered in the Booking System.
 	 */
-	public List<Guest> getGuests() { return this.guests; }
+	//public List<Guest> getGuests() { return this.guests; }
 
 	/**
 	 * Gets the list of Bookings for this Booking System.
@@ -65,7 +70,7 @@ public class BookingSystem {
 	 * Gets the list of Maintenance Tickets for this Booking System.
 	 * @return list of Maintenance Tickets created under this Booking System.
 	 */
-	public List<MaintenanceTicket> getTickets() { return this.tickets; }
+	//public List<MaintenanceTicket> getTickets() { return this.tickets; }
 
 	/**
 	 * Takes a phone number or name of a Guest expected to be in the Hotel's
@@ -135,7 +140,7 @@ public class BookingSystem {
 	}
 
 	/**
-	 * Checks whether or not a Room is available within the defined window.
+	 * Checks whether a Room is available within the defined window.
 	 * @param room Room to check for availability.
 	 * @param start Start time that the Room must be available for.
 	 * @param end End time that the Room must be available for.
@@ -180,17 +185,17 @@ public class BookingSystem {
 		Booking booking = new Booking(guest.getGuestId(), start, end, room.getRoomNumber(),
 				BookingStatus.CONFIRMED, cost);
 		bookings.add(booking);
-		room.setStatus(Status.BOOKED);
-		saveAll();
+		room.setStatus(Status.AWAITING);
+		saveBookings();
 		return booking;
 	}
 
 	/**
 	 * Cancels a Booking that corresponds with the provided confirmation number.
-	 * @param confirmatioNumber confirmation number to cancel.
+	 * @param confirmationNumber confirmation number to cancel.
 	 * @return false if the Booking was not cancelled, true if the Booking was.
 	 */
-	public boolean cancelBooking(int confirmationNumber) {
+	public boolean cancelBooking(int confirmationNumber, RoomUtils utils) {
 		// search for Booking:
 		Booking b = findBookingByConfirmation(confirmationNumber);
 		// no corresponding Booking found, return false:
@@ -200,11 +205,11 @@ public class BookingSystem {
 
 		// update Booking status and set Room as AVAILABLE:
 		b.setStatus(BookingStatus.CANCELLED);
-		Room r = findRoomByNumber(b.getRoomNumber());
-		if (r != null && r.getStatus() == Status.BOOKED) {
+		Room r = utils.findRoom(b.getRoomNumber());
+		if (r != null && r.getStatus() == Status.AWAITING) {
 			r.setStatus(Status.AVAILABLE);
 		}
-		saveAll();
+        saveBookings();
 		return true;
 	}
 
@@ -237,7 +242,7 @@ public class BookingSystem {
 		} else {
 			target.setStatus(Status.BOOKED);
 		}
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
@@ -256,7 +261,7 @@ public class BookingSystem {
 
 		b.setStatus(BookingStatus.CHECKEDIN);
 		r.setStatus(Status.OCCUPIED);
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
@@ -288,20 +293,55 @@ public class BookingSystem {
 		Room r = findRoomByNumber(b.getRoomNumber());
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
-		saveAll();
+		saveBookings();
 		return true;
 	}
 
+    /**
+     * Returns a list of confirmed bookings that have the corresponding guest.
+     * @param guest Guest to find bookings for.
+     * @return List of active bookings of Guest
+     */
+    public List<Booking> getConfirmedBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getConfirmedBookings() {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getCheckedBookingsByGuest(Guest guest) {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getGuestID() == guest.getGuestId() && b.getStatus() == BookingStatus.CHECKEDIN) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
 	// ---- maintenance ----
 	public MaintenanceTicket createTicket(int roomNumber, String description, String severity) {
-		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, roomNumber, description, severity, MaintenanceStatus.OPEN);
+		MaintenanceTicket t = new MaintenanceTicket(nextTicketId++, findRoomByNumber(roomNumber), description, severity, MaintenanceStatus.OPEN);
 		tickets.add(t);
 		// if severe, mark room awaiting
 		Room r = findRoomByNumber(roomNumber);
 		if (r != null && "HIGH".equalsIgnoreCase(severity)) {
 			r.setStatus(Status.AWAITING);
 		}
-		saveAll();
+		saveBookings();
 		return t;
 	}
 
@@ -310,23 +350,23 @@ public class BookingSystem {
 			if (t.getTicketId() == ticketId) {
 				t.setStatus(MaintenanceStatus.RESOLVED);
 				// if room was awaiting, free or keep occupied depending on bookings
-				Room r = findRoomByNumber(t.getRoomNumber());
+				Room r = t.getRoom();
 				if (r != null && r.getStatus() == Status.AWAITING) {
 					// if someone is checked-in on this room, it should be OCCUPIED, else AVAILABLE
 					boolean occupied = bookings.stream()
 							.anyMatch(b -> b.getRoomNumber() == r.getRoomNumber() && b.getStatus() == BookingStatus.CHECKEDIN);
 					r.setStatus(occupied ? Status.OCCUPIED : Status.AVAILABLE);
 				}
-				saveAll();
+				saveBookings();
 				return true;
 			}
 		}
 		return false;
 	}
-	public List<Booking> getBookingsForGuest(int guestId) {
+	public List<Booking> getBookingsForGuest(Guest guest) {
 		List<Booking> result = new ArrayList<>();
 		for (Booking b : bookings) {
-			if (b.getGuestID() == guestId) {
+			if (b.getGuestID() == guest.getGuestId()) {
 				result.add(b);
 			}
 		}
