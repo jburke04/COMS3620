@@ -162,8 +162,8 @@ public class HotelSystem {
      */
     public boolean cancelBooking(int confirmationNumber) {
         //TODO: THIS WILL NEED UPDATED WHEN BOOKING SYSTEM NO LONGER CONTAINS ALL ROOM INFO.
-        boolean success = bookingSystem.cancelBooking(confirmationNumber, utils);
-        roomSystem.saveRooms();
+        boolean success = bookingSystem.cancelBooking(confirmationNumber, this.utils);
+        roomSystem.save();
         return success;
     }
 
@@ -174,8 +174,19 @@ public class HotelSystem {
      */
     public boolean checkInByNumber(int confirmationNumber) {
         boolean success = bookingSystem.checkIn(confirmationNumber);
-        roomSystem.saveRooms();
+        roomSystem.save();
         return success;
+    }
+
+    /**
+     * Updates a Booking with the provided start and end dates.
+     * @param b Booking to update.
+     * @param start Updated Starting date for Booking.
+     * @param end Updated Ending date for Booking.
+     * @return true if operation was successful, false if it failed.
+     */
+    public boolean updateBooking(Booking b, Calendar start, Calendar end) {
+        return bookingSystem.updateBooking(b, start, end);
     }
 
     /**

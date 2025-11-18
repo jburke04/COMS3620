@@ -126,5 +126,17 @@ public class Booking {
 	 * @param status BookingStatus to set to.
 	 */
 	public void setStatus(BookingStatus status) { this.status = status; }
+
+	/**
+	 * Sets the Start time for this Booking.
+	 * @param startTime Start time to set to.
+	 */
+	public void setStartTime(Calendar startTime) { this.startTime = startTime; }
+
+	/**
+	 * Sets the End time for this Booking.
+	 * @param endTime End time to set to.
+	 */
+	public void setEndTime(Calendar endTime) { this.endTime = endTime; }
 }
 

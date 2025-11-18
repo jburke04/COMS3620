@@ -92,9 +92,7 @@ public class BookingSystem implements SubSystem {
 	 * @param end End time that the Room must be available for.
 	 * @return True if the Room is available at that time, False if the Room isn't.
 	 */
-	public boolean isRoomAvailable(Room room, Calendar start, Calendar end) {
-		//TODO: check if the Room is available within a window of time, currently only checking if it has the AVAILABLE status
-		
+	public boolean isRoomAvailable(Room room, Calendar start, Calendar end) {		
 		// check if the Room is not currently AVAILABLE:
 		if (room.getStatus() != Status.AVAILABLE) return false;
 
@@ -239,6 +237,19 @@ public class BookingSystem implements SubSystem {
 		Room r = findRoomByNumber(b.getRoomNumber());
 		b.setStatus(BookingStatus.COMPLETED);
 		if (r != null) r.setStatus(Status.NEEDS_CLEANING);
+		this.save();
+		return true;
+	}
+
+	public boolean updateBooking(Booking b, Calendar start, Calendar end) {
+		// check if the room is available during that time:
+		if (isRoomAvailable(findRoomByNumber(b.getRoomNumber()), start, end))
+			return false;
+
+		// update the start and end times:
+		b.setStartTime(start);
+		b.setEndTime(end);
+
 		this.save();
 		return true;
 	}
