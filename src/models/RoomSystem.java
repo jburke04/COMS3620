@@ -19,13 +19,6 @@ public class RoomSystem implements SubSystem {
     }
 
     /**
-     * Saves the room list to Rooms.json
-     */
-    public void saveRooms() {
-        Parser.saveRooms(roomPath, rooms);
-    }
-
-    /**
      * Takes a room number provided by a user and searches through the Hotel's
      * Booking System to see if that room number exists.
      * @param roomNumber Room number to search for.
@@ -84,7 +77,7 @@ public class RoomSystem implements SubSystem {
         // Check if any Bookings with this Room conflict with the defined window:
         for (Booking b : bookings) {
             // make sure room number corresponds to the desired Room's room number:
-            if (b.getRoomNumber() != room.getRoomNumber()) continue;
+            if (b.getRoom() != room) continue;
 
             // don't check with CANCELLED or COMPLETED Bookings:
             if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.COMPLETED) continue;
@@ -124,7 +117,7 @@ public class RoomSystem implements SubSystem {
      */
     public boolean isRoomCheckedIn(Room room, List<Booking> bookings) {
         for (Booking b : bookings) {
-            if (b.getRoomNumber() != room.getRoomNumber()) {
+            if (b.getRoom() != room) {
                 continue;
             }
             if (b.getStatus() == BookingStatus.CHECKEDIN) {
@@ -132,5 +125,26 @@ public class RoomSystem implements SubSystem {
             }
         }
         return false; //Room is presumably available
+    }
+
+    public int setAvailable(Room room) {
+        if (room != null && room.getStatus() == Status.AWAITING)
+			room.setStatus(Status.AVAILABLE);
+        this.save();
+        return 0;
+    }
+
+    public int setOccupied(Room room) {
+        if (room != null)
+            room.setStatus(Status.OCCUPIED);
+        this.save();
+        return 0;
+    }
+
+    public int setCleaning(Room room) {
+        if (room != null)
+            room.setStatus(Status.NEEDS_CLEANING);
+        this.save();
+        return 0;
     }
 }

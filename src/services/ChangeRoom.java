@@ -32,7 +32,7 @@ public class ChangeRoom {
 
         Calendar start = b.getStartTime();
         Calendar end   = b.getEndTime();
-        Room current = system.getRoomByNumber(b.getRoomNumber());
+        Room current = b.getRoom();
 
         System.out.println("Current room: " + (current != null ? current.getRoomNumber() + " (" + current.getRoomType() + ")" : "?"));
 
@@ -58,7 +58,7 @@ public class ChangeRoom {
         System.out.print("Pick room number: ");
         int newRoom = Integer.parseInt(sc.nextLine().trim());
 
-        boolean ok = system.changeRoom(conf, newRoom);
+        boolean ok = system.changeRoom(b, newRoom);
         System.out.println(ok ? "Room changed." : "Could not change room.");
     }
 }

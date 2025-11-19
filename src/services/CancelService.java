@@ -6,7 +6,7 @@ import models.*;
 /**
  * Service for Booking Cancellation.
  */
-public class Cancel {
+public class CancelService {
 
     /**
      * Starter loop that checks which Booking a user wants to cancel.
@@ -57,7 +57,7 @@ public class Cancel {
     private static void printBookings(HotelSystem system) {
         for (Booking booking : system.getConfirmedBookings())
             if (booking.getStatus() == BookingStatus.CONFIRMED)
-                System.out.println("Confirmation Number: " + booking.getConfirmationNumber() + ", Room #" + booking.getRoomNumber());
+                System.out.println("Confirmation Number: " + booking.getConfirmationNumber() + ", Room #" + booking.getRoom().getRoomNumber());
     }
 
     /**
@@ -80,7 +80,7 @@ public class Cancel {
 
             // user confirmed, cancel the booking:
             if (choice.equalsIgnoreCase("y") || choice.equalsIgnoreCase("yes")) {
-                system.cancelBooking(selected.getConfirmationNumber());
+                system.cancelBooking(selected);
                 System.out.println("Booking " + selected.getConfirmationNumber() + " cancelled. Returning to Main screen.");
                 break;
             }

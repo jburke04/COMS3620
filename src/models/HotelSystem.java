@@ -28,9 +28,9 @@ public class HotelSystem {
      * Where it all starts. This will give us our subsystems to play with.
      */
     public HotelSystem() {
+        this.roomSystem.load();
         this.bookingSystem.load();
         this.guestSystem.load();
-        this.roomSystem.load();
         this.utils = new RoomUtils(this.bookingSystem.getBookings(), this.roomSystem.getRooms());
         this.maintenanceSystem = new MaintenanceSystem(utils);
         this.paymentSystem = new PaymentSystem();
@@ -113,6 +113,11 @@ public class HotelSystem {
     }
 
     //BOOKING METHODS
+
+    public List<Booking> getBookings() {
+        return this.bookingSystem.getBookings();
+    }
+
     /**
      * Returns whether a booking is in the system.
      * @param confirmationNumber A confirmation number to search for.
@@ -135,10 +140,10 @@ public class HotelSystem {
         if (!roomSystem.isRoomAvailable(room, bookingSystem.getBookings(), startDate, endDate)) {
             return false;
         }
-        //Now that we know the room is available, book it. This also means you don't have to do the checks in BookingSystem :)
-        //The return here may look weird, but this should ideally catch any weird stuff where the room is available but the booking fails to be created.
+
+        // room is available, book it:
         boolean success = !Objects.isNull(bookingSystem.createBooking(guest, room, startDate, endDate)); //Exclusively so I can save room state after this call.
-        roomSystem.saveRooms();
+        roomSystem.save();
         return success;
     }
 
@@ -148,22 +153,29 @@ public class HotelSystem {
      * @param newRoomNumber The room number of the room to move to.
      * @return Whether the room change was successful.
      */
-    public boolean changeRoom(int confirmationNumber, int newRoomNumber) {
+    public boolean changeRoom(Booking b, int newRoomNumber) {
         //TODO: MAKE SURE TO ADD THE COST RECALCULATION IN HERE!
-        boolean success = bookingSystem.changeRoom(confirmationNumber, newRoomNumber, utils);
-        roomSystem.saveRooms();
+        if (!roomSystem.isRoomAvailable(roomSystem.findRoomByNumber(newRoomNumber), 
+            bookingSystem.getBookings(), 
+            b.getStartTime(),
+            b.getEndTime()))
+            return false;
+
+        Room prev = b.getRoom();
+        boolean success = bookingSystem.changeRoom(b, roomSystem.findRoomByNumber(newRoomNumber));
+        if (b.getStatus() == BookingStatus.CHECKEDIN)
+            roomSystem.setOccupied(prev);
         return success;
     }
 
     /**
      * Cancels a booking.
-     * @param confirmationNumber Confirmation Number of the booking.
+     * @param b Booking to cancel.
      * @return Whether the booking could be cancelled or not.
      */
-    public boolean cancelBooking(int confirmationNumber) {
-        //TODO: THIS WILL NEED UPDATED WHEN BOOKING SYSTEM NO LONGER CONTAINS ALL ROOM INFO.
-        boolean success = bookingSystem.cancelBooking(confirmationNumber, this.utils);
-        roomSystem.save();
+    public boolean cancelBooking(Booking b) {
+        boolean success = bookingSystem.cancelBooking(b);
+        roomSystem.setAvailable(b.getRoom());
         return success;
     }
 
@@ -186,6 +198,8 @@ public class HotelSystem {
      * @return true if operation was successful, false if it failed.
      */
     public boolean updateBooking(Booking b, Calendar start, Calendar end) {
+        if (roomSystem.isRoomAvailable(b.getRoom(), bookingSystem.getBookings(), start, end) == false)
+            return false;
         return bookingSystem.updateBooking(b, start, end);
     }
 
@@ -261,7 +275,8 @@ public class HotelSystem {
         if (Objects.isNull(b)) {
             return false;
         }
-        Room r = roomSystem.findRoomByNumber(b.getRoomNumber());
-        return paymentSystem.checkoutAndPay(b, r);
+        boolean success = paymentSystem.checkoutAndPay(b, b.getRoom());
+        roomSystem.setCleaning(b.getRoom());
+        return success;
     }
 }

@@ -1,10 +1,9 @@
 package services;
 
-import models.*;
 import helpers.Parser;
-
 import java.util.List;
 import java.util.Scanner;
+import models.*;
 
 public class GetGuests {
 
@@ -62,7 +61,7 @@ public class GetGuests {
 
         for (Booking b : bookings) {
             System.out.println("  Confirmation #: " + b.getConfirmationNumber());
-            System.out.println("  Room: " + b.getRoomNumber());
+            System.out.println("  Room: " + b.getRoom().getRoomNumber());
             System.out.println("  Cost: $" + b.getCost());
             System.out.println("  Start: " +Parser.isoFromCalendar(b.getStartTime()));
             System.out.println("  End: " + Parser.isoFromCalendar(b.getEndTime()));

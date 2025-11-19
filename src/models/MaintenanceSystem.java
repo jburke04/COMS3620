@@ -1,7 +1,6 @@
 package models;
 
 import helpers.Parser;
-
 import java.util.*;
 
 public class MaintenanceSystem {
@@ -50,7 +49,7 @@ public class MaintenanceSystem {
      * @return Whether the given ticketID could be marked resolved.
      */
     public boolean resolveTicket(int ticketId) {
-        for (MaintenanceTicket t : tickets) {
+        for (MaintenanceTicket t : this.tickets) {
             if (t.getTicketId() == ticketId) {
                 t.setStatus(MaintenanceStatus.RESOLVED);
                 // if room was awaiting, free or keep occupied depending on bookings

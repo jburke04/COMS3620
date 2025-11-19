@@ -1,9 +1,11 @@
 package services;
 
-import java.util.Scanner;
-import javax.lang.model.util.ElementScanner14;
+import java.util.*;
 import models.*;
 
+/**
+ * Service for Updating a Booking
+ */
 public class UpdateBookingService {
 
     /**
@@ -11,7 +13,7 @@ public class UpdateBookingService {
      * @param scanner Input scanner for user input
      * @param system Hotel System to utilize
      */
-    public void start(Scanner scanner, HotelSystem system) {
+    public static void start(Scanner scanner, HotelSystem system) {
         String choice = "";
         Booking selected;
         System.out.println();
@@ -49,11 +51,12 @@ public class UpdateBookingService {
      * Prints Bookings with their confirmation number, start time, and end time.
      * @param system HotelSystem to utilize.
      */
-    private void printBookings(HotelSystem system) {
+    private static void printBookings(HotelSystem system) {
         for (Booking b : system.getBookings()) {
-            System.println(b.getConfirmationNumber + ": \n" +
-            "\tStart: " + b.getStartTime.toString() +
-            "\n\tEnd: " + b.getEndTime.toString());
+            if (b.getStatus() != BookingStatus.CANCELLED)
+                System.out.println(b.getConfirmationNumber() + ": \n" +
+                    "\tStart: " + fmt(b.getStartTime()) +
+                    "\n\tEnd: " + fmt(b.getEndTime()));
         }
     }
 
@@ -63,7 +66,7 @@ public class UpdateBookingService {
      * @param selected Selected Booking to update
      * @param system Hotel System to utilize
      */
-    private int infoLoop(Scanner scanner, Booking selected, HotelSystem system) {
+    private static int infoLoop(Scanner scanner, Booking selected, HotelSystem system) {
         System.out.println("Updating booking " + selected.getConfirmationNumber());
         String input = "";
         Calendar start , end;
@@ -125,14 +128,17 @@ public class UpdateBookingService {
      * @param date Date to set with the parsed string
      * @return 0 if the date was parsed successfully, 1 if it was not.
      */
-    private int parseDate(String input, Calendar date) {
-        date.clear();
+    private static int parseDate(String input, Calendar date) {
+        if (date != null)
+            date.clear();
+
         try {
             String tokens[] = input.split("-");
             int yr = Integer.parseInt(tokens[0]);
             int m = Integer.parseInt(tokens[1]);
             int d = Integer.parseInt(tokens[2]);
-            date.set(yr, m - 1, d);
+            date = GregorianCalendar.getInstance();
+            date.set(yr, m - 1, d, 14, 0, 0);
             return 0;
         } catch (Exception e) {
             System.out.println("\nInvalid Date. Please try again.");
@@ -147,12 +153,14 @@ public class UpdateBookingService {
      * @param system Hotel System to utilize.
      * @return 0 if confirmed, 1 if not confirmed.
      */
-    private int confirmationLoop(Scanner scanner, Booking selected, HotelSystem system) {
+    private static int confirmationLoop(Scanner scanner, Booking selected, HotelSystem system) {
         String input = "";
 
         // UI loop:
         do { 
             System.out.print("\nAre you sure you want to update? [Y]es or [N]o: ");
+
+            input = scanner.nextLine().trim();
 
             // confirmed, return 0:
             if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"))
@@ -164,5 +172,10 @@ public class UpdateBookingService {
             else 
                 System.out.println("\nInvalid input.");
         } while (true);
+    }
+
+    private static String fmt(Calendar c) {
+        return String.format("%04d-%02d-%02d",
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
     }
 }
