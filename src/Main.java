@@ -77,7 +77,6 @@ public class Main {
 //                ViewBookingsService.start(sc, system);
 //                break;
             case "0":
-                sc.close();
                 return;
             default:
                 System.out.println("Invalid.");
