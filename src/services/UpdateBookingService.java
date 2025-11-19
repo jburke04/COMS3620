@@ -1,6 +1,7 @@
 package services;
 
 import java.util.Scanner;
+import javax.lang.model.util.ElementScanner14;
 import models.*;
 
 public class UpdateBookingService {
@@ -26,6 +27,7 @@ public class UpdateBookingService {
 
             choice = scanner.nextLine().trim();
 
+            // user wants to return to previous menu:
             if (choice.equalsIgnoreCase("q") || choice.equalsIgnoreCase("quit")) {
                 System.out.println("\nUpdate request cancelled. Returning to Bookings Menu.\n");
                 return;
@@ -35,8 +37,7 @@ public class UpdateBookingService {
             if (selected != null) {
                 // information inputted was correct and user did not go back a step:
                 if (infoLoop(scanner, selected, system) == 0)
-                    if (confirmationLoop(scanner, selected, system) == 0)
-                        return;
+                    return;
             }
             else
                 System.out.println("\nInvalid ID. Please input an ID from the list of Bookings.\n");
@@ -46,6 +47,7 @@ public class UpdateBookingService {
 
     /**
      * Prints Bookings with their confirmation number, start time, and end time.
+     * @param system HotelSystem to utilize.
      */
     private void printBookings(HotelSystem system) {
         for (Booking b : system.getBookings()) {
@@ -62,7 +64,6 @@ public class UpdateBookingService {
      * @param system Hotel System to utilize
      */
     private int infoLoop(Scanner scanner, Booking selected, HotelSystem system) {
-        //TODO: get the dates to change it to and check if the dates are valid
         System.out.println("Updating booking " + selected.getConfirmationNumber());
         String input = "";
         Calendar start , end;
@@ -100,11 +101,21 @@ public class UpdateBookingService {
                     break;
             } while (true);
 
-            // check if dates are valid:
-            if (system.updateBooking(selected, start, end) == true)
-                return 0;
-            else
-                System.out.println("\nCould not update Booking. Try again.");
+            // Confirm if user wants to update Booking:
+            if (confirmationLoop(scanner, selected, system) == 0) {
+                // make sure operation completes:
+                if (system.updateBooking(selected, start, end) == true) {
+                    System.out.println("\nBooking updated successfully:\n" + selected.toString());
+                    return 0;
+                }
+                // operation failed:
+                else 
+                    System.out.println("\nBooking could not be updated. Try again.");
+            }
+            // user declined:
+            else {
+                System.out.println("\nBooking update cancelled.");
+            }
         } while (true);
     }
 
@@ -112,6 +123,7 @@ public class UpdateBookingService {
      * Parses provided String and sets it as the date
      * @param input Inputted string to parse
      * @param date Date to set with the parsed string
+     * @return 0 if the date was parsed successfully, 1 if it was not.
      */
     private int parseDate(String input, Calendar date) {
         date.clear();
@@ -130,8 +142,27 @@ public class UpdateBookingService {
 
     /**
      * Confirmation loop to ensure the user wants to update this booking and with what information.
+     * @param scanner Input scanner for user input.
+     * @param selected Selected Booking to update.
+     * @param system Hotel System to utilize.
+     * @return 0 if confirmed, 1 if not confirmed.
      */
-    private void confirmationLoop(Scanner scanner, Booking selected, HotelSystem system) {
+    private int confirmationLoop(Scanner scanner, Booking selected, HotelSystem system) {
+        String input = "";
 
+        // UI loop:
+        do { 
+            System.out.print("\nAre you sure you want to update? [Y]es or [N]o: ");
+
+            // confirmed, return 0:
+            if (input.equalsIgnoreCase("y") || input.equalsIgnoreCase("yes"))
+                return 0;
+            // not confirmed, return 1:
+            else if (input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no"))
+                return 1;
+            // invalid input:
+            else 
+                System.out.println("\nInvalid input.");
+        } while (true);
     }
 }
