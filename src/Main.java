@@ -1,6 +1,5 @@
 
 import java.util.Scanner;
-
 import models.*;
 import services.*;
 
@@ -20,6 +19,7 @@ public class Main {
             System.out.println("5) Checkout & Payment");
             System.out.println("6) Guest Lookup");
             System.out.println("7) Update a Booking");
+            System.out.println("8) View all Bookings");
             System.out.println("0) Exit");
             System.out.print("Choose: ");
             String choice = sc.nextLine().trim();
@@ -44,6 +44,9 @@ public class Main {
                     break;
                 case "7":
                     UpdateBookingService.start(sc, system);
+                    break;
+                case "8":
+                    ViewBookingsService.start(sc, system);
                     break;
                 case "0":
                     sc.close();
