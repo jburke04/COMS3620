@@ -48,7 +48,7 @@ public class Booking {
 	 * @param guestID Guest ID the Booking is under.
 	 * @param startTime Start time of the Booking.
 	 * @param endTime End time of the Booking.
-	 * @param roomNumber Room number the Booking is for.
+	 * @param room Room the Booking is for.
 	 * @param BookingStatus Current status of the Booking.
 	 * @param double Full calculated cost of the Booking.
 	 */

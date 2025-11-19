@@ -247,6 +247,7 @@ public class Parser {
      * @param filepath path to Guests.json
      * @param guests list of Guests
      */
+    @SuppressWarnings("unchecked")
     public static void saveGuests(String filepath, List<Guest> guests) {
         JSONArray arr = new JSONArray();
         for (Guest g : guests) {
