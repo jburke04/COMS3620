@@ -25,7 +25,7 @@ public class InStayMaintenanceService {
         Room first = rooms.values().stream().findFirst().orElse(null);
         if (first != null) {
             first.setStatus(Status.OCCUPIED);
-            Booking b = new Booking(guestId, Calendar.getInstance(), Calendar.getInstance(), first.getRoomNumber(), BookingStatus.CHECKEDIN, first.getCost());
+            Booking b = new Booking(guestId, Calendar.getInstance(), Calendar.getInstance(), first, BookingStatus.CHECKEDIN, first.getCost());
             currentBookings.put(guestId, b);
         }
     }

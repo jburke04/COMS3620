@@ -1,6 +1,5 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.*;
 
 public class RoomUtils {
@@ -8,8 +7,8 @@ public class RoomUtils {
     private List<Room> roomsList;
 
     public RoomUtils(List<Booking> bookings, List<Room> rooms) {
-        bookingsList = bookings;
-        roomsList = rooms;
+        this.bookingsList = bookings;
+        this.roomsList = rooms;
     }
 
     public RoomUtils(ArrayList<Room> roomsList, ArrayList<Booking> bookingsList) {

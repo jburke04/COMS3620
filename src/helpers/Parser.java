@@ -21,6 +21,8 @@ public class Parser {
 
     private static final JSONParser parser = new JSONParser();
 
+    private static List<Room> roomsList = new ArrayList<>();
+
     /**
      * Checks if the file provided is empty or not, providing a parsed JSONArray
      * of data from the JSON file if it's not empty.
@@ -58,12 +60,10 @@ public class Parser {
                 String type = (String) desc.get("type");
                 double cost = ((Number) desc.get("cost")).doubleValue();
 
-                rooms.add(new Room(
-                        num,
-                        Status.valueOf(status),
-                        RoomType.valueOf(type),
-                        cost
-                ));
+                Room room = new Room(num, Status.valueOf(status), RoomType.valueOf(type), cost);
+
+                rooms.add(room);
+                Parser.roomsList.add(room);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse Rooms.json: " + e.getMessage(), e);
@@ -109,14 +109,21 @@ public class Parser {
                 int guestId = ((Long) b.get("guestID")).intValue();
                 String startStr = (String) b.get("startTime");
                 String endStr   = (String) b.get("endTime");
-                int roomNum = ((Long) b.get("roomNumber")).intValue();
+                JSONObject obj = (JSONObject) b.get("room");
                 String status = (String) b.get("status");
                 double cost = ((Number) b.get("cost")).doubleValue();
 
                 Calendar start = gregFromISO(startStr);
                 Calendar end   = gregFromISO(endStr);
 
-                bookings.add(new Booking(conf, guestId, start, end, roomNum,
+                // make sure the actual object (not a copy) is linked to the Booking:
+                Room r = null;
+                for (Room room : Parser.roomsList) {
+                    if (((Long) obj.get("roomNumber")).intValue() == room.getRoomNumber())
+                        r = room;
+                }
+
+                bookings.add(new Booking(conf, guestId, start, end, r,
                         BookingStatus.valueOf(status), cost));
             }
         } catch (Exception e) {
@@ -163,7 +170,17 @@ public class Parser {
             o.put("guestID", b.getGuestID());
             o.put("startTime", isoFromCalendar(b.getStartTime()));
             o.put("endTime", isoFromCalendar(b.getEndTime()));
-            o.put("roomNumber", b.getRoomNumber());
+            
+            JSONObject r = new JSONObject();
+            JSONObject desc = new JSONObject();
+            desc.put("type", b.getRoom().getRoomType().name());
+            desc.put("cost", b.getRoom().getCost());
+
+            r.put("roomNumber", b.getRoom().getRoomNumber());
+            r.put("status", b.getRoom().getStatus().name());
+            r.put("description", desc);
+
+            o.put("room", r);
             o.put("status", b.getStatus().name());
             o.put("cost", b.getCost());
             arr.add(o);

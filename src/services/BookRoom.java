@@ -96,7 +96,7 @@ public class BookRoom {
         System.out.println("\nSummary:");
         System.out.println(" Guest: " + guest);
         System.out.println(" Room: " + room.getRoomNumber() + " (" + room.getRoomType() + ")");
-        System.out.println(" Dates: " + fmt(in) + " → " + fmt(out) + " (" + nights + " nights)");
+        System.out.println(" Dates: " + fmt(in) + " --> " + fmt(out) + " (" + nights + " nights)");
         System.out.println(" Total: $" + total);
         System.out.print("Confirm booking? (y/n): ");
         String ans = scanner.nextLine().trim().toLowerCase();

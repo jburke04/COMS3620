@@ -4,19 +4,18 @@ import helpers.Parser;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RoomSystem {
+public class RoomSystem implements SubSystem {
     private final List<Room> rooms = new ArrayList<>();
     private final String roomPath = "src/assets/Rooms.json";
 
-    public RoomSystem() {
-        Parser.parseRooms(roomPath, rooms);
+    @Override
+    public void load() {
+        Parser.parseRooms(this.roomPath, this.rooms);
     }
 
-    /**
-     * Saves the room list to Rooms.json
-     */
-    public void saveRooms() {
-        Parser.saveRooms(roomPath, rooms);
+    @Override
+    public void save() {
+        Parser.saveRooms(this.roomPath, this.rooms);
     }
 
     /**
@@ -27,12 +26,15 @@ public class RoomSystem {
      * 			exists in the Hotel.
      */
     public Room findRoomByNumber(int roomNumber) {
-        for (Room r : rooms) {
+        // search for corresponding room:
+        for (Room r : this.rooms) {
+            // match found:
             if (r.getRoomNumber() == roomNumber) {
                 return r;
             }
         }
 
+        // no room found, return null:
         return null;
     }
 
@@ -52,8 +54,12 @@ public class RoomSystem {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gets the list of Rooms for this Room System
+     * @return list of Rooms
+     */
     public List<Room> getRooms() {
-        return rooms;
+        return this.rooms;
     }
 
     /**
@@ -71,7 +77,7 @@ public class RoomSystem {
         // Check if any Bookings with this Room conflict with the defined window:
         for (Booking b : bookings) {
             // make sure room number corresponds to the desired Room's room number:
-            if (b.getRoomNumber() != room.getRoomNumber()) continue;
+            if (b.getRoom() != room) continue;
 
             // don't check with CANCELLED or COMPLETED Bookings:
             if (b.getStatus() == BookingStatus.CANCELLED || b.getStatus() == BookingStatus.COMPLETED) continue;
@@ -99,8 +105,7 @@ public class RoomSystem {
      * @return whether the checked date is during the range.
      */
     private boolean during(Calendar toCheck, Calendar start, Calendar end) {
-        if (toCheck.after(start) && toCheck.before(end)) return true;
-        return false;
+        return toCheck.after(start) && toCheck.before(end);
     }
 
     /**
@@ -111,7 +116,7 @@ public class RoomSystem {
      */
     public boolean isRoomCheckedIn(Room room, List<Booking> bookings) {
         for (Booking b : bookings) {
-            if (b.getRoomNumber() != room.getRoomNumber()) {
+            if (b.getRoom() != room) {
                 continue;
             }
             if (b.getStatus() == BookingStatus.CHECKEDIN) {
@@ -119,5 +124,26 @@ public class RoomSystem {
             }
         }
         return false; //Room is presumably available
+    }
+
+    public int setAvailable(Room room) {
+        if (room != null && room.getStatus() == Status.AWAITING)
+			room.setStatus(Status.AVAILABLE);
+        this.save();
+        return 0;
+    }
+
+    public int setOccupied(Room room) {
+        if (room != null)
+            room.setStatus(Status.OCCUPIED);
+        this.save();
+        return 0;
+    }
+
+    public int setCleaning(Room room) {
+        if (room != null)
+            room.setStatus(Status.NEEDS_CLEANING);
+        this.save();
+        return 0;
     }
 }

@@ -14,7 +14,7 @@ public class Booking {
 	private int guestID;
 	private Calendar startTime;
 	private Calendar endTime;
-	private int roomNumber;
+	private Room room;
 	private BookingStatus status;
 	private double cost;
 
@@ -24,22 +24,22 @@ public class Booking {
 	 * @param guestID Guest ID the Booking is under.
 	 * @param startTime Start time of the Booking.
 	 * @param endTime End time of the Booking.
-	 * @param roomNumber Room number the Booking is for.
+	 * @param room Room the Booking is for.
 	 * @param BookingStatus Current status of the Booking.
 	 * @param double Full calculated cost of the Booking.
 	 */
 	public Booking(int confirmationNumber, int guestID, Calendar startTime, Calendar endTime,
-				   int roomNumber, BookingStatus status, double cost) {
+				   Room room, BookingStatus status, double cost) {
 		this.confirmationNumber = confirmationNumber;
 		this.guestID = guestID;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.roomNumber = roomNumber;
+		this.room = room;
 		this.status = status;
 		this.cost = cost;
 
-		if (confirmationNumber >= Booking.nextConfirmationNumber) {
-			Booking.nextConfirmationNumber = confirmationNumber + 1;
+		if (this.confirmationNumber >= Booking.nextConfirmationNumber) {
+			Booking.nextConfirmationNumber = this.confirmationNumber + 1;
 		}
 	}
 
@@ -53,8 +53,8 @@ public class Booking {
 	 * @param double Full calculated cost of the Booking.
 	 */
 	public Booking(int guestID, Calendar startTime, Calendar endTime,
-				   int roomNumber, BookingStatus status, double cost) {
-		this(nextConfirmationNumber++, guestID, startTime, endTime, roomNumber, status, cost);
+				   Room room, BookingStatus status, double cost) {
+		this(Booking.nextConfirmationNumber++, guestID, startTime, endTime, room, status, cost);
 	}
 
 	// -------------- Getters --------------
@@ -87,7 +87,7 @@ public class Booking {
 	 * Gets the room number this Booking was made for.
 	 * @return Corresponding room number for this Booking.
 	 */
-	public int getRoomNumber() { return this.roomNumber; }
+	public Room getRoom() { return this.room; }
 
 	/**
 	 * Gets the BookingStatus for this Booking.
@@ -101,18 +101,47 @@ public class Booking {
 	 */
 	public double getCost() { return this.cost; }
 
+	/**
+	 * String representation of a Booking
+	 */
+	public String toString() {
+		return this.confirmationNumber + ": \n"
+			+ "\tRoom #" + this.room.getRoomNumber() + "\n"
+			+ "\tStart: " + fmt(this.startTime) + "\n"
+			+ "\tEnd: " + fmt(this.endTime) + "\n"
+			+ "\tCost: " + this.cost + "\n"
+			+ "\tStatus: " + this.status; 
+	}
+
 	// --------------- Setters -----------------
 
 	/**
-	 * Sets the room number for this Booking.
-	 * @param roomNumber Room number to set to.
+	 * Sets the room for this Booking.
+	 * @param room Room to set to.
 	 */
-	public void setRoomNumber(int roomNumber) { this.roomNumber = roomNumber; }
+	public void setRoom(Room room) { this.room = room; }
 
 	/**
 	 * Sets the BookingStatus for this Booking.
 	 * @param status BookingStatus to set to.
 	 */
 	public void setStatus(BookingStatus status) { this.status = status; }
+
+	/**
+	 * Sets the Start time for this Booking.
+	 * @param startTime Start time to set to.
+	 */
+	public void setStartTime(Calendar startTime) { this.startTime = startTime; }
+
+	/**
+	 * Sets the End time for this Booking.
+	 * @param endTime End time to set to.
+	 */
+	public void setEndTime(Calendar endTime) { this.endTime = endTime; }
+
+	private String fmt(Calendar c) {
+        return String.format("%04d-%02d-%02d",
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
+    }
 }
 
