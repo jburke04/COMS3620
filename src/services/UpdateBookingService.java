@@ -86,7 +86,7 @@ public class UpdateBookingService {
                     return 1;
                 }
                 // check if inputted date was formatted correctly:
-                if (parseDate(input, start) == 0)
+                if ((start = parseDate(input)) != null)
                     break;                
             } while (true);
 
@@ -100,7 +100,7 @@ public class UpdateBookingService {
                     return 1;
                 }
                 // check if inputted date was formatted correctly:
-                if (parseDate(input, end) == 0)
+                if ((end = parseDate(input)) != null)
                     break;
             } while (true);
 
@@ -128,10 +128,8 @@ public class UpdateBookingService {
      * @param date Date to set with the parsed string
      * @return 0 if the date was parsed successfully, 1 if it was not.
      */
-    private static int parseDate(String input, Calendar date) {
-        if (date != null)
-            date.clear();
-
+    private static Calendar parseDate(String input) {
+        Calendar date = null;
         try {
             String tokens[] = input.split("-");
             int yr = Integer.parseInt(tokens[0]);
@@ -139,10 +137,10 @@ public class UpdateBookingService {
             int d = Integer.parseInt(tokens[2]);
             date = GregorianCalendar.getInstance();
             date.set(yr, m - 1, d, 14, 0, 0);
-            return 0;
+            return date;
         } catch (Exception e) {
             System.out.println("\nInvalid Date. Please try again.");
-            return 1;
+            return null;
         }
     }
 

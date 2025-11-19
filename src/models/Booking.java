@@ -107,8 +107,8 @@ public class Booking {
 	public String toString() {
 		return this.confirmationNumber + ": \n"
 			+ "\tRoom #" + this.room.getRoomNumber() + "\n"
-			+ "\tStart: " + this.startTime.toString() + "\n"
-			+ "\tEnd: " + this.endTime.toString() + "\n"
+			+ "\tStart: " + fmt(this.startTime) + "\n"
+			+ "\tEnd: " + fmt(this.endTime) + "\n"
 			+ "\tCost: " + this.cost + "\n"
 			+ "\tStatus: " + this.status; 
 	}
@@ -138,5 +138,10 @@ public class Booking {
 	 * @param endTime End time to set to.
 	 */
 	public void setEndTime(Calendar endTime) { this.endTime = endTime; }
+
+	private String fmt(Calendar c) {
+        return String.format("%04d-%02d-%02d",
+                c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
+    }
 }
 

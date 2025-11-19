@@ -105,8 +105,7 @@ public class RoomSystem implements SubSystem {
      * @return whether the checked date is during the range.
      */
     private boolean during(Calendar toCheck, Calendar start, Calendar end) {
-        if (toCheck.after(start) && toCheck.before(end)) return true;
-        return false;
+        return toCheck.after(start) && toCheck.before(end);
     }
 
     /**
