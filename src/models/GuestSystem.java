@@ -83,6 +83,13 @@ public class GuestSystem implements SubSystem {
         this.save();
     }
 
-
+    public Guest getGuestByID(int id) {
+        for (Guest g : guests) {
+            if (g.getGuestId() == id) {
+                return g;
+            }
+        }
+        return null;
+    }
 
 }

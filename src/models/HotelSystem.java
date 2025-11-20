@@ -71,6 +71,10 @@ public class HotelSystem {
         return guestSystem.findGuestByPhoneOrName(phoneOrName);
     }
 
+    public Guest findGuestByID(int id) {
+        return guestSystem.getGuestByID(id);
+    }
+
     public void addGuest(Guest guest) {
         guestSystem.addGuest(guest);
     }
@@ -154,7 +158,7 @@ public class HotelSystem {
 
     /**
      *  Changes the room associated with a booking.
-     * @param confirmationNumber The confirmation number of a booking.
+     * @param b The booking.
      * @param newRoomNumber The room number of the room to move to.
      * @return Whether the room change was successful.
      */
@@ -231,6 +235,10 @@ public class HotelSystem {
 
     public Booking getBookingByConfirmation(int confirmation) {
         return bookingSystem.findBookingByConfirmation(confirmation);
+    }
+
+    public List<Booking> getPastBookings() {
+        return bookingSystem.getPastBookings();
     }
 
     public boolean validateBooking(int confirmation) {

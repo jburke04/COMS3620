@@ -1,6 +1,8 @@
 package models;
 
 import helpers.Parser;
+
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -177,6 +179,16 @@ public class BookingSystem implements SubSystem {
         List<Booking> out = new ArrayList<>();
         for (Booking b : this.bookings) {
             if (b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getPastBookings() {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getStatus() == BookingStatus.COMPLETED) {
                 out.add(b);
             }
         }
