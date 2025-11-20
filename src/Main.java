@@ -51,6 +51,7 @@ public class Main {
         System.out.println("9) Register a Vehicle");
         System.out.println("10) List Guests");
         System.out.println("11) Update Guests");
+        System.out.println("12) Food Menu & Ordering");
         System.out.println("0) Back to Main Menu");
         System.out.println("Choose: ");
         String choice = sc.nextLine().trim();
@@ -85,6 +86,9 @@ public class Main {
                 ListGuests.start(sc, system);
             case "11":
                 UpdateGuest.start(sc, system);
+            case "12":
+                FoodOrderService.start(sc, system);
+                break;
             case "0":
                 return;
             default:
