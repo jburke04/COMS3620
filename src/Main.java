@@ -65,17 +65,16 @@ public class Main {
                 InStayMaintenance.start(sc, system);
                 break;
             case "5":
-                checkout.start(sc, system);
+                CheckIn.start(sc, system);
                 break;
             case "6":
+                checkout.start(sc, system);
+            case "7":
                 GetGuests.start(sc, system);
                 break;
-            case "7":
+            case "8":
                 UpdateBookingService.start(sc, system);
                 break;
-//            case "8":
-//                ViewBookingsService.start(sc, system);
-//                break;
             case "0":
                 sc.close();
                 return;

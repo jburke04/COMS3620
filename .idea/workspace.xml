@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dbf0cba4-d2b3-445a-8a88-afcc461c6a08" name="Changes" comment="">
+    <list default="true" id="dbf0cba4-d2b3-445a-8a88-afcc461c6a08" name="Changes" comment="holy moly that was a lot of work.&#10;-Adding the HotelSystem subsystems.&#10;-Started pulling out functions related to certain subsystems and putting them where they belong.&#10;-Changed the package statements. I provided a new compile command that should make that not an issue and also be much easier to type :)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/services/ViewBookingsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/services/ViewBookingsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/services/CheckIn.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/services/CheckIn.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/Bookings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/Bookings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/CheckIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/CheckIn.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
