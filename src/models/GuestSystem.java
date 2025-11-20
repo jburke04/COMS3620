@@ -72,6 +72,17 @@ public class GuestSystem implements SubSystem {
         this.guests.add(guest);
         this.save();
     }
+    /**
+     * Registers license plate for guest
+     * @param plate license plate to add
+     * @param guest Guest to add
+     */
+    public void registerVehicle(Guest guest, String plate) {
+        if (guest == null) return;
+        guest.setLicensePlate(plate);
+        this.save();
+    }
+
 
 
 }

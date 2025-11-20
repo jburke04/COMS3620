@@ -48,6 +48,7 @@ public class Main {
         System.out.println("6) Checkout & Payment");
         System.out.println("7) Guest Lookup");
         System.out.println("8) Update a Booking");
+        System.out.println("9) Register a Vehicle");
         System.out.println("0) Back to Main Menu");
         System.out.println("Choose: ");
         String choice = sc.nextLine().trim();
@@ -76,6 +77,9 @@ public class Main {
 //            case "8":
 //                ViewBookingsService.start(sc, system);
 //                break;
+            case "9":
+                    RegisterVehicle.start(sc,system);
+                    break;
             case "0":
                 return;
             default:
