@@ -8,9 +8,10 @@ public class Guest {
 	private static int id = 1;
 
 	private final int guestId;
-	private final String name;
+	private String name;
 	private String phoneNumber;
 	private String email;
+	private String licensePlate;
 
 	/**
 	 * Constructor for an existing Guest.
@@ -67,20 +68,34 @@ public class Guest {
 	 * @return Guest's email.
 	 */
 	public String getEmail() { return this.email; }
+	public String getLicensePlate() {
+		return licensePlate;
+	}
 
 	// ---------------- Setters ----------------
 
 	/**
-	 * Sets the Guest's phone number.
+	 * Sets the Guest's phone number. USE ONLY FROM HOTELSYSTEM changeGuestInfo() METHOD PLEASE!
 	 * @param phoneNumber Phone number to change to.
 	 */
 	public void setPhonenumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 
 	/**
-	 * Sets the Guest's email.
+	 * Sets the Guest's email. USE ONLY FROM HOTELSYSTEM changeGuestInfo() METHOD PLEASE!
 	 * @param email Email to change to.
 	 */
 	public void setEmail(String email) { this.email = email; }
+
+    /**
+     * Sets the Guest's name. People have changed their names before. USE ONLY FROM HOTELSYSTEM changeGuestInfo() METHOD PLEASE!
+     * @param name Name to change to.
+     */
+    public void setName(String name) { this.name = name; }
+
+
+	public void setLicensePlate(String plate) {
+		this.licensePlate = plate;
+	}
 
 
 	/**
@@ -89,5 +104,6 @@ public class Guest {
 	@Override public String toString() {
 		return this.name + ", #" + this.guestId + ", Phone: " + this.phoneNumber + ", Email:" + this.email;
 	}
+
 }
 

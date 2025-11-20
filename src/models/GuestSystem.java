@@ -72,6 +72,40 @@ public class GuestSystem implements SubSystem {
         this.guests.add(guest);
         this.save();
     }
+    /**
+     * Registers license plate for guest
+     * @param plate license plate to add
+     * @param guest Guest to add
+     */
+    public void registerVehicle(Guest guest, String plate) {
+        if (guest == null) return;
+        guest.setLicensePlate(plate);
+        this.save();
+    }
 
+    public Guest getGuestByID(int id) {
+        for (Guest g : guests) {
+            if (g.getGuestId() == id) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public void changeGuestInfo(Guest g, int field, String info) {
+        //Just so y'all know and so I don't forget: 1 = Name, 2 = Phone Number, 3 = Email address
+        switch (field) {
+            case 1:
+                g.setName(info);
+                break;
+            case 2:
+                g.setPhonenumber(info);
+                break;
+            case 3:
+                g.setEmail(info);
+                break;
+        }
+        save();
+    }
 
 }
