@@ -86,6 +86,7 @@ public class Parser {
                 String name = (String) g.get("name");
                 String phone = (String) g.get("phone");
                 String email = (String) g.get("email");
+                String plate = (String) g.get("plate");
                 guests.add(new Guest(guestId, name, phone, email));
             }
         } catch (Exception e) {
@@ -256,6 +257,7 @@ public class Parser {
             o.put("name", g.getName());
             o.put("phone", g.getPhoneNumber());
             o.put("email", g.getEmail());
+            o.put("plate", g.getLicensePlate());
             arr.add(o);
         }
         try (FileWriter w = new FileWriter(filepath)){

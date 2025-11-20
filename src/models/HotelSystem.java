@@ -75,6 +75,11 @@ public class HotelSystem {
         guestSystem.addGuest(guest);
     }
 
+    public void registerVehicle(Guest guest, String plate) {
+        if (guest == null) return;
+        guestSystem.registerVehicle(guest,plate);
+    }
+
     //ROOM METHODS
 
     /**

@@ -11,6 +11,7 @@ public class Guest {
 	private final String name;
 	private String phoneNumber;
 	private String email;
+	private String licensePlate;
 
 	/**
 	 * Constructor for an existing Guest.
@@ -67,6 +68,9 @@ public class Guest {
 	 * @return Guest's email.
 	 */
 	public String getEmail() { return this.email; }
+	public String getLicensePlate() {
+		return licensePlate;
+	}
 
 	// ---------------- Setters ----------------
 
@@ -81,6 +85,11 @@ public class Guest {
 	 * @param email Email to change to.
 	 */
 	public void setEmail(String email) { this.email = email; }
+
+
+	public void setLicensePlate(String plate) {
+		this.licensePlate = plate;
+	}
 
 
 	/**

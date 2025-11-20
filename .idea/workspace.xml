@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dbf0cba4-d2b3-445a-8a88-afcc461c6a08" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/services/RegisterVehicle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/services/ViewBookingsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/services/ViewBookingsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/helpers/Parser.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/helpers/Parser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/models/Guest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/models/Guest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/models/GuestSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/models/GuestSystem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/models/HotelSystem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/models/HotelSystem.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/assets/Guests.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/Guests.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helpers/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Guest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Guest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/GuestSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/GuestSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/HotelSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/HotelSystem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,11 +42,23 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="35JemrjjjuQ1RHZh4P3BeNgfyYA" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "registerVehicle",
+    "kotlin-language-version-configured": "true",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -64,6 +86,9 @@
     </task>
     <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
