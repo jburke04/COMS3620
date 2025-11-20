@@ -1,6 +1,8 @@
 package models;
 
 import helpers.Parser;
+
+import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -75,7 +77,7 @@ public class BookingSystem implements SubSystem {
 
 	/**
 	 * Cancels a Booking that corresponds with the provided confirmation number.
-	 * @param confirmationNumber confirmation number to cancel.
+	 * @param b booking to cancel.
 	 * @return false if the Booking was not cancelled, true if the Booking was.
 	 */
 	public boolean cancelBooking(Booking b) {
@@ -90,8 +92,8 @@ public class BookingSystem implements SubSystem {
 
 	/**
 	 * Changes the room number under an existing Booking.
-	 * @param confirmationNumber Booking to modify.
-	 * @param newRoomNumber Room number to change to.
+	 * @param b Booking to modify.
+	 * @param newRoom Room to change to.
 	 * @return True if the operation was successful, false if it failed.
 	 */
 	public boolean changeRoom(Booking b, Room newRoom) {
@@ -177,6 +179,16 @@ public class BookingSystem implements SubSystem {
         List<Booking> out = new ArrayList<>();
         for (Booking b : this.bookings) {
             if (b.getStatus() == BookingStatus.CONFIRMED) {
+                out.add(b);
+            }
+        }
+        return out;
+    }
+
+    public List<Booking> getPastBookings() {
+        List<Booking> out = new ArrayList<>();
+        for (Booking b : bookings) {
+            if (b.getStatus() == BookingStatus.COMPLETED) {
                 out.add(b);
             }
         }
