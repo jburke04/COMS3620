@@ -84,6 +84,10 @@ public class HotelSystem {
         guestSystem.registerVehicle(guest,plate);
     }
 
+    public void changeGuestInfo(Guest guest, int field, String info) {
+        guestSystem.changeGuestInfo(guest, field, info);
+    }
+
     //ROOM METHODS
 
     /**
