@@ -51,6 +51,7 @@ public class Main {
         System.out.println("9) Register a Vehicle");
         System.out.println("10) List Guests");
         System.out.println("11) Update Guests");
+        System.out.println("12) Food Menu & Ordering");
         System.out.println("0) Back to Main Menu");
         System.out.println("Choose: ");
         String choice = sc.nextLine().trim();
@@ -85,6 +86,9 @@ public class Main {
                 ListGuests.start(sc, system);
             case "11":
                 UpdateGuest.start(sc, system);
+            case "12":
+                FoodOrderService.start(sc, system);
+                break;
             case "0":
                 return;
             default:
@@ -98,6 +102,7 @@ public class Main {
     private static void staffOperationMenu(Scanner sc, HotelSystem system) {
         System.out.println("\n=== STAFF OPERATIONS ===");
         System.out.println("1) View all Bookings");
+        System.out.println("2) Post-Checkout Cleaning & Maintenance");
         System.out.println("0) Back to Main Menu");
         System.out.print("Choose: ");
         String choice = sc.nextLine().trim();
@@ -105,6 +110,9 @@ public class Main {
         switch (choice) {
             case "1":
                 ViewBookingsService.start(sc, system);
+                break;
+            case "2":
+                PostCheckoutCleaningService.start(sc, system);
                 break;
             case "0":
                 return;
