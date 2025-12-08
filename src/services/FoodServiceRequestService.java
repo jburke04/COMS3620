@@ -9,8 +9,26 @@ import models.*;
 public class FoodServiceRequestService {
 
     /**
-     * Start loop for creating a Food Service Request
-     *
+     * Array of item costs to apply to the final Booking cost:
+     */
+    private final double costs[] = {
+        8.50,
+        11.50,
+        8.40,
+        12.50,
+        18.60,
+        25.00,
+        4.00,
+        6.80,
+        7.60,
+        5.30
+    };
+
+    public FoodServiceRequestService() {
+    }
+
+    /**
+     * Start loop for creating a Food Service Request.
      * @param sc Scanner for User input.
      * @param system Hotel System to utilize.
      */
@@ -60,7 +78,7 @@ public class FoodServiceRequestService {
                         System.out.println("\nInvalid input. Please input an integer value for the Room Number.\n"); 
 
                     // check if Room satisfies preconditions:
-                    r = checkRoom(system, Integer.parseInt(input.trim()));
+                    r = checkRoom(system, Integer.parseInt(input.trim()), g);
 
                     // Room satisfied preconditions:
                     if (r != null) {
@@ -79,6 +97,18 @@ public class FoodServiceRequestService {
         //TODO: after confirming Guest and Room, choose item from menu
         do {
 
+            System.out.println("Menu:\n"
+                + "\t1.  Deluxe Club Sandwich \t$8.50\n"
+                + "\t2.  10 in. Pizza         \t$11.50\n"
+                + "\t3.  3pc. Chicken Tenders \t$8.40\n"
+                + "\t4.  Spaghetti & Meatballs\t$12.50\n"
+                + "\t5.  8oz Steak & Mushrooms\t$18.60\n"
+                + "\t6.  Buttered Lobster     \t$25.00\n"
+                + "\t7.  Chocolate Chip Cookie\t$4.00\n"
+                + "\t8.  Molten Lava Cake     \t$6.80\n"
+                + "\t9.  Classic Cheesecake   \t$7.60\n"
+                + "\t10. Creme Brulee         \t$5.30\n");
+
         } while (true);
 
         //TODO: after choosing item(s), calculate the cost and add it on to the Booking
@@ -90,7 +120,7 @@ public class FoodServiceRequestService {
      * @param roomNumber Room Number to check.
      * @return Room that corresponds to the provided Room number if it satisfies all conditions, null if not.
      */
-    private static Room checkRoom(HotelSystem system, int roomNumber) {
+    private static Room checkRoom(HotelSystem system, int roomNumber, Guest g) {
         Room r = null;
 
         //room doesn't exist:
@@ -101,9 +131,20 @@ public class FoodServiceRequestService {
             System.out.println("\nRoom must currently be checked in to provide a Food Service Request.\n");
             return null;
         }
-        //room isn't checked in by Guest:
+        
+        //check if Guest is checked in to this room:
+        for (Booking b : system.getBookings()) {
+            if (b.getRoom() == r) {
+                if (b.getGuestID() != g.getGuestID()) {
+                    System.out.println("\nGuest is not Checked-in to this Room. Guest needs to be checked-in to the Room to create a Request.\n");
+                    return null;
+                }
+                else
+                    break;
+            }
+        }
 
-
+        // all preconditions met, return Room:
         return r;
     }
 
