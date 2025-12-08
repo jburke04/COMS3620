@@ -6,12 +6,14 @@ package models;
  * and the Room for it to be delivered to.
  */
 public class FoodRequest {
+    private static int nextReqID = 100; 
 
-    private static int reqID = 100;
+    private final int reqID;
     private final int guestID;
     private final Room room;
     private double cost;
     private String desc;
+    private RequestStatus status;
 
         /**
      * Constructor for a new Food Request.
@@ -20,16 +22,18 @@ public class FoodRequest {
      * @param room Room to service to
      * @param cost Total cost of request
      * @param desc Formatted description of the request.
+     * @param status Status of the Request
      */
-    public FoodRequest(int reqID, int guestID, Room room, double cost, String desc) {
+    public FoodRequest(int reqID, int guestID, Room room, double cost, String desc, RequestStatus status) {
         this.reqID = reqID;
         this.guestID = guestID;
         this.room = room;
         this.cost = cost;
         this.desc = desc;
+        this.status = status;
 
-        if (reqID >= FoodRequest.reqID)
-            FoodRequest.reqID = this.reqID + 1;
+        if (reqID >= FoodRequest.nextReqID)
+            FoodRequest.nextReqID = this.reqID + 1;
         
     }
 
@@ -41,7 +45,7 @@ public class FoodRequest {
      * @param desc Formatted description of the request.
      */
     public FoodRequest(int guestID, Room room, double cost, String desc) {
-        this(FoodRequest.reqID++, guestID, room, cost, desc);
+        this(FoodRequest.nextReqID++, guestID, room, cost, desc, RequestStatus.NEW);
     }
 
     // --------------- GETTERS -------------------
@@ -74,5 +78,15 @@ public class FoodRequest {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    // --------------- OTHER -------------------
+
+    @Override
+    public String toString() {
+        return "Request #" + this.reqID
+            + "\n\tRoom #" + this.room.getRoomNumber()
+            + "\n\tCost: $" + String.format("%.2f", this.cost)
+            + "\n\tDesc:\n" + this.desc;
     }
 }
