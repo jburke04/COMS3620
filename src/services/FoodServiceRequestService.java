@@ -11,7 +11,7 @@ public class FoodServiceRequestService {
     /**
      * Array of item costs to apply to the final Booking cost:
      */
-    private final double costs[] = {
+    private static final double costs[] = {
         8.50,
         11.50,
         8.40,
@@ -24,9 +24,6 @@ public class FoodServiceRequestService {
         5.30
     };
 
-    public FoodServiceRequestService() {
-    }
-
     /**
      * Start loop for creating a Food Service Request.
      * @param sc Scanner for User input.
@@ -36,6 +33,8 @@ public class FoodServiceRequestService {
         String input = "";
         Guest g = null;
         Room r = null;
+        double total = 0;
+        String desc = "";
 
         System.out.println("\n=== CREATE FOOD SERVICE REQUEST ===\n");
 
@@ -94,9 +93,8 @@ public class FoodServiceRequestService {
                 System.out.println("\nProvided Name or ID does not exist in System. Please provide an existing ID or Name.\n");
         } while (true);
 
-        //TODO: after confirming Guest and Room, choose item from menu
-        do {
 
+        // Food menu:
             System.out.println("Menu:\n"
                 + "\t1.  Deluxe Club Sandwich \t$8.50\n"
                 + "\t2.  10 in. Pizza         \t$11.50\n"
@@ -108,10 +106,32 @@ public class FoodServiceRequestService {
                 + "\t8.  Molten Lava Cake     \t$6.80\n"
                 + "\t9.  Classic Cheesecake   \t$7.60\n"
                 + "\t10. Creme Brulee         \t$5.30\n");
+        do {
+
+            System.out.print("Select item(s) to order (separate by commas). [Q]uit to return to Main Menu: ");
+            input = sc.nextLine();
+
+            String[] inputs = input.trim().split(",");
+
+            if (inputs.length == 0)
+                System.out.println("\nEmpty string. Please provide entries for the request or terminate the process.");
+            // check for valid input:
+            else if ((total = calcCost(inputs)) > 0) {
+                System.out.printf("\nCost of Request: $%.2f\n", total);
+
+                // Optional Special Instructions for order:
+                System.out.print("Special Requests (Enter if none): ");
+                String spInstr = sc.nextLine().trim();
+
+                // Format Description:
+                desc = formatDescription(inputs, spInstr);
+
+                break;
+            }
 
         } while (true);
 
-        //TODO: after choosing item(s), calculate the cost and add it on to the Booking
+        //TODO: create ticket and let receptionist know ticket has been created
     }
 
     /**
@@ -150,8 +170,40 @@ public class FoodServiceRequestService {
 
     /**
      * Calculates the cost of all ordered items
+     * 
      */
-    private static void calcCost(HotelSystem system, String[] inputs) {
+    private static double calcCost(String[] inputs) {
+        double total = 0.00;
+        
+        // iterate through provided list of inputs:
+        for (String s : inputs) {
+            // entry was not a number:
+            if (Double.isNaN(Double.parseDouble(s))) {
+                System.out.println("\nInvalid input. Make sure all entries are numbers.");
+                return 0.00;
+            }
+            // entry out of bounds or added a ".":
+            else if (Integer.parseInt(s) > 10 || Integer.parseInt(s) < 1 || Double.parseDouble(s) % 1 > 0) {
+                System.out.println("\nInvalid input. Entries must be a whole number between 1-10.");
+                return 0.00;
+            }
+            else {
+                total += costs[Integer.parseInt(s) - 1];
+            }
+        }
 
+        // return total:
+        return total;
+    }
+
+    /**
+     * 
+     */
+    private static String formatDescription(String[] inputs, String instr) {
+        String result = "";
+
+        //TODO: format a description based on the items selected
+
+        return result;
     }
 }
