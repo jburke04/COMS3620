@@ -161,6 +161,7 @@ public class Parser {
      * @param filepath Path to Employees.json
      * @param employees List of Employees
      */
+    @SuppressWarnings("unchecked")
     public static void parseEmployees(String filepath, List<Employee> employees) {
         employees.clear();
         try {
@@ -298,6 +299,7 @@ public class Parser {
      * @param filepath path to Employees.json
      * @param employees List of Employees
      */
+    @SuppressWarnings("unchecked")
     public static void saveEmployees(String filepath, List<Employee> employees) {
         JSONArray arr = new JSONArray();
         for (Employee e : employees) {
