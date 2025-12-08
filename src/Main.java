@@ -52,6 +52,7 @@ public class Main {
         System.out.println("10) List Guests");
         System.out.println("11) Update Guests");
         System.out.println("12) Food Menu & Ordering");
+        System.out.println("13) Key Replacement");
         System.out.println("0) Back to Main Menu");
         System.out.println("Choose: ");
         String choice = sc.nextLine().trim();
@@ -88,6 +89,9 @@ public class Main {
                 UpdateGuest.start(sc, system);
             case "12":
                 FoodOrderService.start(sc, system);
+                break;
+            case "13":
+                keyReplacementService.start(sc, system);
                 break;
             case "0":
                 return;
