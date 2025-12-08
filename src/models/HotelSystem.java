@@ -60,7 +60,7 @@ public class HotelSystem {
     }
 
     /**
-     * I don't like doing this, but some functions need the list of guests.
+     * Returns the list of Guests in this Hotel System.
      * @return The list of Guest objects.
      */
     public List<Guest> getGuests() {
@@ -69,6 +69,15 @@ public class HotelSystem {
 
     public Guest findGuestByPhoneOrName(String phoneOrName) {
         return guestSystem.findGuestByPhoneOrName(phoneOrName);
+    }
+
+    /**
+     * Finds a Guest by the corresponding Guest ID.
+     * @param id Guest ID to search for.
+     * @return Guest with the corresponding Guest ID.
+     */
+    public Guest findGuestByID(int id) {
+        return guestSystem.findGuestByID(id);
     }
 
     public void addGuest(Guest guest) {

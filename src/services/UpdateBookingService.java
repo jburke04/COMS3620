@@ -22,10 +22,7 @@ public class UpdateBookingService {
         do { 
             System.out.println("=== UPDATE BOOKING ===\n");
 
-            System.out.println("List of Bookings:\n");
-            printBookings(system);
-
-            System.out.print("\nEnter the corresponding ID of the Booking to update. [Q]uit to go back: ");
+            System.out.print("Enter the corresponding confirmation number of the Booking to update. [Q]uit to go back: ");
 
             choice = scanner.nextLine().trim();
 
@@ -42,22 +39,9 @@ public class UpdateBookingService {
                     return;
             }
             else
-                System.out.println("\nInvalid ID. Please input an ID from the list of Bookings.\n");
+                System.out.println("\nInvalid confirmation number. Please input a valid confirmation number.\n");
 
         } while (true);
-    }
-
-    /**
-     * Prints Bookings with their confirmation number, start time, and end time.
-     * @param system HotelSystem to utilize.
-     */
-    private static void printBookings(HotelSystem system) {
-        for (Booking b : system.getBookings()) {
-            if (b.getStatus() != BookingStatus.CANCELLED)
-                System.out.println(b.getConfirmationNumber() + ": \n" +
-                    "\tStart: " + fmt(b.getStartTime()) +
-                    "\n\tEnd: " + fmt(b.getEndTime()));
-        }
     }
 
     /**

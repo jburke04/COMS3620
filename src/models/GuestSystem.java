@@ -46,6 +46,22 @@ public class GuestSystem implements SubSystem {
     }
 
     /**
+     * Find a Guest by the provided ID.
+     * @param id Guest ID to search for.
+     * @return Guest with corresponding Guest ID.
+     */
+    public Guest findGuestByID(int id) {
+        // compare all guests in the list:
+        for (Guest g : this.guests) {
+            if (g.getGuestId() == id)
+            return g;
+        }
+
+        // no matching guest, return null:
+        return null;
+    }
+
+    /**
      * Since I only want this class to see the full guest list, this method will get called straight from HotelSystem. Hiding all I can.
      * I'm aware that printing in this class is probably taboo. This is how it will work for now, feel free to find a way
      * to do this that maintains the information hiding and also doesn't directly print to console. Maybe writing to an IO stream?
