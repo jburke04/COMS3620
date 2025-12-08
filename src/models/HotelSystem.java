@@ -21,7 +21,7 @@ public class HotelSystem {
     private final MaintenanceSystem maintenanceSystem;
     private final PaymentSystem paymentSystem;
     private final RoomUtils utils;
-    //EmployeeSystem employeeSystem; FOR LATER USE.
+    EmployeeSystem employeeSystem = new EmployeeSystem();
 
 
     /**
@@ -31,6 +31,7 @@ public class HotelSystem {
         this.roomSystem.load();
         this.bookingSystem.load();
         this.guestSystem.load();
+        this.employeeSystem.load();
         this.utils = new RoomUtils(this.bookingSystem.getBookings(), this.roomSystem.getRooms());
         this.maintenanceSystem = new MaintenanceSystem(utils);
         this.paymentSystem = new PaymentSystem();

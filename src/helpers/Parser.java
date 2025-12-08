@@ -156,6 +156,32 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a file to populate Employee System's list of Employees
+     * @param filepath Path to Employees.json
+     * @param employees List of Employees
+     */
+    @SuppressWarnings("unchecked")
+    public static void parseEmployees(String filepath, List<Employee> employees) {
+        employees.clear();
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
+            for (Object o : arr) {
+                JSONObject e = (JSONObject) o;
+                int id = ((Long) e.get("employeeId")).intValue();
+                EmployeeType type = EmployeeType.valueOf((String) e.get("role"));
+                String name = (String) e.get("name");
+                String phone = (String) e.get("phone");
+                String email = (String) e.get("email");
+
+                employees.add(EmployeeFactory.makeEmployee(type, id, name, phone, email));
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to parse Employees.json: "+e.getMessage(), e);
+        }
+    }
+
     // ---- Saves ----
     /**
      * Saves the Bookings to the desired file.
@@ -265,6 +291,31 @@ public class Parser {
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to save Guests.json " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Saves the Employees to Employees.json file
+     * @param filepath path to Employees.json
+     * @param employees List of Employees
+     */
+    @SuppressWarnings("unchecked")
+    public static void saveEmployees(String filepath, List<Employee> employees) {
+        JSONArray arr = new JSONArray();
+        for (Employee e : employees) {
+            JSONObject o = new JSONObject();
+            o.put("id", e.getId());
+            o.put("role", e.type());
+            o.put("name", e.getName());
+            o.put("phone", e.getPhone());
+            o.put("email", e.getEmail());
+            arr.add(o);
+        }
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to save Employees.json " + e.getMessage(), e);
         }
     }
 
