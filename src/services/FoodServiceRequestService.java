@@ -230,10 +230,11 @@ public class FoodServiceRequestService {
 
         // format into result string:
         for (int i = 0; i < 10; i++) {
-            if (entries[i] != 0)
+            if (entries[i] != 0) {
                 result += "\t" + entries[i] + "x " + items[i];
-            if (i < 9)
-                result += "\n";
+                if (i < 9)
+                    result += "\n";
+            }
         }
 
         // append Special Instructions if any:
