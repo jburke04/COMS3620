@@ -68,7 +68,7 @@ public class ViewEmployeeService {
 
             // narrow down criteria:
             if (id != 0) {
-                Employee e = system.getEmployeeByID(id);
+                Employee e = system.findEmployeeByID(id);
                 if (e != null)
                     results.add(e);
             }
@@ -133,7 +133,7 @@ public class ViewEmployeeService {
     private static List<Employee> filter(List<Employee> emps, String nameOrPhoneNumber) {
         List<Employee> results = new ArrayList<>();
 
-        if (emps.isEmpty() || emps == null)
+        if (emps == null)
             return null;
 
         for (Employee e : emps) {
@@ -153,7 +153,7 @@ public class ViewEmployeeService {
     private static List<Employee> filter(List<Employee> emps, EmployeeType role) {
         List<Employee> results = new ArrayList<>();
 
-        if (emps.isEmpty() || emps == null)
+        if (emps == null)
             return null;
 
         for (Employee e : emps) {

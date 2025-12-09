@@ -109,6 +109,7 @@ public class Main {
         System.out.println("2) Post-Checkout Cleaning & Maintenance");
         System.out.println("3) Hire / Onboard Employee");
         System.out.println("4) View Employees");
+        System.out.println("5) Fire Employee");
         System.out.println("0) Back to Main Menu");
         System.out.print("Choose: ");
         String choice = sc.nextLine().trim();
@@ -125,6 +126,9 @@ public class Main {
                 break;
             case "4":
                 ViewEmployeeService.start(sc, system);
+                break;
+            case "5":
+                FireEmployee.start(sc, system);
                 break;
             case "0":
                 return;

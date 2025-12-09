@@ -317,13 +317,25 @@ public class HotelSystem {
         return employeeSystem.getEmployees();
     }
 
-    /**
-     * Returns an Employee with the corresponding ID.
-     * @param id ID to search for.
-     * @return Employee with corresponding ID.
-     */
-    public Employee getEmployeeByID(int id) {
-        return employeeSystem.getEmployeeByID(id);
-    } 
+    public boolean fireEmployee(Employee employee) {
+        return employeeSystem.fireEmployee(employee);
+    }
 
+    /**
+     * Finds an employee by ID number
+     * @param ID Employee ID
+     * @return The employee or null if the ID is unused.
+     */
+    public Employee findEmployeeByID(int ID) {
+        return employeeSystem.findEmployeeByID(ID);
+    }
+
+    /**
+     * Find an employee by name or phone.
+     * @param nameOrPhone Employee Name or Phone
+     * @return The employee or null if the name or phone can't be found.
+     */
+    public Employee findEmployeeByNameOrPhone(String nameOrPhone) {
+        return employeeSystem.findEmployeeByNameOrPhone(nameOrPhone);
+    }
 }
