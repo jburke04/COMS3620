@@ -157,7 +157,8 @@ public class Parser {
     }
 
     /**
-     * Parses a file to populate Employee System's list of Employees
+     * Parses a file to populate the Employees list of the EmployeeSystem.
+     * Supports both "id" and legacy "employeeId" keys.
      * @param filepath Path to Employees.json
      * @param employees List of Employees
      */
@@ -168,17 +169,27 @@ public class Parser {
             JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
             for (Object o : arr) {
                 JSONObject e = (JSONObject) o;
-                int id = ((Long) e.get("employeeId")).intValue();
-                EmployeeType type = EmployeeType.valueOf((String) e.get("role"));
-                String name = (String) e.get("name");
-                String phone = (String) e.get("phone");
-                String email = (String) e.get("email");
 
-                employees.add(EmployeeFactory.makeEmployee(type, id, name, phone, email));
+                Long idVal = (Long) e.get("id");
+                if (idVal == null && e.get("employeeId") != null) {
+                    idVal = (Long) e.get("employeeId");
+                }
+                int id = (idVal == null) ? 0 : idVal.intValue();
+
+                String roleStr = (String) e.get("role");
+                EmployeeType type = EmployeeType.valueOf(roleStr);
+
+                String name  = (String) e.getOrDefault("name", "");
+                String phone = (String) e.getOrDefault("phone", "");
+                String email = (String) e.getOrDefault("email", "");
+
+                Employee emp = EmployeeFactory.makeEmployee(type, id, name, phone, email);
+                if (emp != null) {
+                    employees.add(emp);
+                }
             }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to parse Employees.json: "+e.getMessage(), e);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to parse Employees.json: " + ex.getMessage(), ex);
         }
     }
 
@@ -305,17 +316,17 @@ public class Parser {
         for (Employee e : employees) {
             JSONObject o = new JSONObject();
             o.put("id", e.getId());
-            o.put("role", e.type());
+            o.put("role", e.type().name());
             o.put("name", e.getName());
             o.put("phone", e.getPhone());
             o.put("email", e.getEmail());
             arr.add(o);
         }
+
         try (FileWriter w = new FileWriter(filepath)) {
             w.write(arr.toJSONString());
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to save Employees.json " + e.getMessage(), e);
+        } catch (IOException ex) {
+            throw new RuntimeException("Failed to save Employees.json: " + ex.getMessage(), ex);
         }
     }
 

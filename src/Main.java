@@ -107,6 +107,7 @@ public class Main {
         System.out.println("\n=== STAFF OPERATIONS ===");
         System.out.println("1) View all Bookings");
         System.out.println("2) Post-Checkout Cleaning & Maintenance");
+        System.out.println("3) Hire / Onboard Employee");
         System.out.println("0) Back to Main Menu");
         System.out.print("Choose: ");
         String choice = sc.nextLine().trim();
@@ -117,6 +118,9 @@ public class Main {
                 break;
             case "2":
                 PostCheckoutCleaningService.start(sc, system);
+                break;
+            case "3":
+                HireEmployeeService.start(sc, system);
                 break;
             case "0":
                 return;

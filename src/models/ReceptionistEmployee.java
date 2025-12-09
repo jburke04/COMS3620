@@ -3,6 +3,7 @@ package models;
 public class ReceptionistEmployee implements Employee{
 
     private final int id;
+    private final EmployeeType type = EmployeeType.RECEPTION;
     private String name;
     private String phone;
     private String email;
@@ -17,12 +18,12 @@ public class ReceptionistEmployee implements Employee{
 
     @Override
     public void fulfillRequest() {
-
+        System.out.println("Receptionist " + name + " is handling front-desk requests.");
     }
 
     @Override
     public EmployeeType type() {
-        return EmployeeType.RECEPTION;
+        return type;
     }
 
     @Override

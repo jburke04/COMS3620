@@ -2,6 +2,7 @@ package models;
 
 public class BellboyEmployee implements Employee{
     private int id;
+    private final EmployeeType type = EmployeeType.BELLBOY;
     private String name;
     private String phone;
     private String email;
@@ -15,31 +16,31 @@ public class BellboyEmployee implements Employee{
 
     @Override
     public void fulfillRequest() {
-
+        System.out.println("Bellboy " + name + " is assisting guests with luggage.");
     }
 
     @Override
     public EmployeeType type() {
-        return null;
+        return type;
     }
 
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
     public String getPhone() {
-        return "";
+        return phone;
     }
 
     @Override
     public String getEmail() {
-        return "";
+        return email;
     }
 }

@@ -2,6 +2,7 @@ package models;
 
 public class MaintenanceEmployee implements Employee{
     private int id;
+    private final EmployeeType type = EmployeeType.TECHNICIAN;
     private String name;
     private String phone;
     private String email;
@@ -15,12 +16,12 @@ public class MaintenanceEmployee implements Employee{
 
     @Override
     public void fulfillRequest() {
-
+        System.out.println("Maintenance technician " + name + " is handling technical issues.");
     }
 
     @Override
     public EmployeeType type() {
-        return EmployeeType.TECHNICIAN;
+        return type;
     }
 
     @Override

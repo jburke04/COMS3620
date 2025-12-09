@@ -2,6 +2,7 @@ package models;
 
 /**
  * Employee interface to be used for employees of various departments.
+ * Each Employee has an id, a role (EmployeeType), and basic contact info.
  */
 public interface Employee {
 
@@ -11,12 +12,12 @@ public interface Employee {
     void fulfillRequest();
 
     /**
-     * Used to grab the type of employee, specifically for when using collections of this interface.
+     *Returns the role/type of this employee.
      */
     EmployeeType type();
 
     /**
-     * Grabs this employee's ID.
+     * Returns this employee's ID.
      * @return ID
      */
     int getId();
@@ -29,7 +30,7 @@ public interface Employee {
 
     /**
      * Returns this employee's phone
-     * @return
+     * @return Phone
      */
     String getPhone();
 

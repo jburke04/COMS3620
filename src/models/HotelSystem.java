@@ -297,4 +297,24 @@ public class HotelSystem {
         roomSystem.setCleaning(b.getRoom());
         return success;
     }
+
+    // EMPLOYEE METHODS
+
+    /**
+     * Onboards a new employee and persists them via EmployeeSystem.
+     */
+    public Employee hireEmployee(EmployeeType type,
+                                 String name,
+                                 String phone,
+                                 String email) {
+        return employeeSystem.hireEmployee(type, name, phone, email);
+    }
+
+    /**
+     * Read-only view of current employees (for debugging / reports).
+     */
+    public List<Employee> getEmployees() {
+        return employeeSystem.getEmployees();
+    }
+
 }
