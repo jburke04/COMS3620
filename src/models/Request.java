@@ -11,6 +11,10 @@ public interface Request {
     String getDesc();
 
     RequestStatus getStatus();
+
+    void setDesc(String desc);
+
+    void setStatus(RequestStatus status);
     /**
      * Completion of the request updates corresponding information
      */

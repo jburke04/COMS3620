@@ -72,14 +72,25 @@ public class FoodRequest implements Request {
         return this.desc;
     }
 
+    @Override
+    public RequestStatus getStatus() {
+        return this.status;
+    }
+
     // --------------- SETTERS ----------------
 
     public void setCost(double cost) {
         this.cost = cost;
     }
 
+    @Override
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public void setStatus(RequestStatus status) {
+        this.status = status;
     }
 
     // --------------- OTHER -------------------

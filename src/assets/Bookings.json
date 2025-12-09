@@ -1,1 +1,145 @@
-[{"confirmationNumber":1000,"cost":100.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-21T14:00","guestID":3,"room":{"roomNumber":102,"description":{"cost":100.0,"type":"SINGLE"},"status":"AVAILABLE"},"status":"CANCELLED"},{"confirmationNumber":1001,"cost":200.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":3,"room":{"roomNumber":201,"description":{"cost":100.0,"type":"SINGLE"},"status":"AVAILABLE"},"status":"CONFIRMED"},{"confirmationNumber":1002,"cost":300.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":3,"room":{"roomNumber":104,"description":{"cost":150.0,"type":"DOUBLE"},"status":"AWAITING"},"status":"CHECKEDIN"},{"confirmationNumber":1003,"cost":300.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":5,"room":{"roomNumber":106,"description":{"cost":150.0,"type":"DOUBLE"},"status":"OCCUPIED"},"status":"CHECKEDIN"},{"confirmationNumber":1004,"cost":600.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":2,"room":{"roomNumber":110,"description":{"cost":300.0,"type":"PRESIDENTIAL"},"status":"AWAITING"},"status":"CHECKEDIN"},{"confirmationNumber":1005,"cost":400.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":3,"room":{"roomNumber":107,"description":{"cost":200.0,"type":"KING"},"status":"AWAITING"},"status":"CONFIRMED"},{"confirmationNumber":1006,"cost":600.0,"startTime":"2025-05-24T14:00","endTime":"2025-05-26T14:00","guestID":1,"room":{"roomNumber":112,"description":{"cost":300.0,"type":"PRESIDENTIAL"},"status":"AWAITING"},"status":"CONFIRMED"},{"confirmationNumber":1007,"cost":200.0,"startTime":"2025-05-20T14:00","endTime":"2025-05-22T14:00","guestID":4,"room":{"roomNumber":103,"description":{"cost":100.0,"type":"SINGLE"},"status":"AWAITING"},"status":"CONFIRMED"},{"confirmationNumber":1009,"cost":200.0,"startTime":"2025-11-22T14:00","endTime":"2025-11-24T14:00","guestID":4,"room":{"roomNumber":202,"description":{"cost":100.0,"type":"SINGLE"},"status":"AWAITING"},"status":"CONFIRMED"},{"confirmationNumber":1010,"cost":100.0,"startTime":"2025-12-12T14:00","endTime":"2025-12-13T14:00","guestID":6,"room":{"roomNumber":102,"description":{"cost":100.0,"type":"SINGLE"},"status":"AVAILABLE"},"status":"CANCELLED"},{"confirmationNumber":1011,"cost":200.0,"startTime":"2026-02-02T14:00","endTime":"2026-02-03T14:00","guestID":2,"room":{"roomNumber":109,"description":{"cost":200.0,"type":"KING"},"status":"AWAITING"},"status":"CONFIRMED"}]
+[
+  {
+    "confirmationNumber": 1000,
+    "cost": 100.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-21T14:00",
+    "guestID": 3,
+    "room": {
+      "roomNumber": 102,
+      "description": { "cost": 100.0, "type": "SINGLE" },
+      "status": "AVAILABLE"
+    },
+    "status": "CANCELLED"
+  },
+  {
+    "confirmationNumber": 1001,
+    "cost": 200.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 3,
+    "room": {
+      "roomNumber": 201,
+      "description": { "cost": 100.0, "type": "SINGLE" },
+      "status": "AVAILABLE"
+    },
+    "status": "CONFIRMED"
+  },
+  {
+    "confirmationNumber": 1002,
+    "cost": 300.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 3,
+    "room": {
+      "roomNumber": 104,
+      "description": { "cost": 150.0, "type": "DOUBLE" },
+      "status": "AWAITING"
+    },
+    "status": "CHECKEDIN"
+  },
+  {
+    "confirmationNumber": 1003,
+    "cost": 300.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 5,
+    "room": {
+      "roomNumber": 106,
+      "description": { "cost": 150.0, "type": "DOUBLE" },
+      "status": "OCCUPIED"
+    },
+    "status": "CHECKEDIN"
+  },
+  {
+    "confirmationNumber": 1004,
+    "cost": 600.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 2,
+    "room": {
+      "roomNumber": 110,
+      "description": { "cost": 300.0, "type": "PRESIDENTIAL" },
+      "status": "OCCUPIED"
+    },
+    "status": "CHECKEDIN"
+  },
+  {
+    "confirmationNumber": 1005,
+    "cost": 400.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 3,
+    "room": {
+      "roomNumber": 107,
+      "description": { "cost": 200.0, "type": "KING" },
+      "status": "AWAITING"
+    },
+    "status": "CONFIRMED"
+  },
+  {
+    "confirmationNumber": 1006,
+    "cost": 600.0,
+    "startTime": "2025-05-24T14:00",
+    "endTime": "2025-05-26T14:00",
+    "guestID": 1,
+    "room": {
+      "roomNumber": 112,
+      "description": { "cost": 300.0, "type": "PRESIDENTIAL" },
+      "status": "AWAITING"
+    },
+    "status": "CONFIRMED"
+  },
+  {
+    "confirmationNumber": 1007,
+    "cost": 200.0,
+    "startTime": "2025-05-20T14:00",
+    "endTime": "2025-05-22T14:00",
+    "guestID": 4,
+    "room": {
+      "roomNumber": 103,
+      "description": { "cost": 100.0, "type": "SINGLE" },
+      "status": "AWAITING"
+    },
+    "status": "CONFIRMED"
+  },
+  {
+    "confirmationNumber": 1009,
+    "cost": 200.0,
+    "startTime": "2025-11-22T14:00",
+    "endTime": "2025-11-24T14:00",
+    "guestID": 4,
+    "room": {
+      "roomNumber": 202,
+      "description": { "cost": 100.0, "type": "SINGLE" },
+      "status": "AWAITING"
+    },
+    "status": "CONFIRMED"
+  },
+  {
+    "confirmationNumber": 1010,
+    "cost": 100.0,
+    "startTime": "2025-12-12T14:00",
+    "endTime": "2025-12-13T14:00",
+    "guestID": 6,
+    "room": {
+      "roomNumber": 102,
+      "description": { "cost": 100.0, "type": "SINGLE" },
+      "status": "AVAILABLE"
+    },
+    "status": "CANCELLED"
+  },
+  {
+    "confirmationNumber": 1011,
+    "cost": 200.0,
+    "startTime": "2026-02-02T14:00",
+    "endTime": "2026-02-03T14:00",
+    "guestID": 2,
+    "room": {
+      "roomNumber": 109,
+      "description": { "cost": 200.0, "type": "KING" },
+      "status": "AWAITING"
+    },
+    "status": "CONFIRMED"
+  }
+]

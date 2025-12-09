@@ -7,7 +7,6 @@ public class Main {
 
     public static void main(String[] args) {
         HotelSystem system = new HotelSystem();
-        //system.loadAll();
 
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -20,6 +19,7 @@ public class Main {
             System.out.println("6) Guest Lookup");
             System.out.println("7) Update a Booking");
             System.out.println("8) View all Bookings");
+            System.out.println("9) Create Food Service Request");
             System.out.println("0) Exit");
             System.out.print("Choose: ");
             String choice = sc.nextLine().trim();
@@ -47,6 +47,9 @@ public class Main {
                     break;
                 case "8":
                     ViewBookingsService.start(sc, system);
+                    break;
+                case "9":
+                    FoodServiceRequestService.start(sc, system);
                     break;
                 case "0":
                     sc.close();

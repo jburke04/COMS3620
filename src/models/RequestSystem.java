@@ -11,7 +11,7 @@ public class RequestSystem implements SubSystem {
 
     private final String requestsPath = "src/assets/Requests.json";
 
-    private int nextReqID = 100;
+    public static int nextReqID = 100;
 
     @Override
     public void load() {
