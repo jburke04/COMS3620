@@ -22,7 +22,7 @@ public class HotelSystem {
     private final PaymentSystem paymentSystem;
     private final RoomUtils utils;
     EmployeeSystem employeeSystem = new EmployeeSystem();
-
+    private final LostAndFoundSystem lostAndFoundSystem = new LostAndFoundSystem();
 
     /**
      * Where it all starts. This will give us our subsystems to play with.
@@ -32,6 +32,7 @@ public class HotelSystem {
         this.bookingSystem.load();
         this.guestSystem.load();
         this.employeeSystem.load();
+        this.lostAndFoundSystem.load();
         this.utils = new RoomUtils(this.bookingSystem.getBookings(), this.roomSystem.getRooms());
         this.maintenanceSystem = new MaintenanceSystem(utils);
         this.paymentSystem = new PaymentSystem();
@@ -337,5 +338,32 @@ public class HotelSystem {
      */
     public Employee findEmployeeByNameOrPhone(String nameOrPhone) {
         return employeeSystem.findEmployeeByNameOrPhone(nameOrPhone);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // LOST & FOUND METHODS
+    // ─────────────────────────────────────────────────────────────
+
+    public LostAndFoundItem logLostFoundItem(String description,
+                                             String location,
+                                             Guest possibleOwner) {
+        return lostAndFoundSystem.createItem(description, location, possibleOwner);
+    }
+
+    public List<LostAndFoundItem> getAllLostFoundItems() {
+        return lostAndFoundSystem.getItems();
+    }
+
+    public List<LostAndFoundItem> searchLostFoundItems(String query) {
+        return lostAndFoundSystem.searchByText(query);
+    }
+
+    public LostAndFoundItem findLostFoundItemById(int id) {
+        return lostAndFoundSystem.findById(id);
+    }
+
+    public void markLostItemClaimed(int id) {
+        LostAndFoundItem item = lostAndFoundSystem.findById(id);
+        lostAndFoundSystem.markClaimed(item);
     }
 }
