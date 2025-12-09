@@ -2,7 +2,6 @@ package models;
 
 import helpers.Parser;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class EmployeeSystem implements SubSystem{
@@ -34,7 +33,7 @@ public class EmployeeSystem implements SubSystem{
      * Read-only view of current employees.
      */
     public List<Employee> getEmployees() {
-        return Collections.unmodifiableList(this.employees);
+        return this.employees;
     }
 
     public Employee getEmployeeByID(int id) {

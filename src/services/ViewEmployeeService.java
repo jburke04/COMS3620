@@ -21,8 +21,8 @@ public class ViewEmployeeService {
         EmployeeType type = null;
         String nameOrPhoneNumber = "";
         int id = 0;
-        ArrayList<Employee> temp = new ArrayList<>();
-        ArrayList<Employee> results = new ArrayList<>();
+        List<Employee> temp = new ArrayList<>();
+        List<Employee> results = new ArrayList<>();
 
         System.out.println("\n============ VIEW EMPLOYEES ============\n");
 
@@ -37,6 +37,8 @@ public class ViewEmployeeService {
 
                 if (check(input) == 0)
                     return;
+                if (check(input) == 1)
+                    break;
                 else if (check(input) == 2) {
                     if (Double.isNaN(Double.parseDouble(input)))
                         System.out.println("Invalid input. ID should be a numerical value.");
@@ -65,20 +67,21 @@ public class ViewEmployeeService {
                 role = input;
 
             // narrow down criteria:
-            if (id != 0)
-                results = system.getEmployeeByID(id);
-            else
-                results = system.getEmployees();
-
-            if (nameOrPhoneNumber.length() > 0)
-                results = filter(results, nameOrPhoneNumber);
-            
-            
-            if (role.length() > 0 && (type = findType(role)) != null) {
-                results = filter(results, type);
+            if (id != 0) {
+                Employee e = system.getEmployeeByID(id);
+                if (e != null)
+                    results.add(e);
             }
+            else
+                results = new ArrayList<>(system.getEmployees());
 
-            if (results.size() == 0)
+            if (!nameOrPhoneNumber.isEmpty())
+                results = filter(results, nameOrPhoneNumber);
+                
+            if (!role.isEmpty() && (type = findType(role)) != null)
+                results = filter(results, type);
+
+            if (results.isEmpty())
                 System.out.println("\nNo Employees matched provided criteria.\n");
             else
                 stringify(results);
@@ -94,11 +97,11 @@ public class ViewEmployeeService {
     private static int check(String input) {
         // check if quitting:
         if (input.equalsIgnoreCase("q") || input.equalsIgnoreCase("quit")) {
-            System.out.println("\nReturning to Main Menu.\n");
+            System.out.println("\nReturning to Main Menu.");
             return 0;
         }
         // check if no criteria:
-        else if (input.length() == 0)
+        else if (input.isEmpty())
             return 1;
         
         return 2;
@@ -110,13 +113,13 @@ public class ViewEmployeeService {
      * @return EmployeeType
      */
     private static EmployeeType findType(String role) {
-        if (role.equalsIgnoreCase("RECEPTION"))
+        if (role.equalsIgnoreCase("reception"))
             return EmployeeType.RECEPTION;
-        if (role.equalsIgnoreCase("HOUSEKEEPING"))
+        if (role.equalsIgnoreCase("housekeeping"))
             return EmployeeType.HOUSEKEEPING;
-        if (role.equalsIgnoreCase("TECHNICIAN"))
+        if (role.equalsIgnoreCase("technician"))
             return EmployeeType.TECHNICIAN;
-        if (role.equalsIgnoreCase("BELLBOY"))
+        if (role.equalsIgnoreCase("bellboy"))
             return EmployeeType.BELLBOY;
         return null;
     }
@@ -129,6 +132,9 @@ public class ViewEmployeeService {
      */
     private static List<Employee> filter(List<Employee> emps, String nameOrPhoneNumber) {
         List<Employee> results = new ArrayList<>();
+
+        if (emps.isEmpty() || emps == null)
+            return null;
 
         for (Employee e : emps) {
             if (e.getName().equalsIgnoreCase(nameOrPhoneNumber) || e.getPhone().equalsIgnoreCase(nameOrPhoneNumber))
@@ -146,6 +152,9 @@ public class ViewEmployeeService {
      */
     private static List<Employee> filter(List<Employee> emps, EmployeeType role) {
         List<Employee> results = new ArrayList<>();
+
+        if (emps.isEmpty() || emps == null)
+            return null;
 
         for (Employee e : emps) {
             if (e.type() == role)
