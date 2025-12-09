@@ -1,5 +1,7 @@
-pakcage models;
+package models;
 
+import helpers.Parser;
+import java.util.*;
 /**
  * Request System that handles logic concerning Requests.
  */

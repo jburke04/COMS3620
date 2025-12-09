@@ -24,6 +24,19 @@ public class FoodServiceRequestService {
         5.30
     };
 
+    private static final String items[] = {
+        "Deluxe Club Sandwich",
+        "10 in. Pizza",
+        "3pc. Chicken Tenders",
+        "Spaghetti & Meatballs",
+        "8oz Steak & Mushrooms",
+        "Buttered Lobster",
+        "Chocolate Chip Cookie",
+        "Molten Lava Cake",
+        "Classic Cheesecake",
+        "Creme Brulee"
+    };
+
     /**
      * Start loop for creating a Food Service Request.
      * @param sc Scanner for User input.
@@ -150,7 +163,7 @@ public class FoodServiceRequestService {
         if ((r = system.getRoomByNumber(roomNumber)) == null)
             System.out.println("\nRoom number does not exist. Please provide an existing Room Number.\n"); 
         //room isn't checked in:
-        else if (r.getStatus != Status.OCCUPIED) {
+        else if (r.getStatus() != Status.OCCUPIED) {
             System.out.println("\nRoom must currently be checked in to provide a Food Service Request.\n");
             return null;
         }
@@ -158,7 +171,7 @@ public class FoodServiceRequestService {
         //check if Guest is checked in to this room:
         for (Booking b : system.getBookings()) {
             if (b.getRoom() == r) {
-                if (b.getGuestID() != g.getGuestID()) {
+                if (b.getGuestID() != g.getGuestId()) {
                     System.out.println("\nGuest is not Checked-in to this Room. Guest needs to be checked-in to the Room to create a Request.\n");
                     return null;
                 }
@@ -200,12 +213,32 @@ public class FoodServiceRequestService {
     }
 
     /**
-     * 
+     * Formats the description to provide the item ordered, the number of times ordered,
+     * and any special instructions requested.
+     * @param inputs List of inputted entries for request.
+     * @param instr Special instructions per Guest request.
+     * @return String representation of the full description.
      */
     private static String formatDescription(String[] inputs, String instr) {
-        String result = "";
+        String result = "Order: \n";
+        int[] entries = new int[10];
 
-        //TODO: format a description based on the items selected
+        // calculate how many of each entry in this order:
+        for (String s : inputs) {
+            entries[Integer.parseInt(s) - 1]++;
+        }
+
+        // format into result string:
+        for (int i = 0; i < 10; i++) {
+            if (entries[i] != 0)
+                result += "\t" + entries[i] + "x " + items[i];
+            if (i < 9)
+                result += "\n";
+        }
+
+        // append Special Instructions if any:
+        if (instr.length() > 0)
+            result += "\nSpecial Instructions: " + instr;
 
         return result;
     }

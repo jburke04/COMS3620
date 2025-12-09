@@ -290,4 +290,10 @@ public class HotelSystem {
         roomSystem.setCleaning(b.getRoom());
         return success;
     }
+
+    // REQUEST SYSTEM
+
+    public void addRequest(Request r) {
+        this.requestSystem.addRequest(r);
+    }
 }
