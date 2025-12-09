@@ -1,5 +1,14 @@
 [
-    {
-        
-    }
+  {
+    "cost": 172.3,
+    "type": "FoodRequest",
+    "guestID": 2,
+    "room": {
+      "roomNumber": 110,
+      "description": { "cost": 300.0, "type": "PRESIDENTIAL" },
+      "status": "OCCUPIED"
+    },
+    "reqID": 100,
+    "status": "NEW"
+  }
 ]

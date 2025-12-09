@@ -25,6 +25,7 @@ public class RequestSystem implements SubSystem {
 
     public void addRequest(Request r) {
         this.requests.add(r);
+        this.save();
     }
 
 }

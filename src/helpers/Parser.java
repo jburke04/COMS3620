@@ -304,6 +304,10 @@ public class Parser {
         for (Request req : requests) {
             JSONObject request = new JSONObject();
 
+            request.put("type", "FoodRequest");
+            request.put("reqID", req.getReqID());
+            request.put("guestID", req.getGuestID());
+
             JSONObject r = new JSONObject();
             JSONObject desc = new JSONObject();
             desc.put("type", req.getRoom().getRoomType().name());
@@ -313,12 +317,9 @@ public class Parser {
             r.put("status", req.getRoom().getStatus().name());
             r.put("description", desc);
 
-            request.put("type", "FoodRequest");
-            request.put("reqID", req.getReqID());
-            request.put("guestID", req.getGuestID());
             request.put("room", r);
             request.put("cost", ((FoodRequest) req).getCost());
-            request.put("status", req.getStatus());
+            request.put("status", req.getStatus().name());
 
             arr.add(request);
         }
