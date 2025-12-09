@@ -5,6 +5,7 @@ import helpers.Parser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class EmployeeSystem implements SubSystem{
     private final String employeePath = "src/assets/Employees.json";
@@ -85,9 +86,31 @@ public class EmployeeSystem implements SubSystem{
     }
 
     /**
-     * (Optional for future iterations.)
+     * Fires an employee. (Removes the employee from the list.)
+     * @param employee Employee to fire.
+     * @return If the employee was removed or not.
      */
-    public boolean fireEmployee(int employeeId) {
-        return employees.removeIf(e -> e.getId() == employeeId);
+    public boolean fireEmployee(Employee employee) {
+        boolean out = employees.remove(employee);
+        save();
+        return out;
+    }
+
+    public Employee findEmployeeByID(int ID) {
+        for (Employee e : employees) {
+           if (e.getId() == ID) {
+               return e;
+           }
+        }
+        return null;
+    }
+
+    public Employee findEmployeeByNameOrPhone(String nameOrPhone) {
+        for (Employee e : employees) {
+            if (e.getName().contains(nameOrPhone) || e.getPhone().equals(nameOrPhone)) {
+                return e;
+            }
+        }
+        return null;
     }
 }
