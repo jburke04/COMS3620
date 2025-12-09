@@ -13,7 +13,7 @@ public class RequestSystem implements SubSystem {
 
     @Override
     public void load() {
-        Parser.loadRequests(this.requestsPath, this.requests);
+        Parser.parseRequests(this.requestsPath, this.requests);
     }
 
     @Override

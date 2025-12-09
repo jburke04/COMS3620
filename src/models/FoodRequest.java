@@ -31,7 +31,7 @@ public class FoodRequest implements Request {
         this.desc = desc;
         this.status = status;
 
-        if (reqID >= RequestSystem.nextReqID)
+        if (this.reqID >= RequestSystem.nextReqID)
             RequestSystem.nextReqID = this.reqID + 1;
         
     }
@@ -48,15 +48,17 @@ public class FoodRequest implements Request {
     }
 
     // --------------- GETTERS -------------------
-
+    @Override
     public int getReqID() {
         return this.reqID;
     }
 
+    @Override
     public int getGuestID() {
         return this.guestID;
     }
 
+    @Override
     public Room getRoom() {
         return this.room;
     }
@@ -65,6 +67,7 @@ public class FoodRequest implements Request {
         return this.cost;
     }
 
+    @Override
     public String getDesc() {
         return this.desc;
     }

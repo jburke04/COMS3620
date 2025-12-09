@@ -155,6 +155,37 @@ public class Parser {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public static void parseRequests(String filepath, List<Request> requests) {
+        requests.clear();
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
+            for (Object o : arr) {
+                JSONObject req = (JSONObject) o;
+                int reqID = ((Long) req.get("reqID")).intValue();
+                int guestID = ((Long) req.get("guestID")).intValue();
+                JSONObject room = (JSONObject) req.get("room");
+                String desc = (String) req.get("desc");
+                String status = (String) req.get("status");
+
+                // make sure the actual object (not a copy) is linked to the Booking:
+                Room r = null;
+                for (Room ro : Parser.roomsList) {
+                    if (((Long) room.get("roomNumber")).intValue() == ro.getRoomNumber())
+                        r = ro;
+                }
+
+                // only food requests have cost:
+                if ("FoodRequest".equals((String) req.get("type"))) {
+                    double cost = ((Long) req.get("cost")).doubleValue();
+                    requests.add(new FoodRequest(reqID, guestID, r, cost, desc, RequestStatus.valueOf(status)));
+                }
+                
+            }
+        } catch (Exception e) {
+        }
+    }
+
     // ---- Saves ----
     /**
      * Saves the Bookings to the desired file.
@@ -263,6 +294,39 @@ public class Parser {
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to save Guests.json " + e.getMessage(), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void saveRequests(String filepath, List<Request> requests) {
+        JSONArray arr = new JSONArray();
+
+        for (Request req : requests) {
+            JSONObject request = new JSONObject();
+
+            JSONObject r = new JSONObject();
+            JSONObject desc = new JSONObject();
+            desc.put("type", req.getRoom().getRoomType().name());
+            desc.put("cost", req.getRoom().getCost());
+
+            r.put("roomNumber", req.getRoom().getRoomNumber());
+            r.put("status", req.getRoom().getStatus().name());
+            r.put("description", desc);
+
+            request.put("type", "FoodRequest");
+            request.put("reqID", req.getReqID());
+            request.put("guestID", req.getGuestID());
+            request.put("room", r);
+            request.put("cost", ((FoodRequest) req).getCost());
+            request.put("status", req.getStatus());
+
+            arr.add(request);
+        }
+
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save MaintenanceTickets.json: " + e.getMessage(), e);
         }
     }
 
