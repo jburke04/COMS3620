@@ -3,8 +3,26 @@ pakcage models;
 /**
  * Request System that handles logic concerning Requests.
  */
-public class RequestSystem {
+public class RequestSystem implements SubSystem {
 
     private final List<Request> requests = new ArrayList<>();
+
+    private final String requestsPath = "src/assets/Requests.json";
+
+    private int nextReqID = 100;
+
+    @Override
+    public void load() {
+        Parser.loadRequests(this.requestsPath, this.requests);
+    }
+
+    @Override
+    public void save() {
+        Parser.saveRequests(this.requestsPath, this.requests);
+    }
+
+    public void addRequest(Request r) {
+        this.requests.add(r);
+    }
 
 }

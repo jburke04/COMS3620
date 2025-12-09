@@ -132,7 +132,7 @@ public class FoodServiceRequestService {
         } while (true);
 
         // Create ticket:
-        FoodRequest f = new FoodRequest(g.getGuestId(), r, total, desc);
+        Request f = new FoodRequest(g.getGuestId(), r, total, desc);
         system.addRequest(f);
         System.out.println("\nFood Service Request Created.\n" + f.toString());
     }

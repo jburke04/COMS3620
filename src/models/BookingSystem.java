@@ -14,8 +14,6 @@ public class BookingSystem implements SubSystem {
 
 	private final String bookingsPath = "src/assets/Bookings.json";
 
-	private int nextTicketId = 1;
-
 	/**
 	 * Loads booking data from JSON file of bookings
 	 */

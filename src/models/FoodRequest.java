@@ -5,8 +5,7 @@ package models;
  * Food Request will be made by calling the front desk and providing the items they want
  * and the Room for it to be delivered to.
  */
-public class FoodRequest {
-    private static int nextReqID = 100; 
+public class FoodRequest implements Request {
 
     private final int reqID;
     private final int guestID;
@@ -32,8 +31,8 @@ public class FoodRequest {
         this.desc = desc;
         this.status = status;
 
-        if (reqID >= FoodRequest.nextReqID)
-            FoodRequest.nextReqID = this.reqID + 1;
+        if (reqID >= RequestSystem.nextReqID)
+            RequestSystem.nextReqID = this.reqID + 1;
         
     }
 
@@ -45,7 +44,7 @@ public class FoodRequest {
      * @param desc Formatted description of the request.
      */
     public FoodRequest(int guestID, Room room, double cost, String desc) {
-        this(FoodRequest.nextReqID++, guestID, room, cost, desc, RequestStatus.NEW);
+        this(RequestSystem.nextReqID++, guestID, room, cost, desc, RequestStatus.NEW);
     }
 
     // --------------- GETTERS -------------------
@@ -88,5 +87,14 @@ public class FoodRequest {
             + "\n\tRoom #" + this.room.getRoomNumber()
             + "\n\tCost: $" + String.format("%.2f", this.cost)
             + "\n\tDesc:\n" + this.desc;
+    }
+
+    @Override
+    public void complete() {
+        this.status = RequestStatus.FULFILLED;
+    }
+
+    public void pay() {
+        this.status = RequestStatus.PAID;
     }
 }
