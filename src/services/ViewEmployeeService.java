@@ -18,6 +18,7 @@ public class ViewEmployeeService {
         String input = "";
 
         String role = "";
+        EmployeeType type = null;
         String nameOrPhoneNumber = "";
         int id = 0;
         ArrayList<Employee> temp = new ArrayList<>();
@@ -53,7 +54,7 @@ public class ViewEmployeeService {
             if (check(input) == 0)
                 return;
             else if (check(input) == 2)
-                NameOrPhoneNumber = input;
+                nameOrPhoneNumber = input;
             
             System.out.print("Role: ");
             input = sc.nextLine().trim();
@@ -72,9 +73,15 @@ public class ViewEmployeeService {
             if (nameOrPhoneNumber.length() > 0)
                 results = filter(results, nameOrPhoneNumber);
             
-            if (role.length() > 0) {
-
+            
+            if (role.length() > 0 && (type = findType(role)) != null) {
+                results = filter(results, type);
             }
+
+            if (results.size() == 0)
+                System.out.println("\nNo Employees matched provided criteria.\n");
+            else
+                stringify(results);
         } while (true);
 
     }
@@ -124,7 +131,7 @@ public class ViewEmployeeService {
         List<Employee> results = new ArrayList<>();
 
         for (Employee e : emps) {
-            if (e.getName().equalsIgnoreCase(nameOrPhoneNumber) || e.getPhoneNumber().equalsIgnoreCase(nameOrPhoneNumber))
+            if (e.getName().equalsIgnoreCase(nameOrPhoneNumber) || e.getPhone().equalsIgnoreCase(nameOrPhoneNumber))
                 results.add(e);
         }
 
@@ -153,6 +160,13 @@ public class ViewEmployeeService {
      * @param emps List to Stringify.
      */
     private static void stringify(List<Employee> emps) {
+        System.out.println("\nCriteria matched:\n");
 
+        for (Employee e : emps) {
+            System.out.println("\n\tName: " + e.getName()
+                    + "\n\tID: " + e.getId()
+                    + "\n\tPhone Number: " + e.getPhone()
+                    + "\n\tEmail: " + e.getEmail());
+        }
     }
 }

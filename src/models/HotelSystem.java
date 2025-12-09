@@ -317,4 +317,13 @@ public class HotelSystem {
         return employeeSystem.getEmployees();
     }
 
+    /**
+     * Returns an Employee with the corresponding ID.
+     * @param id ID to search for.
+     * @return Employee with corresponding ID.
+     */
+    public Employee getEmployeeByID(int id) {
+        return employeeSystem.getEmployeeByID(id);
+    } 
+
 }
