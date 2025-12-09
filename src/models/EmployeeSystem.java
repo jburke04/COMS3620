@@ -1,9 +1,7 @@
 package models;
 
 import helpers.Parser;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -14,11 +12,11 @@ public class EmployeeSystem implements SubSystem{
 
     @Override
     public void load() {
-        Parser.parseEmployees(employeePath, employees);
+        Parser.parseEmployees(this.employeePath, this.employees);
 
         // Compute next id based on current employees
         int max = 0;
-        for (Employee e : employees) {
+        for (Employee e : this.employees) {
             if (e.getId() > max) {
                 max = e.getId();
             }
@@ -29,14 +27,25 @@ public class EmployeeSystem implements SubSystem{
 
     @Override
     public void save() {
-        Parser.saveEmployees(employeePath, employees);
+        Parser.saveEmployees(this.employeePath, this.employees);
     }
 
     /**
      * Read-only view of current employees.
      */
     public List<Employee> getEmployees() {
-        return Collections.unmodifiableList(employees);
+        return this.employees;
+    }
+
+    public Employee getEmployeeByID(int id) {
+        // iterate through list of employees:
+        for (Employee e : this.employees) {
+            if (e.getId() == id)
+                return e;
+        }
+
+        // no such Employee, return null:
+        return null;
     }
 
 
