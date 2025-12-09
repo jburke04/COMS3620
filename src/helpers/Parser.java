@@ -193,6 +193,36 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses Lost & Found items from JSON.
+     *
+     * @param filepath path to LostAndFoundItems.json
+     * @param items    list of LostAndFoundItem to populate
+     */
+    @SuppressWarnings("unchecked")
+    public static void parseLostAndFoundItems(String filepath, List<LostAndFoundItem> items) {
+        items.clear();
+        try {
+            JSONArray arr = (JSONArray) parseOrEmptyArray(filepath);
+            for (Object o : arr) {
+                JSONObject obj = (JSONObject) o;
+                int id = ((Long) obj.get("id")).intValue();
+                String desc = (String) obj.getOrDefault("description", "");
+                String location = (String) obj.getOrDefault("locationFound", "");
+                Long guestIdLong = (Long) obj.get("guestId");
+                Integer guestId = (guestIdLong == null) ? null : guestIdLong.intValue();
+                String statusStr = (String) obj.getOrDefault("status", "UNCLAIMED");
+                String dateFound = (String) obj.getOrDefault("dateFound", "");
+
+                LostItemStatus status = LostItemStatus.valueOf(statusStr);
+                items.add(new LostAndFoundItem(id, desc, location, guestId, status, dateFound));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse LostAndFoundItems.json: " + e.getMessage(), e);
+        }
+    }
+
+
     // ---- Saves ----
     /**
      * Saves the Bookings to the desired file.
@@ -327,6 +357,35 @@ public class Parser {
             w.write(arr.toJSONString());
         } catch (IOException ex) {
             throw new RuntimeException("Failed to save Employees.json: " + ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Saves Lost & Found items to LostAndFoundItems.json
+     *
+     * @param filepath path to LostAndFoundItems.json
+     * @param items    list of LostAndFoundItem
+     */
+    @SuppressWarnings("unchecked")
+    public static void saveLostAndFoundItems(String filepath, List<LostAndFoundItem> items) {
+        JSONArray arr = new JSONArray();
+        for (LostAndFoundItem i : items) {
+            JSONObject o = new JSONObject();
+            o.put("id", i.getId());
+            o.put("description", i.getDescription());
+            o.put("locationFound", i.getLocationFound());
+            if (i.getGuestId() != null) {
+                o.put("guestId", i.getGuestId());
+            }
+            o.put("status", i.getStatus().name());
+            o.put("dateFound", i.getDateFound());
+            arr.add(o);
+        }
+
+        try (FileWriter w = new FileWriter(filepath)) {
+            w.write(arr.toJSONString());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save LostAndFoundItems.json: " + e.getMessage(), e);
         }
     }
 
